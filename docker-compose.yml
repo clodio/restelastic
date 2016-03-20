@@ -1,0 +1,29 @@
+restlastic:
+  image: clodio/restlastic
+  links:
+    - elasticsearch
+  volumes:
+    - .:/app
+    - ./environment/logs:/var/log
+  working_dir: /app
+  ports:
+    - "1337:1337"
+  environment:
+    - ELASTICSEARCH_HOST=elasticsearch
+  command: node server.js
+
+elasticsearch:
+  image: elasticsearch:2.2
+  command: elasticsearch -Des.network.host=0.0.0.0
+  ports:
+    - "9200:9200"
+    - "9300:9300"
+  volumes:
+    - /usr/share/elasticsearch/data:/usr/share/elasticsearch/data
+
+kibana4:
+  image: kibana:4.4
+  ports:
+    - "5601:5601"
+  links:
+    - elasticsearch
