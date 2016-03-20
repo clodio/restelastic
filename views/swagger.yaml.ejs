@@ -1,0 +1,1074 @@
+swagger: '2.0'
+info:
+  description: >-
+    # Swagger template
+
+    <% var sample_data_without_id = sample_data;
+      var id = sample_data.id;
+      var etag = sample_data.etag;
+      delete sample_data_without_id.id; %>
+
+    This is a swagger template for your api, you should adpat exemples to your context and add a description of the purpose af the API. You should also replase todo with your data.
+
+
+    # Routes
+
+
+      ```
+      GET <%= domain %>/<%= version %>/<%= model %>
+      GET <%= domain %>/<%= version %>/<%= model %>/search?q=
+      GET <%= domain %>/<%= version %>/<%= model %>/:id
+      POST <%= domain %>/<%= version %>/<%= model %>
+      POST <%= domain %>/<%= version %>/<%= model %>/:id
+      PATCH <%= domain %>/<%= version %>/<%= model %>/:id
+      PUT <%= domain %>/<%= version %>/<%= model %>/:id
+      DELETE <%= domain %>/<%= version %>/<%= model %>/:id
+      GET <%= domain %>/<%= version %>/<%= model %>/swagger.yaml
+      GET <%= domain %>/<%= version %>/<%= model %>/postman.json
+      ```
+
+    # SubRoutes
+
+
+    Ressources can be linked to others, in this case subRessource will have a <%= model %>_id field with the value :id
+
+
+      ```
+      GET <%= domain %>/<%= version %>/<%= model %>/:id/_subRessource
+      GET <%= domain %>/<%= version %>/<%= model %>/:id/_subRessource/search?q=
+      GET <%= domain %>/<%= version %>/<%= model %>/:id/_subRessource/:subRessource_id
+      POST <%= domain %>/<%= version %>/<%= model %>/:id/_subRessource
+      POST <%= domain %>/<%= version %>/<%= model %>/:id/_subRessource/:subRessource_id
+      PATCH <%= domain %>/<%= version %>/<%= model %>/:id/_subRessource/:subRessource_id
+      PUT <%= domain %>/<%= version %>/<%= model %>/:id/_subRessource/:subRessource_id
+      DELETE <%= domain %>/<%= version %>/<%= model %>/:id/_subRessource/:subRessource_id
+      ```
+
+    # Partial data
+
+
+    Add fields= to retrieve only some fields (Use . to access deep properties)
+
+
+      ```
+      GET <%= domain %>/<%= version %>/<%= model %>?fields=id,name
+      GET <%= domain %>/<%= version %>/<%= model %>?fields=adress
+      GET <%= domain %>/<%= version %>/<%= model %>?fields=adress.locality
+      ```
+
+
+    # Filter
+
+
+    Use . to access deep properties
+
+
+      ```
+      GET <%= domain %>/<%= version %>/<%= model %>?title=elastifull&author=clodio
+      GET <%= domain %>/<%= version %>/<%= model %>?id=1,2
+      GET <%= domain %>/<%= version %>/<%= model %>?id=1&id=2
+      GET <%= domain %>/<%= version %>/<%= model %>?author.name=clodio
+      ```
+
+    # Pagination
+
+
+    Add start_index and/or count (pagination and total_results will be included in response with next and previous link)
+
+
+      ```
+      GET <%= domain %>/<%= version %>/<%= model %>?start_index=20
+      GET <%= domain %>/<%= version %>/<%= model %>?start_index=20&count=3
+      {
+        "data":[...],
+        "paging": {
+          "total_results":30,
+          "prev": "<%= baseUrl %><%= domain %>/<%= version %>/<%= model %>?start_index=17&count=3",
+          "next": "<%= baseUrl %><%= domain %>/<%= version %>/<%= model %>?start_index=23&count=3",
+        }
+      }
+
+      ```
+
+
+
+    # Operators
+
+
+    Add _gte, _gt, _lte, _lt for getting a range
+
+
+      ```
+      GET <%= domain %>/<%= version %>/<%= model %>?price_gte=10&price_lte=20
+      GET <%= domain %>/<%= version %>/<%= model %>?creation_date_gte=now-1d/d
+      GET <%= domain %>/<%= version %>/<%= model %>?creation_date_gte=now-1d
+      GET <%= domain %>/<%= version %>/<%= model %>?creation_date_gte=2014-06-18T23:59:59Z
+      ```
+
+
+    Add _ne to exclude a value
+
+
+      ```
+      GET <%= domain %>/<%= version %>/<%= model %>?price_ne=20
+      ```
+
+
+    add _exists=true to find records with the field, _exists=false to find records without fields
+
+
+      ```
+      GET <%= domain %>/<%= version %>/<%= model %>?address.locality_exists=true
+      GET <%= domain %>/<%= version %>/<%= model %>?address.locality_exists=false
+      ```
+
+
+    Add _like to filter using like
+
+
+      ```
+      GET <%= domain %>/<%= version %>/<%= model %>?title_like=server*
+      ```
+
+
+    Add _prefix to filter with prefix
+
+
+      ```
+      GET <%= domain %>/<%= version %>/<%= model %>?name_prefix=cl
+      ```
+
+
+    Add _regex to filter with RegExp
+
+
+      ```
+      GET <%= domain %>/<%= version %>/<%= model %>?name_regex=clo.?dio
+      ```
+
+
+    Add _fuzzy to filter with fuzzy search
+
+
+      ```
+      GET <%= domain %>/<%= version %>/<%= model %>?votes_fuzzy=2 --> votes : 1,2,3
+      GET <%= domain %>/<%= version %>/<%= model %>?name_fuzzy=cladio --> name : clodio
+      GET <%= domain %>/<%= version %>/<%= model %>?votes_fuzzy=cldio --> name : clodio
+      ```
+
+
+
+    Full-text search
+
+
+    Add /search?q= to do a full search on all fields
+
+
+      ```
+      GET <%= domain %>/<%= version %>/<%= model %>/search?q=*c
+      ```
+
+
+    # Dates
+
+
+    creation_date and modification_date are automatically managed with RFC3369
+
+
+      ```
+      Ex 2014-06-18T23:59:59Z
+      ```
+
+
+    You can use now, now-1d, now+1d/d,... when searching/filtering (see elastic.co)
+
+      ```
+      GET <%= domain %>/<%= version %>/<%= model %>?creation_date_gte=now-1d
+      ```
+
+
+
+    # Etag
+
+
+    All ressources have a version, you can use it to cache data or to modify a specific version
+
+
+      ```
+      GET <%= domain %>/<%= version %>/<%= model %>/1
+      ```
+
+
+    --> send a etag header and a etag inside the result
+
+
+    you can use header If-None-Match to retrieve data only if modified, to modify data only if not modified
+
+    # Automatic or managed data definitions with elasticsearch
+
+
+    You can create a new ressource or a new field easily by calling POST, if you want to manage precisely types of your data. You must use elastic mapping to precise types of data. By defaut, all the fields will considered as string, expect automatic creation_date and modification_date
+
+
+    create index
+
+
+      ```
+      curl -XPUT 'http://localhost:9200/<%= domain %>_<%= model %>/'
+      ```
+
+
+    create mapping
+
+
+      ```
+      curl -XPUT 'http://localhost:9200/<%= domain %>_<%= model %>/_mapping/<%= model %>' \
+      -d'{
+        "<%= model %>": {
+          "properties":
+            <%- mapping_text  %>
+        }
+      }'
+      ```
+
+    Retrieve mapping
+
+
+      ```
+      curl -XGET http://localhost:9200/<%= domain %>_<%= model %>/_mapping/<%= model %>
+      ```
+
+
+    # Business Intelligence
+
+
+    Since data are stored in ELK you can make graphs with kibana, and use specific elastic request (aggregations,...)
+
+
+    see https://www.elastic.co/products/kibana
+
+
+
+    # Swagger
+
+
+    You can get a swagger template of the Restull API
+
+
+      ```
+      GET <%= baseUrl %><%= domain %>/<%= version %>/<%= model %>/swagger.yaml
+      ```
+
+
+    # Postman
+
+
+    You can get a postman template of the Restull API
+
+
+      ```
+      GET <%= baseUrl %><%= domain %>/<%= version %>/<%= model %>/postman.json
+      ```
+
+
+  version: '<%= version %>'
+  title: <%= domain %>:<%= model %> RestFul API
+  termsOfService: 'https://wiki.collaboratif-courrier.fr/confluence/display/APEX/'
+  contact:
+    name: --# your name and email --
+    email: your_email@yourdomain.com
+host: <%=: baseUrl |replace:"https://","" | replace:"http://","" | replace:"/","" %>
+basePath: /<%= domain %>/<%= version %>
+securityDefinitions:
+  bearer:
+    type: apiKey
+    name: Authorization
+    in: header
+
+    description: >
+
+        header `Authorization` to add in all calls
+
+
+        Use the `readonly` account
+
+
+          ```
+          eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2NsYXVkZS1pZHAubGFwb3N0ZS5mciIsInBybiI6ImNsYXVkZS5zZWd1cmV0QGxhcG9zdGUuZnIiLCJhdWQiOiJodHRwczovL2NsYXVkZS1hdXRoLmxhcG9zdGUuZnIiLCJleHAiOiIxNDYxNTYxNzIxIiwic2NvcGVzIjpbInJlc3NvdXJjZXMucmVhZCJdfQ.ssrAHB1phB3hGh4n2t7rBJQAJP5GQWM5Qtvg7tR7UwA
+          ```
+
+        Or use the `readwrite` account
+
+
+          ```
+          eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2NsYXVkZS1pZHAubGFwb3N0ZS5mciIsInBybiI6ImNsYXVkZS5zZWd1cmV0QGxhcG9zdGUuZnIiLCJhdWQiOiJodHRwczovL2NsYXVkZS1hdXRoLmxhcG9zdGUuZnIiLCJleHAiOiIxNDYxNTYxNzIxIiwic2NvcGVzIjpbInJlc3NvdXJjZXMucmVhZCIsInJlc3NvdXJjZXMud3JpdGUiXX0.rn6BGkwXv1bqaevBuroqNoBDP6d8dNo3dN1f6kwPqNU
+          ```
+
+        or use the `write` account
+
+
+          ```
+          eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2NsYXVkZS1pZHAubGFwb3N0ZS5mciIsInBybiI6ImNsYXVkZS5zZWd1cmV0QGxhcG9zdGUuZnIiLCJhdWQiOiJodHRwczovL2NsYXVkZS1hdXRoLmxhcG9zdGUuZnIiLCJleHAiOiIxNDYxNTYxNzIxIiwic2NvcGVzIjpbInJlc3NvdXJjZXMud3JpdGUiXX0.ltmMFRJuiBaw79InBvDsu2uJ1wqr2nJ4rOdTJTIcXrU
+          ```
+
+tags:
+  - name: readOnly
+    description: API services that can only be readed
+  - name: readWrite
+    description: API services that can be readed and writed
+  - name: write
+    description: Ressources that can only be writed
+schemes:
+  - <% if (baseUrl.indexOf("https") >-1 ) {%>https<%} else {%>http<%} %>
+paths:
+
+  /<%= model %>:
+    get:
+      tags:
+        - readOnly
+        - readWrite
+      summary: Retrieve a list of <%= model %>
+      description: >
+
+
+        Retrieve <%= model %> with differents search criteria, pagination and a filter on attributes.
+
+
+        Example with pagination criteria
+
+
+          ```
+          curl -iX GET \
+          -H 'Accept: application/json' \
+          -H 'Authorization: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2NsYXVkZS1pZHAubGFwb3N0ZS5mciIsInBybiI6ImNsYXVkZS5zZWd1cmV0QGxhcG9zdGUuZnIiLCJhdWQiOiJodHRwczovL2NsYXVkZS1hdXRoLmxhcG9zdGUuZnIiLCJleHAiOiIxNDYxNTYxNzIxIiwic2NvcGVzIjpbInJlc3NvdXJjZXMucmVhZCIsInJlc3NvdXJjZXMud3JpdGUiXX0.rn6BGkwXv1bqaevBuroqNoBDP6d8dNo3dN1f6kwPqNU' \
+          "<%= baseUrl %><%= domain %>/<%= version %>/<%= model %>?start_index=1&count=10"
+          ```
+
+        Example with dates criteria
+
+
+          ```
+          curl -iX GET \
+          -H 'Accept: application/json' \
+          -H 'Authorization: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2NsYXVkZS1pZHAubGFwb3N0ZS5mciIsInBybiI6ImNsYXVkZS5zZWd1cmV0QGxhcG9zdGUuZnIiLCJhdWQiOiJodHRwczovL2NsYXVkZS1hdXRoLmxhcG9zdGUuZnIiLCJleHAiOiIxNDYxNTYxNzIxIiwic2NvcGVzIjpbInJlc3NvdXJjZXMucmVhZCIsInJlc3NvdXJjZXMud3JpdGUiXX0.rn6BGkwXv1bqaevBuroqNoBDP6d8dNo3dN1f6kwPqNU' \
+          "<%= baseUrl %><%= domain %>/<%= version %>/<%= model %>?creation_date_gte=2015-06-18T00:00:00Z"
+          ```
+
+        Example with filter on retrieved attributes
+
+
+          ```
+          curl -iX GET \
+          -H 'Accept: application/json' \
+          -H 'Authorization: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2NsYXVkZS1pZHAubGFwb3N0ZS5mciIsInBybiI6ImNsYXVkZS5zZWd1cmV0QGxhcG9zdGUuZnIiLCJhdWQiOiJodHRwczovL2NsYXVkZS1hdXRoLmxhcG9zdGUuZnIiLCJleHAiOiIxNDYxNTYxNzIxIiwic2NvcGVzIjpbInJlc3NvdXJjZXMucmVhZCIsInJlc3NvdXJjZXMud3JpdGUiXX0.rn6BGkwXv1bqaevBuroqNoBDP6d8dNo3dN1f6kwPqNU' \
+          "<%= baseUrl %><%= domain %>/<%= version %>/<%= model %>?creation_date_gte=2015-06-18T00:00:00Z&fields=id,modification_date"
+          ```
+
+
+
+      operationId: list<%=: model | capitalize%>
+      produces:
+        - application/json
+      parameters:
+        - in: query
+          name: fields
+          description: >
+            List of attributes to retrieved (comma separator)
+            Ex ?fields=id,creation_date
+          required: false
+          type: string
+        - in: query
+          name: start_index
+          description: First item to retrieved (start at 1)
+          required: false
+          type: integer
+          format: int64
+        - in: query
+          name: count
+          description: "Number of item to retrieve (default <%= sails.config.blueprints.defaultLimit || 30 %>, max <%= sails.config.blueprints.maxLimit || 1000 %>)"
+          maximum: <%= sails.config.blueprints.maxLimit || 1000 %>
+          required: false
+          type: integer
+          format: int64
+        - in: header
+          name: If-None-Match
+          description: "Version of the ressource (see etag) (Ex : <%= etag %>)"
+          required: false
+          type: string
+      security:
+        - bearer: []
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/Pagination'
+        '304':
+          description: not modified
+        '400':
+          description: 'Bad request, parameters are not correct'
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Error'
+        '401':
+          description: 'Unauthorized, the authentification is invalid or missing'
+        '403':
+          description: 'Forbidden, permissions are insufficient'
+        '429':
+          description: Too many requests
+        '500':
+          description: Internal server error
+        '503':
+          description: Temporary unavailable
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Error'
+    post:
+      tags:
+        - readWrite
+        - write
+      summary: Create a ressource <%= model %>
+      description: >
+        Create a ressource <%= model %>
+
+
+          ```
+          curl -iX POST \
+          -H 'Accept: application/json' \
+          -H 'Content-Type: application/json; charset=utf-8' \
+          -H 'Authorization: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2NsYXVkZS1pZHAubGFwb3N0ZS5mciIsInBybiI6ImNsYXVkZS5zZWd1cmV0QGxhcG9zdGUuZnIiLCJhdWQiOiJodHRwczovL2NsYXVkZS1hdXRoLmxhcG9zdGUuZnIiLCJleHAiOiIxNDYxNTYxNzIxIiwic2NvcGVzIjpbInJlc3NvdXJjZXMucmVhZCIsInJlc3NvdXJjZXMud3JpdGUiXX0.rn6BGkwXv1bqaevBuroqNoBDP6d8dNo3dN1f6kwPqNU' \
+          -d '<%- JSON.stringify(sample_data_without_id) %>' \
+          '<%= baseUrl %><%= domain %>/<%= version %>/<%= model %>'
+          ```
+
+      operationId: create<%=: model | capitalize %>
+      consumes:
+        - application/x-www-form-urlencoded
+      produces:
+        - application/json
+      security:
+        - bearer: []
+      parameters:
+        - in: body
+          name: body
+          description: ressource <%= model %>
+          required: false
+          schema:
+            $ref: '#/definitions/<%=: model | capitalize %>'
+      responses:
+        '201':
+          description: Created
+          schema:
+            $ref: '#/definitions/<%=: model | capitalize %>'
+        '304':
+          description: not modified
+        '400':
+          description: 'Bad request, parameters are not correct'
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Error'
+        '401':
+          description: 'Unauthorized, the authentification is invalid or missing'
+        '403':
+          description: 'Forbidden, permissions are insufficient'
+        '404':
+          description: Not found
+        '412':
+          description: 'Precondition failed, versions conflit'
+        '429':
+          description: Too many requests
+        '500':
+          description: Internal server error
+        '503':
+          description: Temporary unavailable
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Error'
+  '/<%= model %>/{id}':
+    get:
+      tags:
+        - readOnly
+        - readWrite
+      summary: Retrieve one ressource <%= model %>
+      description: >
+
+        Retrieve the ressource <%= model %> `<%= id %>` with filter on attributes
+
+          ```
+          curl -iX GET \
+          -H 'Accept: application/json' \
+          -H 'Authorization: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2NsYXVkZS1pZHAubGFwb3N0ZS5mciIsInBybiI6ImNsYXVkZS5zZWd1cmV0QGxhcG9zdGUuZnIiLCJhdWQiOiJodHRwczovL2NsYXVkZS1hdXRoLmxhcG9zdGUuZnIiLCJleHAiOiIxNDYxNTYxNzIxIiwic2NvcGVzIjpbInJlc3NvdXJjZXMucmVhZCIsInJlc3NvdXJjZXMud3JpdGUiXX0.rn6BGkwXv1bqaevBuroqNoBDP6d8dNo3dN1f6kwPqNU' \
+          -H "If-None-Match: <%= etag %>" \
+          "<%= baseUrl %><%= domain %>/<%= version %>/<%= model %>/<%= id %>?fields=id,creation_date,modification_date"
+          ```
+
+      operationId: getOne<%=: model | capitalize%>
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          name: id
+          description: "Unique identifier of the ressource <%= model %> to retrieve (Ex: <%= id %>)"
+          required: true
+          type: string
+        - in: query
+          name: fields
+          description: "List of attributes to retrieved (comma separator) (Ex : ?fields=id,creation_date)"
+          required: false
+          type: string
+        - in: header
+          name: If-None-Match
+          description: "Version of the ressource (see etag) (Ex : <%= etag %>)"
+          required: true
+          required: false
+          type: string
+      security:
+        - bearer: []
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/<%=: model | capitalize %>'
+        '304':
+          description: not modified
+        '400':
+          description: 'Bad request, parameters are not correct'
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Error'
+        '401':
+          description: 'Unauthorized, the authentification is invalid or missing'
+        '403':
+          description: 'Forbidden, permissions are insufficient'
+        '404':
+          description: Not found
+        '429':
+          description: Too many requests
+        '500':
+          description: Internal server error
+        '503':
+          description: Temporary unavailable
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Error'
+    put:
+      tags:
+        - readWrite
+        - write
+      summary: Full update a ressource <%= model %>
+      description: >
+
+        Full update the ressource <%= model %> `<%= id %>`
+
+
+          ```
+          curl -iX PUT \
+          -H 'Accept: application/json' \
+          -H 'Content-Type: application/json; charset=utf-8' \
+          -H 'Authorization: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2NsYXVkZS1pZHAubGFwb3N0ZS5mciIsInBybiI6ImNsYXVkZS5zZWd1cmV0QGxhcG9zdGUuZnIiLCJhdWQiOiJodHRwczovL2NsYXVkZS1hdXRoLmxhcG9zdGUuZnIiLCJleHAiOiIxNDYxNTYxNzIxIiwic2NvcGVzIjpbInJlc3NvdXJjZXMucmVhZCIsInJlc3NvdXJjZXMud3JpdGUiXX0.rn6BGkwXv1bqaevBuroqNoBDP6d8dNo3dN1f6kwPqNU' \
+          -d '<%- JSON.stringify(sample_data) %>' \
+          "<%= baseUrl %><%= domain %>/<%= version %>/<%= model %>/<%= id %>"
+          ```
+
+      operationId: fullUpdateOne<%=: model | capitalize %>
+      consumes:
+        - application/x-www-form-urlencoded
+      produces:
+        - application/json
+      security:
+        - bearer: []
+      parameters:
+        - in: path
+          name: id
+          description: "Unique identifier of the ressource <%= model %> to update (Ex: <%= id %>)"
+          required: true
+          type: string
+        - in: body
+          name: body
+          description: ressource <%= model %>
+          required: false
+          schema:
+            $ref: '#/definitions/<%=: model | capitalize %>'
+        - in: header
+          name: If-None-Match
+          description: "Version of the ressource (see etag) (Ex : <%= etag %>)"
+          required: false
+          type: string
+      responses:
+        '200':
+          description: Successful operation
+          schema:
+            $ref: '#/definitions/<%=: model | capitalize %>'
+        '201':
+          description: Created
+          schema:
+            $ref: '#/definitions/<%=: model | capitalize %>'
+        '400':
+          description: 'Bad request, parameters are not correct'
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Error'
+        '401':
+          description: 'Unauthorized, the authentification is invalid or missing'
+        '403':
+          description: 'Forbidden, permissions are insufficient'
+        '412':
+          description: 'Precondition failed, versions conflit'
+        '429':
+          description: Too many requests
+        '500':
+          description: Internal server error
+        '503':
+          description: Temporary unavailable
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Error'
+    post:
+      tags:
+        - readWrite
+        - write
+      summary: Partial update (one or more attributes) a ressource <%= model %>
+      description: >
+        Partial update the ressource <%= model %> `<%= id %>`
+
+
+          ```
+          curl -iX POST \
+          -H 'Accept: application/json' \
+          -H 'Content-Type: application/json; charset=utf-8' \
+          -H 'Authorization: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2NsYXVkZS1pZHAubGFwb3N0ZS5mciIsInBybiI6ImNsYXVkZS5zZWd1cmV0QGxhcG9zdGUuZnIiLCJhdWQiOiJodHRwczovL2NsYXVkZS1hdXRoLmxhcG9zdGUuZnIiLCJleHAiOiIxNDYxNTYxNzIxIiwic2NvcGVzIjpbInJlc3NvdXJjZXMucmVhZCIsInJlc3NvdXJjZXMud3JpdGUiXX0.rn6BGkwXv1bqaevBuroqNoBDP6d8dNo3dN1f6kwPqNU' \
+          -d '<%- JSON.stringify(sample_data) %>' \
+          "<%= baseUrl %><%= domain %>/<%= version %>/<%= model %>/<%= id %>"
+          ```
+
+      operationId: partialUpdate<%=: model | capitalize %>
+      consumes:
+        - application/x-www-form-urlencoded
+      produces:
+        - application/json
+      security:
+        - bearer: []
+      parameters:
+        - in: path
+          name: id
+          description: "Unique identifier of the ressource <%= model %> to update (Ex: <%= id %>)"
+          required: true
+          type: string
+        - in: body
+          name: body
+          description: ressource <%= model %>
+          required: false
+          schema:
+            $ref: '#/definitions/<%=: model | capitalize %>'
+        - in: header
+          name: If-None-Match
+          description: "Version of the ressource (see etag) (Ex : <%= etag %>)"
+          required: false
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/<%=: model | capitalize %>'
+        '304':
+          description: not modified
+        '400':
+          description: 'Bad request, parameters are not correct'
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Error'
+        '401':
+          description: 'Unauthorized, the authentification is invalid or missing'
+        '403':
+          description: 'Forbidden, permissions are insufficient'
+        '404':
+          description: Not found
+        '412':
+          description: 'Precondition failed, versions conflit'
+        '429':
+          description: Too many requests
+        '500':
+          description: Internal server error
+        '503':
+          description: Temporary unavailable
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Error'
+    patch:
+      tags:
+        - readWrite
+        - write
+      summary: Partial update (one or more attributes) a ressource <%= model %>
+      description: >
+        Partial update the ressource <%= model %> `<%= id %>`
+
+
+          ```
+          curl -iX PATCH \
+          -H 'Accept: application/json' \
+          -H 'Content-Type: application/json; charset=utf-8' \
+          -H 'Authorization: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2NsYXVkZS1pZHAubGFwb3N0ZS5mciIsInBybiI6ImNsYXVkZS5zZWd1cmV0QGxhcG9zdGUuZnIiLCJhdWQiOiJodHRwczovL2NsYXVkZS1hdXRoLmxhcG9zdGUuZnIiLCJleHAiOiIxNDYxNTYxNzIxIiwic2NvcGVzIjpbInJlc3NvdXJjZXMucmVhZCIsInJlc3NvdXJjZXMud3JpdGUiXX0.rn6BGkwXv1bqaevBuroqNoBDP6d8dNo3dN1f6kwPqNU' \
+          -d '<%- JSON.stringify(sample_data) %>' \
+          "<%= baseUrl %><%= domain %>/<%= version %>/<%= model %>/<%= id %>"
+          ```
+
+      operationId: patch<%=: model | capitalize %>
+      consumes:
+        - application/x-www-form-urlencoded
+      produces:
+        - application/json
+      security:
+        - bearer: []
+      parameters:
+        - in: path
+          name: id
+          description: "Unique identifier of the ressource <%= model %> to update (Ex: <%= id %>)"
+          required: true
+          type: string
+        - in: body
+          name: body
+          description: ressource <%= model %>
+          required: false
+          schema:
+            $ref: '#/definitions/<%=: model | capitalize %>'
+        - in: header
+          name: If-None-Match
+          description: "Version of the ressource (see etag) (Ex : <%= etag %>)"
+          required: false
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/<%=: model | capitalize %>'
+        '304':
+          description: not modified
+        '400':
+          description: 'Bad request, parameters are not correct'
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Error'
+        '401':
+          description: 'Unauthorized, the authentification is invalid or missing'
+        '403':
+          description: 'Forbidden, permissions are insufficient'
+        '404':
+          description: Not found
+        '412':
+          description: 'Precondition failed, versions conflit'
+        '429':
+          description: Too many requests
+        '500':
+          description: Internal server error
+        '503':
+          description: Temporary unavailable
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Error'
+
+    delete:
+      tags:
+        - readWrite
+        - write
+      summary: 'Delete a ressource <%= model %>'
+      description: >
+        Delete the ressource <%= model %> `<%= id %>`
+
+
+          ```
+          curl -iX DELETE \
+          -H 'Accept: application/json' \
+          -H 'Authorization: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2NsYXVkZS1pZHAubGFwb3N0ZS5mciIsInBybiI6ImNsYXVkZS5zZWd1cmV0QGxhcG9zdGUuZnIiLCJhdWQiOiJodHRwczovL2NsYXVkZS1hdXRoLmxhcG9zdGUuZnIiLCJleHAiOiIxNDYxNTYxNzIxIiwic2NvcGVzIjpbInJlc3NvdXJjZXMucmVhZCIsInJlc3NvdXJjZXMud3JpdGUiXX0.rn6BGkwXv1bqaevBuroqNoBDP6d8dNo3dN1f6kwPqNU' \
+          "<%= baseUrl %><%= domain %>/<%= version %>/<%= model %>/<%= id %>"
+          ```
+
+      operationId: deleteOne<%=: model | capitalize %>
+      produces:
+        - application/json
+      security:
+        - bearer: []
+      parameters:
+        - in: path
+          name: id
+          description: "Unique identifier of the ressource <%= model %> to delete (Ex: <%= id %>)"
+          required: true
+          type: string
+        - in: header
+          name: If-None-Match
+          description: "Version of the ressource (see etag) (Ex : <%= etag %>)"
+          required: false
+          type: string
+      responses:
+        '204':
+          description: Deleted
+        '401':
+          description: 'Unauthorized, the authentification is invalid or missing'
+        '403':
+          description: 'Forbidden, permissions are insufficient'
+        '404':
+          description: Not found
+        '429':
+          description: Too many requests
+        '500':
+          description: Internal server error
+        '503':
+          description: Temporary unavailable
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Error'
+  /<%= model %>/search:
+    get:
+      tags:
+        - readOnly
+        - readWrite
+      summary: Fulltext search on all attribute of <%= model %>
+      description: >
+
+        Search ressources <%= model %> with differents search criteria, pagination and a filter on attributes.
+
+
+        Example with pagination criteria
+
+
+          ```
+          curl -iX GET \
+          -H 'Accept: application/json' \
+          -H 'Authorization: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2NsYXVkZS1pZHAubGFwb3N0ZS5mciIsInBybiI6ImNsYXVkZS5zZWd1cmV0QGxhcG9zdGUuZnIiLCJhdWQiOiJodHRwczovL2NsYXVkZS1hdXRoLmxhcG9zdGUuZnIiLCJleHAiOiIxNDYxNTYxNzIxIiwic2NvcGVzIjpbInJlc3NvdXJjZXMucmVhZCIsInJlc3NvdXJjZXMud3JpdGUiXX0.rn6BGkwXv1bqaevBuroqNoBDP6d8dNo3dN1f6kwPqNU' \
+          "<%= baseUrl %><%= domain %>/<%= version %>/<%= model %>/search?q=v*&start_index=1&count=10"
+          ```
+
+        Example with dates criteria
+
+
+          ```
+          curl -iX GET \
+          -H 'Accept: application/json' \
+          -H 'Authorization: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2NsYXVkZS1pZHAubGFwb3N0ZS5mciIsInBybiI6ImNsYXVkZS5zZWd1cmV0QGxhcG9zdGUuZnIiLCJhdWQiOiJodHRwczovL2NsYXVkZS1hdXRoLmxhcG9zdGUuZnIiLCJleHAiOiIxNDYxNTYxNzIxIiwic2NvcGVzIjpbInJlc3NvdXJjZXMucmVhZCIsInJlc3NvdXJjZXMud3JpdGUiXX0.rn6BGkwXv1bqaevBuroqNoBDP6d8dNo3dN1f6kwPqNU' \
+          "<%= baseUrl %><%= domain %>/<%= version %>/<%= model %>/search?q=v*&creation_date_gte=2015-06-18T00:00:00Z"
+          ```
+
+        Example with filter on retrieved attributes
+
+
+          ```
+          curl -iX GET \
+          -H 'Accept: application/json' \
+          -H 'Authorization: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2NsYXVkZS1pZHAubGFwb3N0ZS5mciIsInBybiI6ImNsYXVkZS5zZWd1cmV0QGxhcG9zdGUuZnIiLCJhdWQiOiJodHRwczovL2NsYXVkZS1hdXRoLmxhcG9zdGUuZnIiLCJleHAiOiIxNDYxNTYxNzIxIiwic2NvcGVzIjpbInJlc3NvdXJjZXMucmVhZCIsInJlc3NvdXJjZXMud3JpdGUiXX0.rn6BGkwXv1bqaevBuroqNoBDP6d8dNo3dN1f6kwPqNU' \
+          "<%= baseUrl %><%= domain %>/<%= version %>/<%= model %>/search?q=v*&creation_date_gte=2015-06-18T00:00:00Z&fields=id,modification_date"
+          ```
+
+
+
+      operationId: search<%=: model | capitalize%>
+      produces:
+        - application/json
+      parameters:
+        - in: query
+          name: q
+          description: >
+            champs de recherche fulltext
+
+            Ex ?q=recherh*
+          required: false
+          type: string
+        - in: query
+          name: fields
+          description: >
+            List of attributes to retrieved (comma separator)
+            Ex ?fields=id,creation_date
+          required: false
+          type: string
+        - in: query
+          name: start_index
+          description: First item to retrieved (start at 1)
+          default: 1
+          required: false
+          type: integer
+          format: int64
+        - in: query
+          name: count
+          description: "Number of item to retrieve (default 10, max 999)"
+          default: 20
+          maximum: 999
+          required: false
+          type: integer
+          format: int64
+        - in: header
+          name: If-None-Match
+          description: "Version of the ressource (see etag) (Ex : <%= etag %>)"
+          required: false
+          type: string
+      security:
+        - bearer: []
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/Pagination'
+        '304':
+          description: not modified
+        '400':
+          description: 'Bad request, parameters are not correct'
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Error'
+        '401':
+          description: 'Unauthorized, the authentification is invalid or missing'
+        '403':
+          description: 'Forbidden, permissions are insufficient'
+        '429':
+          description: Too many requests
+        '500':
+          description: Internal server error
+        '503':
+          description: Temporary unavailable
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Error'
+
+definitions:
+  Pagination:
+    description: Pagination format
+    properties:
+      paginate:
+        $ref: '#/definitions/Paginate'
+      <%= model %>:
+        type: array
+        description: 'Ressources List, empty if none'
+        items:
+          $ref: '#/definitions/<%=: model | capitalize %>'
+  Paginate:
+    description: "Pagination links and number of items"
+    properties:
+      next:
+        type: string
+        description: >
+          Link href to consult next page
+          ex '<%= baseUrl %><%= model %>/v1/<%= model %>?start_index=21&count=10'
+      prev:
+        type: string
+        description: |
+          Link to consult previous page
+          ex '<%= baseUrl %><%= model %>/v1/<%= model %>?start_index=1&count=10'
+      total_results:
+        type: integer
+        format: int64
+        description: "Total number of items (ex 27)"
+  Error:
+    description: "Error format"
+    required:
+      - error
+    properties:
+      error_description:
+        type: string
+        description: "long description error message (ex 'A user must have an email address')"
+      error:
+        type: string
+        description: 'error name to describe the error, ex "invalid_user"'
+  <%=: model | capitalize %>:
+    description: <%= model %> format model
+    properties:
+    <%
+    getAttributeDefinition = function(key, key_data, padding) {
+      var output= "";
+      output += padding + key + ":"+ "\n";
+      padding += "  " ;
+      if ( key_data.type !== undefined) {
+        //TODO other field type : https://www.elastic.co/guide/en/elasticsearch/reference/current/mapping-types.html
+        //http://swagger.io/specification/
+        if (key_data.type == "integer") {
+          output += padding + "type: " + "integer"+ "\n";
+          output += padding + "format: " + "int32"+ "\n";
+        }
+        else if (key_data.type == "long") {
+          output += padding + "type: " + "integer"+ "\n";
+          output += padding + "format: " + "int64"+ "\n";
+        }
+        else if (key_data.type == "float") {
+          output += padding + "type: " + "number"+ "\n";
+          output += padding + "format: " + "float"+ "\n";
+        }
+        else if (key_data.type == "double") {
+          output += padding + "type: " + "number"+ "\n";
+          output += padding + "format: " + "double"+ "\n";
+        }
+        else if (key_data.type == "byte") {
+          output += padding + "type: " + "string"+ "\n";
+          output += padding + "format: " + "byte"+ "\n";
+        }
+        else if (key_data.type == "binary") {
+          output += padding + "type: " + "string"+ "\n";
+          output += padding + "format: " + "binary"+ "\n";
+        }
+        else if (key_data.type == "date") {
+          output += padding + "type: " + "string"+ "\n";
+          output += padding + "format: " + "date-time"+ "\n";
+        }
+        else{
+          output += padding + "type: " + key_data.type+ "\n";
+        }
+
+
+        if (key_data.type == "double" || key_data.type == "float") {
+          output += padding + "description: " + "todo describe"+ "\n";
+          var value= sample_data[key] || "10.01";
+          output += padding + "example: " + value + "\n";
+        }
+        else if(key_data.type == "integer" || key_data.type == "long") {
+          output += padding + "description: " + "todo describe"+ "\n";
+          var value= sample_data[key] || "10.01";
+          output += padding + "example: " + value + "\n";
+        }
+        else if(key_data.type == "boolean" ) {
+          output += padding + "description: " + "todo describe"+ "\n";
+          output += padding + "example: " + "true"+ "\n";
+        }
+        else if(key_data.type == "date" ) {
+          output += padding + "description: " + "todo describe"+ "\n";
+          output += padding + "example: " + "2014-06-18T23:59:58Z"+ "\n";
+        }
+        else if(key == "id" ) {
+          output += padding + "description: " + "unique identifier of the ressource"+ "\n";
+          output += padding + "example: " + id + "\n";
+        }
+        else if(key == "etag" ) {
+          output += padding + "description: " + "Etag of the ressource"+ "\n";
+          output += padding + "example: " + etag + "\n";
+        }
+        else{
+          output += padding + "description: " + "todo describe"+ "\n";
+          var value= sample_data[key] || "todo add example";
+          output += padding + "example: " + value + "\n";
+        }
+      }
+      else {
+        if (key_data.properties !== undefined) {
+          output += padding + "type: " + "object"+ "\n";
+          output += padding + "properties:"+ "\n";
+          padding += "  " ;
+          for(var subkey in key_data.properties) {
+            output += getAttributeDefinition(subkey, key_data.properties[subkey], padding);
+          }
+        }
+      }
+      return output;
+    }
+    %>
+    <% var outputYaml = "";for(var key in mapping){ %>
+<% outputYaml += getAttributeDefinition(key,  mapping[key], "      "); %>
+    <% } %>
+<%=outputYaml %>

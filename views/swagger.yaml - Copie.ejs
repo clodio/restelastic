@@ -1,0 +1,608 @@
+swagger: '2.0'
+info:
+  description: >-
+    --# your description -
+
+
+  version: '<%= version %>'
+  title: <%= domain %>:<%= model %> RestFul API
+  termsOfService: 'https://wiki.collaboratif-courrier.fr/confluence/display/APEX/'
+  contact:
+    name: --# your name and email --
+host: <%=: baseUrl |replace:"https://","" | replace:"http://","" | replace:"/","" %>
+basePath: /<%= domain %>/<%= version %>
+securityDefinitions:
+  basicAuth:
+    type: basic
+    description: "HTTPs Basic Authentication.   \n\nUtilisez le compte en lecture login:`readonly`, mot de passe:`password` ; Basic cmVhZG9ubHk6cGFzc3dvcmQ=\n\nou \n\nle compte en lecture/ecriture login:`readwrite`, mot de passe:`password` ; Basic cmVhZHdyaXRlOnBhc3N3b3Jk=\n"
+schemes:
+  - <% if (baseUrl.indexOf("https") >-1 ) {%>https<%} else {%>http<%} %>
+paths:
+  /<%= model %>:
+    get:
+      tags:
+        - readOnly
+        - readWrite
+      summary: Récupère une liste de <%= model %>
+      description: "\nRecherche les <%= model %> avec différents critères de recherche, des paramètres de pagination et un filtre sur les données retournées.\n\n Note | vue la faible volumétrie de <%= model %>, la pagination et le filtre fields ne sont pas forcement nécessaire dans une v1 du service\n\n ```\n# Récupérer les <%= model %> actifs du site 787120 qui n'ont pas été affectés à une tournée\n> usecase : gestion de l'affectation du <%= model %> à une tournée par un site (GCP sur Tracéo)\n\ncurl –i -X GET \\\n-H \"Accept: application/json\" \\\n-H \"Authorization: Basic cmVhZG9ubHk6cGFzc3dvcmQ=\" \\\n <%= baseUrl %><%= domain %>/<%= version %>/<%= model %>?site_regate_id=787120&tournee_id=NULL&status=active&start_index=1&count=10\n\n\n# Récupérer les <%= model %> actifs affectés à la tournée 123456 \n> usecase : préparation du bordereau de distri (GCP Tracéo)\n\ncurl –i -X GET \\\n-H \"Accept: application/json\" \\\n-H \"Authorization: Basic cmVhZG9ubHk6cGFzc3dvcmQ=\" \\\n<%= baseUrl %><%= domain %>/<%= version %>/<%= model %>?tournee_id=123456&status=active&start_index=1&count=10\n\n# Récupérer les <%= model %> actifs qui n'ont pas été affectés à un site \n> usecase : A VALIDER TRACEO détecter un défaut de paramétrage/organisation de la distri dans RZP (IHM tracéo à prévoir)\ncurl –i -X GET \\\n-H \"Accept: application/json\" \\\n-H \"Authorization: Basic cmVhZG9ubHk6cGFzc3dvcmQ=\" \\\n<%= baseUrl %><%= domain %>/<%= version %>/<%= model %>?site_regate_id=NULL&status=active&start_index=1&count=10\n\n# Récupérer les <%= model %> actifs par identifiant de zone d'adresse et date de modification\n> usecase : A PRECISER : demandé lors de la réunion EB  mais usecase à préciser\ncurl –i -X GET \\\n-H \"Accept: application/json\" \\\n-H \"Authorization: Basic cmVhZG9ubHk6cGFzc3dvcmQ=\" \\\n<%= baseUrl %><%= domain %>/<%= version %>/<%= model %>?zone_adresse_id=456789&status=active&start_date=2015-18-06T00:00:00Z&start_index=1&count=10\n\n# Récupérer les <%= model %> actifs qui ont été modifiés depuis une certaine date\n> usecase : A VALIDER TRACEO détecter une modification de données du <%= model %>\ncurl –i -X GET \\\n-H \"Accept: application/json\" \\\n-H \"Authorization: Basic cmVhZG9ubHk6cGFzc3dvcmQ=\" \\\n<%= baseUrl %><%= domain %>/<%= version %>/<%= model %>?start_date=2015-18-06T00:00:00Z\n\n# Récupérer les <%= model %> non actifs (supprimés) depuis une certaine date  \n> usecase : supprimer l'affectation <%= model %> et process de distri (jeter cab...)\ncurl –i -X GET \\\n-H \"Accept: application/json\" \\\n-H \"Authorization: Basic cmVhZG9ubHk6cGFzc3dvcmQ=\" \\\n<%= baseUrl %><%= domain %>/<%= version %>/<%= model %>?start_date=2015-18-06T00:00:00&status=inactive\n```\n"
+      operationId: list<%=: model | capitalize%>
+      produces:
+        - application/json
+      parameters:
+        - in: query
+          name: fields
+          description: >
+            Précise les attribut à retourner dans la réponse partielle (champs
+            séparés par des virgules)
+
+
+
+
+
+            Ex ?fields=id,creation_date
+          required: false
+          type: string
+        - in: query
+          name: start_index
+          description: index du premier élement à retourner (débute à 1)
+          default: 1
+          required: false
+          type: integer
+          format: int64
+        - in: query
+          name: count
+          description: "nombre d'éléments à retourner (défaut 10, max 999)"
+          default: 20
+          maximum: 999
+          required: false
+          type: integer
+          format: int64
+        - in: query
+          name: site_regate_id
+          description: >
+            permet de rechercher des <%= model %> à partir de leur identifiant de site
+            (roc ou regate) rattaché
+          required: false
+          type: string
+        - in: query
+          name: site_roc_id
+          description: >
+            permet de rechercher des <%= model %> à partir de leur identifiant de site
+            (roc ou regate) rattaché
+          required: false
+          type: string
+        - in: query
+          name: status
+          description: "permet de rechercher des <%= model %> en fonction de leur statut actifs ou non actifs \n"
+          required: false
+          type: string
+        - in: query
+          name: zone_adresse_id
+          description: >
+            permet de rechercher des <%= model %> à partir de l'identifiant de zone
+            d'adresse
+          required: false
+          type: string
+        - in: query
+          name: tournee_id
+          description: >
+            permet de rechercher des <%= model %> à partir de leur identifiant de
+            tournée  rattachée (NULL pour voir les <%= model %> sans rattachement)
+          required: false
+          type: string
+      security:
+        - basicAuth: []
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/Pagination'
+        '304':
+          description: not modified
+        '400':
+          description: 'Bad request, parameters are not correct'
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Error'
+        '401':
+          description: 'Unauthorized, the authentification is invalid or missing'
+        '403':
+          description: 'Forbidden, permissions are insufficient'
+        '429':
+          description: Too many requests
+        '500':
+          description: Internal server error
+        '503':
+          description: Temporary unavailable
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Error'
+  '/<%= model %>/{id}':
+    get:
+      tags:
+        - readOnly
+        - readWrite
+      summary: "Récupère un <%= model %>, note vu la faible volumétrie le filtrage n'est pas impératif en V1"
+      description: "```\n#Retourne le <%= model %> 999 avec des filtres sur les attributs\n\n>usecase : A DETAILLER : permet d'afficher les détail d'un <%= model %>\n\nCURL –i -X GET \\\n-H \"Accept: application/json\" \\\n-H \"Authorization: Basic cmVhZG9ubHk6cGFzc3dvcmQ=\" \\\n<%= baseUrl %><%= domain %>/<%= version %>/<%= model %>/999E?fields=id,nom,tournee_id,site_regate_id\n```\n"
+      operationId: getOne<%=: model | capitalize%>
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          name: id
+          description: Identifiant unique du <%= model %> à récupérer
+          required: true
+          type: string
+        - in: query
+          name: fields
+          description: >
+            Précise les attributs à retourner dans la réponse (champs séparés par
+            des virgules)
+
+
+
+
+
+            Ex ?fields=id,nom,tournee_id,site_regate_id
+          required: false
+          type: string
+      security:
+        - basicAuth: []
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/<%=: model | capitalize %>'
+        '304':
+          description: not modified
+        '400':
+          description: 'Bad request, parameters are not correct'
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Error'
+        '401':
+          description: 'Unauthorized, the authentification is invalid or missing'
+        '403':
+          description: 'Forbidden, permissions are insufficient'
+        '404':
+          description: Not found
+        '429':
+          description: Too many requests
+        '500':
+          description: Internal server error
+        '503':
+          description: Temporary unavailable
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Error'
+    put:
+      tags:
+        - readWrite
+      summary: Met à jour completement un <%= model %>
+      description: " \n\n```\n# Met à jour complètement le <%= model %> 999\nCURL –i -X PUT \\\n-H \"Accept: application/json\" \\\n-H \"Authorization: Basic cmVhZG9ubHk6cGFzc3dvcmQ=\" \\\n-d \"{'identifiant': '096682','nom': 'TABAC PRESSE ROUSSEAU','adresse1': '194 RUE NATIONALE','adresse2': '','adresse3': '','indiceDeLocalisation': '','codePostal': '72000','localite': 'LE MANS','coordGeolocalisationLatitude': '48','coordGeolocalisationLongitude': '0.199','accesPersonneMobiliteReduite': '','typeDePoint': 'A2P','poidsMaxi': '20','lotAcheminement': 'MNS1','distributionSort': '72HP1','versionPlanTri': '7','HoraireOuverture': [ { 'periodeActiviteHoraireDeb': '01/01', 'periodeActiviteHoraireFin': '30/01', 'horairesOuvertureLundi': '07:00-12:00 14:00-19:00', 'horairesOuvertureMardi': '07:00-20:00 00:00-00:00', 'horairesOuvertureMercredi': '07:00-20:00 00:00-00:00', 'horairesOuvertureJeudi': '07:00-20:00 00:00-00:00', 'horairesOuvertureVendredi': '07:00-20:00 00:00-00:00', 'horairesOuvertureSamedi': '07:00-14:00 00:00-00:00', 'horairesOuvertureDimanche': '00:00-00:00 00:00-00:00' }, { 'periodeActiviteHoraireDeb': '25/02', 'periodeActiviteHoraireFin': '31/12', 'horairesOuvertureLundi': '07:00-12:00 00:00-00:00', 'horairesOuvertureMardi': '07:00-20:00 00:00-00:00', 'horairesOuvertureMercredi': '07:00-20:00 00:00-00:00', 'horairesOuvertureJeudi': '07:00-20:00 00:00-00:00', 'horairesOuvertureVendredi': '07:00-20:00 00:00-00:00', 'horairesOuvertureSamedi': '07:00-14:00 00:00-00:00', 'horairesOuvertureDimanche': '00:00-00:00 00:00-00:00' }],'PeriodeFermeture': [ { 'calendarDeDebut': '28/02/2014', 'calendarDeFin': '31/03/2014' }, { 'calendarDeDebut': '25/12/2015', 'calendarDeFin': '31/12/2015' }]}\" \\\n<%= baseUrl %><%= domain %>/<%= version %>/<%= model %>/999\n\n```\n"
+      operationId: fullUpdateOne<%=: model | capitalize %>
+      consumes:
+        - application/x-www-form-urlencoded
+      produces:
+        - application/json
+      security:
+        - basicAuth: []
+      parameters:
+        - in: path
+          name: id
+          description: Identifiant unique du <%= model %> à mettre à jour
+          required: true
+          type: string
+        - in: body
+          name: body
+          description: ressource <%= model %>
+          required: false
+          schema:
+            $ref: '#/definitions/<%=: model | capitalize %>'
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/<%=: model | capitalize %>'
+        '400':
+          description: 'Bad request, parameters are not correct'
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Error'
+        '401':
+          description: 'Unauthorized, the authentification is invalid or missing'
+        '403':
+          description: 'Forbidden, permissions are insufficient'
+        '412':
+          description: 'Precondition failed, versions conflit'
+        '429':
+          description: Too many requests
+        '500':
+          description: Internal server error
+        '503':
+          description: Temporary unavailable
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Error'
+    post:
+      tags:
+        - readWrite
+      summary: Met à jour partiellement (un ou plusieurs champs) un <%= model %>
+      description: "```\n# Met à jour le <%= model %> 123456 en lui affectant la tournée 999\n> usecase : A PRECISER traceo affectation de <%= model %> à une tournée\nCURL –i -X POST \\\n-H \"Accept: application/json\" \\\n-H \"Content-Type: multipart/form-data\" \\\n-H \"Authorization: Basic cmVhZG9ubHk6cGFzc3dvcmQ=\" \\\n-d \"{'tournee_id'='999'}\" \\\n<%= baseUrl %><%= domain %>/<%= version %>/<%= model %>/123456\n\n# Met à jour le <%= model %> 123456 en lui affectant le site roc 787120\n> usecase : usecase : n’existe pas à priori, la saisie de code roc est gérée automatiquement par CIPRES\nCURL –i -X POST \\\n-H \"Accept: application/json\" \\\n-H \"Authorization: Basic cmVhZG9ubHk6cGFzc3dvcmQ=\" \\\n-d \"{'site_roc_id'='787120'}\" \\\n<%= baseUrl %><%= domain %>/<%= version %>/<%= model %>/123456\n\n# Met à jour le <%= model %> 987654 en lui affectant le site regate 787120\n> usecase : n’existe pas à priori, la saisie de code regate est gérée automatiquement par CIPRES\nCURL –i -X POST \\\n-H \"Accept: application/json\" \\\n-H \"Authorization: Basic cmVhZG9ubHk6cGFzc3dvcmQ=\" \\\n-d \"{'site_regate_id'='787120'}\" \\\n<%= baseUrl %><%= domain %>/<%= version %>/<%= model %>/987654\n\n# Met à jour le <%= model %> 999 en lui affectant la zone d'adresse 22222\n> usecase : n’existe pas à priori, la saisie de zone d’adresse est gérée automatiquement par CIPRES\nCURL –i -X POST \\\n-H \"Accept: application/json\" \\\n-H \"Authorization: Basic cmVhZG9ubHk6cGFzc3dvcmQ=\" \\\n-d \"{'zone_adresse_id'='22222'}\" \\\n<%= baseUrl %><%= domain %>/<%= version %>/<%= model %>/999\n```\n"
+      operationId: partialUpdate<%=: model | capitalize %>
+      consumes:
+        - application/x-www-form-urlencoded
+      produces:
+        - application/json
+      security:
+        - basicAuth: []
+      parameters:
+        - in: path
+          name: id
+          description: Identifiant unique du <%= model %> à mettre à jour
+          required: true
+          type: string
+        - in: body
+          name: body
+          description: ressource <%= model %>
+          required: false
+          schema:
+            $ref: '#/definitions/<%=: model | capitalize %>'
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/<%=: model | capitalize %>'
+        '304':
+          description: not modified
+        '400':
+          description: 'Bad request, parameters are not correct'
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Error'
+        '401':
+          description: 'Unauthorized, the authentification is invalid or missing'
+        '403':
+          description: 'Forbidden, permissions are insufficient'
+        '404':
+          description: Not found
+        '412':
+          description: 'Precondition failed, versions conflit'
+        '429':
+          description: Too many requests
+        '500':
+          description: Internal server error
+        '503':
+          description: Temporary unavailable
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Error'
+    delete:
+      tags:
+        - readWrite
+      summary: 'Supprime un <%= model %>'
+      description: "Supprime le <%= model %> 999 \n\n```\nCURL –i -X DELETE \\\n-H \"Accept: application/json\" \\\n-H \"Authorization: Basic cmVhZG9ubHk6cGFzc3dvcmQ=\" \\\n<%= baseUrl %><%= domain %>/<%= version %>/<%= model %>/999\n```\n"
+      operationId: deleteOne<%=: model | capitalize %>
+      produces:
+        - application/json
+      security:
+        - basicAuth: []
+      parameters:
+        - in: path
+          name: id
+          description: identifiant unique du <%= model %> à suprimer
+          required: true
+          type: string
+      responses:
+        '204':
+          description: Deleted
+        '401':
+          description: 'Unauthorized, the authentification is invalid or missing'
+        '403':
+          description: 'Forbidden, permissions are insufficient'
+        '404':
+          description: Not found
+        '429':
+          description: Too many requests
+        '500':
+          description: Internal server error
+        '503':
+          description: Temporary unavailable
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Error'
+definitions:
+  Pagination:
+    description: Format de pagination
+    properties:
+      paginate:
+        $ref: '#/definitions/Paginate'
+      <%= model %>:
+        type: array
+        description: 'Ressources renvoyées, vide si aucune'
+        items:
+          $ref: '#/definitions/<%=: model | capitalize %>'
+  Paginate:
+    description: "Lien de pagination et nombre d'éléments"
+    properties:
+      next:
+        type: string
+        description: >
+          Lien href permettant de consulter la page suivante
+
+          ex '<%= baseUrl %><%= model %>/v1/<%= model %>?start_index=21&count=10'
+      prev:
+        type: string
+        description: |
+          Lien href permettant de consulter la page précedente
+          ex '<%= baseUrl %><%= model %>/v1/<%= model %>?start_index=1&count=10'
+      total_results:
+        type: integer
+        format: int64
+        description: "Nombre total d'items de la recherche (ex 27)"
+  Error:
+    description: "Format des retours d'erreur"
+    required:
+      - code
+    properties:
+      message:
+        type: string
+        description: "long description error message (ex 'A user must have an email address')"
+      code:
+        type: string
+        description: 'code to describe the error, ex "invalid_user"'
+  HoraireOuverture:
+    description: "Horaire d'ouverture des <%= model %>"
+    required:
+      - periodeActiviteHoraireDeb
+      - periodeActiviteHoraireFin
+    properties:
+      periodeActiviteHoraireDeb:
+        type: string
+        description: >
+          Indique la période sur laquelle s’appliquent les horaires d’ouverture
+          du <%= model %>. Un point peut posséder 1 à n périodes d’activité horaire
+          avec des horaires d’ouverture différents. format JJ/MM
+        example: 28/02
+      periodeActiviteHoraireFin:
+        type: string
+        description: >
+          Indique la période sur laquelle s’appliquent les horaires d’ouverture
+          du <%= model %>. Un point peut posséder 1 à n périodes d’activité horaire
+          avec des horaires d’ouverture différents. format JJ/MM
+        example: 31/03
+      horairesOuvertureLundi:
+        type: string
+        description: >
+          Indique les horaires d’ouverture du <%= model %> le lundi. Format
+          'nn:nn-nn:nn nn:nn-nn:nn'
+        example: '08:30-12:00 13:30-19:30'
+      horairesOuvertureMardi:
+        type: string
+        description: >
+          Indique les horaires d’ouverture du <%= model %> le mardi. Format
+          'nn:nn-nn:nn nn:nn-nn:nn'
+        example: '08:30-12:00 13:30-19:30'
+      horairesOuvertureMercredi:
+        type: string
+        description: >
+          Indique les horaires d’ouverture du <%= model %> le mercredi. Format
+          'nn:nn-nn:nn nn:nn-nn:nn'
+        example: '08:30-12:00 13:30-19:30'
+      horairesOuvertureJeudi:
+        type: string
+        description: >
+          Indique les horaires d’ouverture du <%= model %> le jeudi. Format
+          'nn:nn-nn:nn nn:nn-nn:nn'
+        example: '08:30-12:00 13:30-19:30'
+      horairesOuvertureVendredi:
+        type: string
+        description: >
+          Indique les horaires d’ouverture du <%= model %> le vendredi. Format
+          'nn:nn-nn:nn nn:nn-nn:nn'
+        example: '08:30-12:00 13:30-19:30'
+      horairesOuvertureSamedi:
+        type: string
+        description: >
+          Indique les horaires d’ouverture du <%= model %> le samedi. Format
+          'nn:nn-nn:nn nn:nn-nn:nn'
+        example: '08:30-12:00 13:30-19:30'
+      horairesOuvertureDimanche:
+        type: string
+        description: >
+          Indique les horaires d’ouverture du <%= model %> le dimanche. Format
+          'nn:nn-nn:nn nn:nn-nn:nn'
+        example: '08:30-12:00 13:30-19:30'
+  PeriodeFermeture:
+    description: Périodes de fermeture des <%= model %>
+    properties:
+      periodeActiviteHoraireDeb:
+        type: string
+        description: >
+          Indique la période sur laquelle s’appliquent les horaires d’ouverture
+          du <%= model %>. Un point peut posséder 1 à n périodes d’activité horaire
+          avec des horaires d’ouverture différents. format JJ/MM
+        example: 28/02
+      periodeActiviteHoraireFin:
+        type: string
+        description: >
+          Indique la période sur laquelle s’appliquent les horaires d’ouverture
+          du <%= model %>. Un point peut posséder 1 à n périodes d’activité horaire
+          avec des horaires d’ouverture différents. format JJ/MM
+        example: 31/03
+  <%=: model | capitalize %>:
+    description: Format des ressources <%= model %>
+    required:
+      - id
+      <%
+getAttributeDefinition = function(key, key_data, padding) {
+    var output= "";
+    output += padding + key + ":"+ "\n";
+    padding += "\t" ;
+    if ( key_data.type !== undefined) {
+      if (key_data.type == "double") {
+        output += padding + "type: " + "integer" + "\n" ;
+        output += padding + "format: " + "int64"+ "\n";
+      }
+      else if (key_data.type == "long") {
+        output += padding + "type: " + "integer"+ "\n";
+        output += padding + "format: " + "int64"+ "\n";
+      }
+      else{
+        output += padding + "type: " + "integer"+ "\n";
+      }
+      output += padding + "description: " + "todo"+ "\n";
+      output += padding + "example: " + "todo"+ "\n";
+    }
+    else {
+      if (key_data.properties !== undefined) {
+        output += padding + "type: " + "object"+ "\n";
+        padding += "\t" ;
+        output += padding + "properties:"+ "\n";
+        padding += "\t" ;
+        for(var subkey in key_data.properties) {
+          console.log("aaagggggggggggggggg");
+          console.log("key_data.properties");console.log(key_data.properties);
+          console.log("subkey");console.log(subkey);
+          console.log("key_data.properties.subkey");console.log(key_data.properties[subkey]);
+          console.log("aaagggggggggggggggg");
+          output += getAttributeDefinition(subkey, key_data.properties[subkey], padding);
+        }
+      }
+    }
+    return output;
+}
+%>
+    properties:
+    <% for(var key in mapping){
+      console.log(key);
+      console.log(mapping[key]); %>
+<%=getAttributeDefinition(key,  mapping[key], "\t\t\t") %>
+    <% } %>
+
+
+      id:
+        type: string
+        description: Référence Unique La Poste ColiPoste du <%= model %>
+        example: acb23ea468
+      nom:
+        type: string
+        description: Nom du point <%= model %>
+        example: BAR TABAC LOTO PMU LE PALAIS
+      adresse1:
+        type: string
+        description: Adresse du <%= model %>
+        example: TODO
+      adresse2:
+        type: string
+        description: TODO
+        example: TODO
+      adresse3:
+        type: string
+        description: TODO
+        example: TODO
+      indiceDeLocalisation:
+        type: string
+        description: L’indice de localisation est une donnée spécifique aux points commerces de proximité (typeDePoint A2P).
+        example: Centre commercial Carré Sénart
+      codePostal:
+        type: string
+        description: Code Postal du <%= model %>
+        example: 75015
+      localite:
+        type: string
+        description: Localité du <%= model %>
+        example: Paris
+      coordGeolocalisationLatitude:
+        type: string
+        description: Coordonnées latitude exprimées en degrés décimaux suivant la norme WSG84.
+        example: 48.49978
+      coordGeolocalisationLongitude:
+        type: string
+        description: Coordonnées longitude exprimées en degrés décimaux suivant la norme WSG84.
+        example: -2.75141
+      accesPersonneMobiliteReduite:
+        type: boolean
+        description: "Indique l'accessibilité du <%= model %>. Valeurs possibles :« 1 » pour oui, « 0 » pour non. Une valeur vide indique que l’information n’est pas connue. Spécifique aux points bureaux de poste choisis (BPR)."
+        example: 1
+      typeDePoint:
+        type: string
+        description: >
+          Type de <%= model %> * « A2P » pour les commerces de proximité du réseau
+          « mon commerçant » * « CIT » pour les Cityssimos (« mon cityssimo »)
+          * « BPR » pour les bureaux de poste choisis (« mon bureau de poste »)
+          * « CDI » pour les centres de distribution de La Poste choisis (« mon
+          bureau de poste ») * « ACP » pour les agences ColiPoste choisies (« mon
+          bureau de poste »)
+        example: A2P
+      poidsMaxi:
+        type: string
+        description: Poids maximum en kg accepté par le <%= model %>
+        example: 3
+      lotAcheminement:
+        type: string
+        description: '???? Ces données sont spécifiques aux points commerces de proximité (A2P).'
+        example: TODO
+      distributionSort:
+        type: string
+        description: '???? Ces données sont spécifiques aux points commerces de proximité (A2P).'
+        example: TODO
+      versionPlanTri:
+        type: string
+        description: '???? Ces données sont spécifiques aux points commerces de proximité (A2P).'
+        example: TODO
+      PeriodeFermeture:
+        type: array
+        description: Périodes de fermeture
+        items:
+          $ref: '#/definitions/PeriodeFermeture'
+      HoraireOuverture:
+        type: array
+        description: "Horaires d'ouvertures"
+        items:
+          $ref: '#/definitions/HoraireOuverture'
+      tournee_id:
+        type: string
+        description: identifiant de tournée qui réalise la distribution dans le <%= model %>
+        example: 12345
+      site_regate_id:
+        type: string
+        description: identifiant du site régate qui réalise la distribution dans le <%= model %>
+        example: 787120
+      site_roc_id:
+        type: string
+        description: identifiant du site roc qui réalise la distribution dans le <%= model %>
+        example: 787120
+      zone_adresse_id:
+        type: string
+        description: "identifiant de la zone d'adresse (CodePostal/localité) qui correspond au <%= model %>"
+        example: 123456789
+      status:
+        type: string
+        description: "statut du <%= model %> active (valeur par défaut)|inactive. Un <%= model %> est inactif s'il a été supprimé par le référentiel source <%= model %>"
+        example: active
+      creation_date:
+        type: string
+        format: date-time
+        description: >
+          Date de création de la ressource au format RFC3339 (créé
+          automatiquement par l'API)
+
+          ex '2015-06-18T23:50:45Z'
+      modification_date:
+        type: string
+        format: date-time
+        description: >
+          Date de dernière modification de la ressource de la ressource (mis
+          à jour automatiquement par l'API)
+
+          ex '2015-06-18T23:50:45Z'

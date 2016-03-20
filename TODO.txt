@@ -1,0 +1,113 @@
+NEW
+logger
+update components (sails,...)
+internationalise swagger
+add exemple from db in swagger
+grafana/graphite
+improve postman
+get mapping
+modifier mapping
+deleter mapping
+reindexer mapping
+_sort _order
+_format (csv)
+error console.log --> console.error
+watson or bunyan log
+english in tests
+passport
+express instead of sails
+docker
+now-1/d in creation, modification and not just search
+version management in files
+improve test from scratch
+github
+
+TEST
+create index from scrath from elk
+chanche sample to test mocha
+controler l'abescence de . dans un nom de champ --> erreur lors de la création
+test post put patch with right etag
+tester swagger
+tester postman
+erreur elasticsearch (index miss, corrupted, stop)
+error message when elk is down
+http code 500 when elk is down
+
+BUGFIX
+/sample/v1/users?votes_lt=9999999999 :send 404 instead of 200 (max)
+delete with etag when not exist send 409 instead of 404
+
+
+tests
+
+//test : _ne, plusieurs _ne, plusieur egal popularity 1007,1004 avec un autre egale (should)
+// gte, lte
+//TODO erreurs dans gte valeurs non numériques
+//_like ,
+
+{
+            "name": "sub",
+            "mail": "sub@unknownmail.com",
+            "pwd": "mypassword",
+            "votes": 6,
+            "is_vip": true,
+            "address" : {
+            	"postal_code":"07340",
+                "locality":"Félines"
+            }
+        }
+
+Fields
+http://localhost:1337/sample/v1/users/4yZpPWYjx?fields=address.locality
+http://localhost:1337/sample/v1/users/4yZpPWYjx?fields=address
+
+Exists
+http://localhost:1337/sample/v1/users?address_exists=true
+http://localhost:1337/sample/v1/users?address.locality_exists=true
+http://localhost:1337/sample/v1/users?address_exists=false
+http://localhost:1337/sample/v1/users?address.locality_exists=false
+
+
+< > <= >=
+http://localhost:1337/sample/v1/users?votes_lt=2
+http://localhost:1337/sample/v1/users?votes_lte=2
+http://localhost:1337/sample/v1/users?votes_gt=2
+http://localhost:1337/sample/v1/users?votes_gte=2
+
+
+Dates
+now, now+1d, now-1d/d
+http://localhost:1337/sample/v1/users?creation_date_gt=2016-02-25T06:58:23Z
+http://localhost:1337/sample/v1/users?creation_date_gt=now-1d
+
+not equal
+http://localhost:1337/sample/v1/users?votes_ne=2
+
+prefix
+http://localhost:1337/sample/v1/users?name_prefix=cl
+
+like
+http://localhost:1337/sample/v1/users?name_like=cl*
+
+regex
+http://localhost:1337/sample/v1/users?name_regex=clo.?dio
+
+fuzzy
+http://localhost:1337/sample/v1/users?votes_fuzzy=2
+--> votes : 1,2,3
+http://localhost:1337/sample/v1/users?name_fuzzy=cladio
+http://localhost:1337/sample/v1/users?name_fuzzy=cldio
+--> name: clodio
+
+search
+http://localhost:1337/sample/v1/users/search?q=*c
+
+
+
+
+
+
+- in: header
+  name: If-None-Match
+  description: version de la ressource à modifier (correspond à l'etag)
+  type: string

@@ -1,0 +1,40 @@
+{
+    "title": "user schema v1",
+    "type": "object",
+    "required": ["uid", "type"],
+    "properties": {
+        "uid": {
+        		"description" :  "unique id of the ressource",
+            "type": "string",
+   			    "maxLength": 100},
+   			"type": {
+        		"description" :  "type of the ressource : user, tournament",
+            "type": "string",
+   			    "enum": ["user"]},
+   			"name": {
+	   			"description" : "name of the user (login)",
+            "type": "string",
+            "minLength": 1,
+   			    "maxLength": 50,
+   			    "pattern": "^[a-zA-Z0-9]+$"},
+   			"mail": {
+            "type": "string",
+            "minLength": 6,
+   			    "maxLength": 50,
+   			    "pattern": "^(?:[\\w\\!\\#\\$\\%\\&\\'\\*\\+\\-\/\\=\\?\\^\\`\\{\\|\\}\\~]+\\.)*[\\w\\!\\#\\$\\%\\&\\'\\*\\+\\-\/\\=\\?\\^\\`\\{\\|\\}\\~]+@(?:(?:(?:[a-zA-Z0-9](?:[a-zA-Z0-9\\-](?!\\.)){0,61}[a-zA-Z0-9]?\\.)+[a-zA-Z0-9](?:[a-zA-Z0-9\\-](?!$)){0,61}[a-zA-Z0-9]?)|(?:\\[(?:(?:[01]?\\d{1,2}|2[0-4]\\d|25[0-5])\\.){3}(?:[01]?\\d{1,2}|2[0-4]\\d|25[0-5])\\]))$"},
+   			"logo": {
+            "type": "string",
+   			    "maxLength": 100},
+   			"pwd": {
+            "type": "string",
+   			    "maxLength": 100},
+   			"displayName": {
+   				"description" :  "name of the user (login) that can be displayed",
+            "type": "string",
+   			    "maxLength": 100},
+   			"tel": {
+   				  "type": "string",
+   					"pattern": "^(\\([0-9]{3}\\))?[0-9]{3}-[0-9]{4}$"
+				}
+    }
+}
