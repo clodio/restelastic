@@ -559,8 +559,6 @@ findOneSecondModel :function (req, res) {
   req.params.version = 'v0';//v0 is always the last version
   req.params.domain = req.params.domain;
 
-  console.log(req.query);
-  console.log(req.params);
   this.findOne(req, res);
 },
 

@@ -941,7 +941,7 @@ module.exports = {
       console.log(response);
       console.log(error);
 				if (response && response.found==false) {
-          console.log("gghhhhg");
+          
 				  cb({"error": "not_found","error_description": "no ressource found" });
 				}
 				else if (response && response.status==409) {
