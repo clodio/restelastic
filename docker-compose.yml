@@ -4,13 +4,11 @@ restlastic:
     - elasticsearch
   volumes:
     - .:/app
-    - ./environment/logs:/var/log
-  working_dir: /app
   ports:
     - "1337:1337"
   environment:
     - ELASTICSEARCH_HOST=elasticsearch
-  command: node server.js
+  command: node app.js
 
 elasticsearch:
   image: elasticsearch:2.2
