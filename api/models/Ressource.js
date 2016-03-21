@@ -3,7 +3,7 @@ var uuid = require('uuid');
 var shortid = require('shortid');
 var crypto = require('crypto');
 var esclient = new elasticsearch.Client({
-  host: 'localhost:9200',
+  host: '0.0.0.0:9200',
   log: 'trace'
 });
 
@@ -941,7 +941,7 @@ module.exports = {
       console.log(response);
       console.log(error);
 				if (response && response.found==false) {
-          
+
 				  cb({"error": "not_found","error_description": "no ressource found" });
 				}
 				else if (response && response.status==409) {
