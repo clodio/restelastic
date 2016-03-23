@@ -3,7 +3,7 @@ var uuid = require('uuid');
 var shortid = require('shortid');
 var crypto = require('crypto');
 var esclient = new elasticsearch.Client({
-  host: '0.0.0.0:9200',
+  host: 'elasticsearch:9200',
   log: 'trace'
 });
 
