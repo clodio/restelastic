@@ -941,17 +941,17 @@ paths:
               $ref: '#/definitions/Error'
 
 definitions:
-  Pagination:
+  Pagination<%=: model | capitalize%>:
     description: Pagination format
     properties:
       paginate:
-        $ref: '#/definitions/Paginate'
+        $ref: '#/definitions/Paginate<%=: model | capitalize%>'
       <%= model %>:
         type: array
         description: 'Ressources List, empty if none'
         items:
           $ref: '#/definitions/<%=: model | capitalize %>'
-  Paginate:
+  Paginate<%=: model | capitalize%>:
     description: "Pagination links and number of items"
     properties:
       next:
@@ -1021,8 +1021,6 @@ definitions:
         else{
           output += padding + "type: " + key_data.type+ "\n";
         }
-
-
         if (key_data.type == "double" || key_data.type == "float") {
           output += padding + "description: " + "todo describe"+ "\n";
           var value= sample_data[key] || "10.01";
