@@ -2,10 +2,7 @@ var elasticsearch = require('elasticsearch');
 var uuid = require('uuid');
 var shortid = require('shortid');
 var crypto = require('crypto');
-var esclient = new elasticsearch.Client({
-  host: '0.0.0.0:9200',
-  log: 'trace'
-});
+var esclient = new elasticsearch.Client(sails.config.connections.someElasticsearchServer);
 
 /**
 * Ressource.js

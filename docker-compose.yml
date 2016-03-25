@@ -1,5 +1,5 @@
 restlastic:
-  image: clodio/restlastic
+  image: clodio/restelastic
   links:
     - elasticsearch
   volumes:
