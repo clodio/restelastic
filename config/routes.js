@@ -38,6 +38,17 @@ module.exports.routes = {
     view: 'homepage'
   },
 
+	/***************************************************************************
+  *                                                                          *
+  * Custom routes here...                                                    *
+  *                                                                          *
+  *  If a request to a URL doesn't match any of the custom routes above, it  *
+  * is matched against Sails route blueprints. See `config/blueprints.js`    *
+  * for configuration options and examples.                                  *
+  *                                                                          *
+  ***************************************************************************/
+  //'GET /users/v1/user/:id': 'RessourceController.alter',
+
 	'GET /:domain/:version/swagger/:id': 'RessourceController.swagger_template',
   'GET /:domain/:version/:model/:id/_:secondModel/search?*': 'RessourceController.searchSecondModel',
 	'GET /:domain/:version/:model/:id/_:secondModel/:secondId': 'RessourceController.findOneSecondModel',
@@ -47,7 +58,6 @@ module.exports.routes = {
   'POST /:domain/:version/:model/:id/_:secondModel/:secondId': 'RessourceController.alterSecondModel',
 	'PATCH /:domain/:version/:model/:id/_:secondModel/:secondId': 'RessourceController.alterSecondModel',
 	'DELETE /:domain/:version/:model/:id/_:secondModel/:secondId': 'RessourceController.deleteSecondModel',
-
 
 	'GET /:domain/:version/:model/search?*': 'RessourceController.search',
 	'GET /:domain/:version/:model/swagger.yaml?*': 'RessourceController.swagger',
@@ -59,27 +69,5 @@ module.exports.routes = {
   'POST /:domain/:version/:model/:id': 'RessourceController.alter',
 	'PATCH /:domain/:version/:model/:id': 'RessourceController.alter',
   'DELETE /:domain/:version/:model/:id': 'RessourceController.deleteOne',
-
-  //'get /:action( user | profile)': 'RessourceController.profile'
-
-  //'GET /[a-z]/v1/user?*': 'RessourceController.findAll',
-  //'PUT /users/v1/user/:id': 'RessourceController.alter',
-  //'POST /users/v1/user': 'RessourceController.create',
-  //'POST /users/v1/user/:id': 'RessourceController.create'
-
-// /^\/users\/v1\/user\/(?:([^\/]+?))\/?$/i
-
-//'GET /personnemorale/:id': 'personneMoraleController.findOne'
-
-
-  /***************************************************************************
-  *                                                                          *
-  * Custom routes here...                                                    *
-  *                                                                          *
-  *  If a request to a URL doesn't match any of the custom routes above, it  *
-  * is matched against Sails route blueprints. See `config/blueprints.js`    *
-  * for configuration options and examples.                                  *
-  *                                                                          *
-  ***************************************************************************/
 
 };
