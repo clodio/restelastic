@@ -65,17 +65,10 @@ module.exports.connections = {
   //   // database: 'your_mongo_db_name_here'
   // },
 
-//someElasticsearchServer:
-//   {
-//    adapter: 'sails-elasticsearch',
-  //  hosts: ['http://127.0.0.1:9200'],
-  //  keepAlive: false,
-  //  sniffOnStart: true,
-  //  maxRetries: 10,
-  //  deadTimeout: 40000,
-//    sniffOnConnectionFault: true,
-  //  apiVersion: '1.3'
-//},
+  someElasticsearchServer:{
+    host: (process.env.ELASTICSEARCH_HOST || 'localhost') + ':' + ( process.env.ELASTICSEARCH_PORT || '9200') ,
+    log: process.env.ELASTICSEARCH_LOG || 'error'
+  }
 
   /***************************************************************************
   *                                                                          *
