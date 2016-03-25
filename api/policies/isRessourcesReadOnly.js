@@ -71,11 +71,10 @@ module.exports = function isRessourcesReadOnly (req, res, next) {
       if (decodedJWT.nbf && decodedJWT.nbf > now) {
       	return res.send(403, {"error":"authentification_jwt_used_too_early","error_description":"jwt token is used too early"});
       }
-
       // if you want more security
       //if ( !( decodedJWT.scopes.indexOf(req.params.domain + '_' + req.params.model + '.read') > -1) ) {
       if ( !( decodedJWT.scopes.indexOf('ressources' + '.read') > -1) ) {
-      	return res.send(403, {"error":"authentification_jwt_scope_error","error_description":"jwt token has not enough scopes"});
+          return res.send(403, {"error":"authentification_jwt_scope_error","error_description":"jwt token has not enough scopes"});
       }
   	}
   	catch(err) {

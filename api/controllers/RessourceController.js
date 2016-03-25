@@ -13,15 +13,13 @@ module.exports = {
 
     // Get the id parameter from the URI route
     if (req.params) {
-      Ressource.findOne(req.params, req.query , function (err, outputRessource) {
+      Ressource.findOne(req, req.query , function (err, outputRessource) {
         if (err && err.error =="not_found") {
         	// send a 404 Not Found
           return res.send(404, "{}");
         }
         else if (err) {
-          //todo improve
-          err.error_code="ERR_500_0017";
-          sails.log.error(err);
+          ReportError.error(req,err,"ERR_500_0017");
           return res.send(500, sails.config.errors["ERR_UNKNOWN"]);
         }
         else {
@@ -62,9 +60,7 @@ module.exports = {
         return res.send(500, [{"error": "index_not_found","error_description": err.error_description }]);
       }
       else if (err && err.error) {
-        //todo improve
-        err.error_code="ERR_500_0002";
-        sails.log.error(err);
+        ReportError.error(req,err,"ERR_500_0002");
         return res.send(500, sails.config.errors["ERR_UNKNOWN"]);
       }
       else {
@@ -93,8 +89,7 @@ module.exports = {
 
       Ressource.search(req, function (err, outputRessource) {
         if (err) {
-          err.error_code="ERR_500_0003";
-          sails.log.error(err);
+          ReportError.error(req,err,"ERR_500_0003");
           return res.send(500, sails.config.errors["ERR_UNKNOWN"]);
         }
         else {
@@ -156,9 +151,7 @@ module.exports = {
           return res.send(400, [{"error": err.error,"error_description": err.error_description}]);
         }
         else if (err) {
-        	//TODO : change output error message format
-          err.error_code="ERR_500_0004";
-          sails.log.error(err);
+          ReportError.error(req,err,"ERR_500_0004");
           return res.send(500, sails.config.errors["ERR_UNKNOWN"]);
         }
         else {
@@ -205,7 +198,7 @@ module.exports = {
         req.body.id = req.params.id;
       }
 
-      Ressource.create(req.params,req.body, function (err, outputRessource) {
+      Ressource.create(req,req.body, function (err, outputRessource) {
         if (err && err.error=="ressource_version_conflict") {
           return res.send(409, [{"error": err.error,"error_description": "Conflict : ressource " +req.params.id + " already exist"}]);
         }
@@ -213,15 +206,11 @@ module.exports = {
           return res.send(400, [{"error": err.error,"error_description": err.error_description}]);
         }
         else if (err && err.created===false) {
-          //TODO : change output error message format
-          err.error_code="ERR_500_0005";
-          sails.log.error(err);
+          ReportError.error(req,err,"ERR_500_0005");
           return res.send(500, sails.config.errors["ERR_UNKNOWN"]);
         }
         else if (err) {
-          //TODO : change output error message format
-          err.error_code="ERR_500_0006";
-          sails.log.error(err);
+          ReportError.error(req,err,"ERR_500_0006");
           return res.send(500, sails.config.errors["ERR_UNKNOWN"]);
         }
         else {
@@ -273,11 +262,11 @@ module.exports = {
        }
        else {
          //retrieve ressource
-         Ressource.findOne(req.params, req.query , function (err, outputRessource) {
+         Ressource.findOne(req, req.query , function (err, outputRessource) {
            if (err && err.error =="not_found") {
 
              //fullUpdate
-            Ressource.fullUpdate(req.params,req.body, function (err, outputRessource) {
+            Ressource.fullUpdate(req,req.body, function (err, outputRessource) {
               if (err && err.error=="ressource_version_conflict") {
                 //console.sails.log("409:conflict");
                 //todo : send 404 before 409
@@ -287,15 +276,11 @@ module.exports = {
                 return res.send(400, [{"error": err.error,"error_description": err.error_description}]);
               }
               else if (err && err.created===false) {
-                //TODO : change output error message format
-                err.error_code="ERR_500_0007";
-                sails.log.error(err);
+                ReportError.error(req,err,"ERR_500_0007");
                 return res.send(500, sails.config.errors["ERR_UNKNOWN"]);
               }
               else if (err) {
-                //TODO : change output error message format
-                err.error_code="ERR_500_0008";
-                sails.log.error(err);
+                ReportError.error(req,err,"ERR_500_0008");
                 return res.send(500, sails.config.errors["ERR_UNKNOWN"]);
               }
               else {
@@ -306,9 +291,7 @@ module.exports = {
             });
            }
            else if (err) {
-             //TODO : change output error message format
-             err.error_code="ERR_500_0009";
-             sails.log.error(err);
+             ReportError.error(req,err,"ERR_500_0009");
              return res.send(500, sails.config.errors["ERR_UNKNOWN"]);
            }
            else {
@@ -322,7 +305,7 @@ module.exports = {
            			// full update ressource with creation_date if send
                 req.params.doc_as_upsert=true;
 
-                Ressource.fullUpdate(req.params,req.body, function (err, outputRessource) {
+                Ressource.fullUpdate(req,req.body, function (err, outputRessource) {
                   if (err && err.error=="ressource_version_conflict") {
                     return res.send(409, [{"error": err.error,"error_description": "Conflict : ressource " +req.params.id + " already exist"}]);
                   }
@@ -330,15 +313,11 @@ module.exports = {
                     return res.send(400, [{"error": err.error,"error_description": err.error_description}]);
                   }
                   else if (err && err.created===false) {
-                    //TODO : change output error message format
-                    err.error_code="ERR_500_0010";
-                    sails.log.error(err);
+                    ReportError.error(req,err,"ERR_500_0010");
                     return res.send(500, sails.config.errors["ERR_UNKNOWN"]);
                   }
                   else if (err) {
-                    //TODO : change output error message format
-                    err.error_code="ERR_500_0011";
-                    sails.log.error(err);
+                    ReportError.error(req,err,"ERR_500_0011");
                     return res.send(500, sails.config.errors["ERR_UNKNOWN"]);
                   }
                   else {
@@ -395,15 +374,13 @@ module.exports = {
 
      // Get the id parameter from the URI route
      if (req.params) {
-       Ressource.getMapping(req.params, req.query , function (err, outputRessource) {
+       Ressource.getMapping(req, req.query , function (err, outputRessource) {
          if (err && err.error =="not_found") {
            // send a 404 Not Found
            return res.send(404, "{}");
          }
          else if (err) {
-           //TODO : change output error message format
-           err.error_code="ERR_500_0012";
-           sails.log.error(err);
+           ReportError.error(req,err,"ERR_500_0012");
            return res.send(500, sails.config.errors["ERR_UNKNOWN"]);
          }
          else {
@@ -416,9 +393,7 @@ module.exports = {
                return res.send(404, "{}");
              }
              else if (err) {
-               //TODO : change output error message format
-               err.error_code="ERR_500_0013";
-               sails.log.error(err);
+               ReportError.error(req,err,"ERR_500_0013");
                return res.send(500, sails.config.errors["ERR_UNKNOWN"]);
              }
              else {
@@ -454,15 +429,13 @@ module.exports = {
 
     // Get the id parameter from the URI route
     if (req.params) {
-      Ressource.getMapping(req.params, req.query , function (err, outputRessource) {
+      Ressource.getMapping(req, req.query , function (err, outputRessource) {
         if (err && err.error =="not_found") {
           // send a 404 Not Found
           return res.send(404, "{}");
         }
         else if (err) {
-          //TODO : change output error message format
-          err.error_code="ERR_500_0014";
-          sails.log.error(err);
+          ReportError.error(req,err,"ERR_500_0014");
           return res.send(500, sails.config.errors["ERR_UNKNOWN"]);
         }
         else {
@@ -475,9 +448,7 @@ module.exports = {
               return res.send(404, "{}");
             }
             else if (err) {
-              //TODO : change output error message format
-              err.error_code="ERR_500_00014";
-              sails.log.error(err);
+              ReportError.error(req,err,"ERR_500_00014");
               return res.send(500, sails.config.errors["ERR_UNKNOWN"]);
             }
             else {
@@ -513,15 +484,13 @@ swagger_template   :function (req, res) {
     // Get the id parameter from the URI route
     req.params.model= "swagger";
     if (req.params) {
-      Ressource.findOne(req.params, req.query , function (err, outputRessource) {
+      Ressource.findOne(req, req.query , function (err, outputRessource) {
         if (err && err.error =="not_found") {
           // send a 404 Not Found
           return res.send(404, "{}");
         }
         else if (err) {
-          //todo improve
-          err.error_code="ERR_500_0016";
-          sails.log.error(err);
+          ReportError.error(req,err,"ERR_500_0016");
           return res.send(500, sails.config.errors["ERR_UNKNOWN"]);
         }
         else {
