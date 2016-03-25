@@ -3,6 +3,7 @@ var uuid = require('uuid');
 var shortid = require('shortid');
 var crypto = require('crypto');
 var esclient = new elasticsearch.Client(sails.config.connections.someElasticsearchServer);
+var log = require('captains-log')();
 
 /**
 * Ressource.js
@@ -20,7 +21,7 @@ module.exports = {
 
   // FindOne methods
   findOne: function findOne (params, query, cb){
-    console.log('findOne:model');
+    sails.log('findOne:model');
 
     // create the DSL Query for elastic search
     var DSLQuery = {
@@ -42,11 +43,11 @@ module.exports = {
     // execute the DSL Query
     esclient.get(DSLQuery, function (error, response) {
       if (response && response.found==false) {
-        cb({"error": "not_found","error_description": "no ressource found" });
+        cb(sails.config.errors["NOT_FOUND"]);
       }
       else if (error) {
-        console.log('Error while executing');
-        cb({"error": "internal_error","error_description": "Error while executing" });
+        error.error_code="ERR_internal_2000"
+        cb(sails.config.errors["ERR_WHEN_RETRIEVING"]);
       }
      else {
      		//ressource found, add version ressource etag from elasticsearch tattribute _version
@@ -63,7 +64,7 @@ module.exports = {
 
   // findAll
   findAll: function findAll (req, cb){
-    console.log('findAll:model');
+  sails.log('findAll:model');
 
       var DSLQuery = "";
       var DSLQuery = {};
@@ -320,17 +321,24 @@ module.exports = {
 
     // execute the DSL Query
     esclient.search(DSLQuery, function (error, response) {
+
           if (error && error.message =="No Living connections") {
-            console.log("ERR Internal elastic ko" + JSON.stringify(error));
-            cb({"error": "internal_error","error_description": "Internal problem with db" });
+            error.error_code="ERR_internal_1000";
+            sails.log.error(error);
+            cb(sails.config.errors["ERR_WITH_DATABASE"]);
+          }
+          else if (error && error.message !="Unable to parse/serialize body" && error.message.indexOf("index_not_found_exception") >0) {
+            cb({"error": "index_not_found","error_description": "Unable to find index of the ressource" });
           }
           else if (error && error.message !="Unable to parse/serialize body") {
-            console.log("ERR Internal Serialise" + JSON.stringify(error));
-            cb({"error": "internal_error","error_description": "Error while executing request" });
+            error.error_code="ERR_internal_1001";
+            sails.log.error(error);
+            cb(sails.config.errors["ERR_WHEN_EXECUTE"]);
           }
           else if (error ) {
-            console.log("ERR Internal elastic ko" + JSON.stringify(error));
-            cb({"error": "internal_error","error_description": "Internal problem with database" });
+            error.error_code="ERR_internal_1002";
+            sails.log.error(error);
+            cb(sails.config.errors["ERR_WITH_DATABASE"]);
           }
           else {
 						var collectionOutput={};
@@ -367,7 +375,7 @@ module.exports = {
 
   // search
   search: function search (req, cb){
-    console.log('search:model');
+    sails.log('search:model');
 
       var DSLQuery = "";
       var DSLQuery = {};
@@ -639,8 +647,9 @@ module.exports = {
             cb({"error":"not found"});
           }
           else if (error) {
-            console.log('Error while executing');
-            cb({"error": "internal_error","error_description": "Error while executing request" });
+            error.error_code="ERR_internal_1011";
+            sails.log.error(error);
+            cb(sails.config.errors["ERR_WHEN_RETRIEVING"]);
           }
           else {
             var collectionOutput={};
@@ -720,19 +729,20 @@ module.exports = {
       if (error && response != undefined) {
 
         if (error && response.status==409) {
-          cb({"error": "ressource_version_conflict","error_description": "ressource already exist"});
+          cb(sails.config.errors["CONFLICT"]);
         }
         else if (error && response.status==400) {
           cb({"error": "wrong_arguments","error_description": response.error.root_cause[0].reason});
         }
         else if (error && error.status==404) {
-          cb({"error": "not_found","error_description": "no ressource found" });
+          cb(sails.config.errors["NOT_FOUND"]);
         }
       }
       else if (error) {
       	//todo manage error
-        console.log('Error while executing DSL Query esclient.update');
-        cb({"error": "internal_error","error_description": "Error while executing request" });
+        error.error_code="ERR_internal_1010";
+        sails.log.error(error);
+        cb(sails.config.errors["ERR_WHEN_RETRIEVING"]);
       }
       else {
         // the ressource has been updated, retrieve it
@@ -794,21 +804,20 @@ module.exports = {
       if (error && response != undefined) {
 
         if (error && response.status==409) {
-          cb({"error": "ressource_version_conflict","error_description": "ressource already exist"});
-        }
+            cb(sails.config.errors["CONFLICT"]);        }
         else if (error && response.status==400) {
           cb({"error": "wrong_arguments","error_description": response.error.root_cause[0].reason});
         }
         else if (error) {
-          console.log("ERR#5676");
-          console.log(error);
-          cb({"error": "internal_error","error_description": "internal error while creating" });
+          error.error_code="ERR_internal_1003";
+          sails.log.error(error);
+          cb(sails.config.errors["ERR_WHEN_CREATE"]);
         }
       }
       else if (error) {
-        console.log("ERR#5677");
-        console.log(error);
-        cb({"error": "internal_error","error_description": "internal error while creating" });
+        error.error_code="ERR_internal_1000";
+        sails.log.error(error);
+        cb(sails.config.errors["ERR_WHEN_CREATE"]);
       }
       else {
         if (response) {
@@ -816,9 +825,9 @@ module.exports = {
           Ressource.findOne (params, {} , function (err, outputResponse) {
             //todo : add error test
             if (error) {
-              console.log("ERR#5678");
-              console.log(error);
-              cb({"error": "internal_error","error_description": "internal error while retrieving data" });
+              error.error_code="ERR_internal_1004";
+              sails.log.error(error);
+              cb(sails.config.errors["ERR_WHEN_RETRIEVING"]);
             }
             else {
               cb(err, outputResponse);
@@ -826,9 +835,9 @@ module.exports = {
           });
         }
         else {
-          console.log("ERR#5679");
-          console.log(error);
-          cb({"error": "internal_error","error_description": "no response while creating" });
+          error.error_code="ERR_internal_1005";
+          sails.log.error(error);
+          cb(sails.config.errors["ERR_NO_RESPONSE_WHEN_CREATE"]);
         }
       }
     });
@@ -879,15 +888,15 @@ module.exports = {
     // execute the DSL Query
     esclient.index(DSLQuery, function (error, response) {
       if (error && response.status==409) {
-        cb({"error": "ressource_version_conflict","error_description": "ressource already exist"});
+        cb(sails.config.errors["CONFLICT"]);
       }
       else if (error && response.status==400) {
         cb({"error": "wrong_arguments","error_description": response.error.root_cause[0].reason});
       }
       else if (error) {
-        console.log("ERR#6677");
-        console.log(error);
-        cb({"error": "internal_error","error_description": "internal error while creating" });
+        error.error_code="ERR_internal_1006";
+        sails.log.error(error);
+        cb(sails.config.errors["ERR_WHEN_RETRIEVING"]);
       }
       else {
         if (response) {
@@ -895,9 +904,9 @@ module.exports = {
           Ressource.findOne (params, {} , function (err, outputResponse) {
             //todo : add error test
             if (error) {
-              console.log("ERR#6678");
-              console.log(error);
-              cb({"error": "internal_error","error_description": "internal error while retrieving data" });
+              error.error_code="ERR_internal_1007";
+              sails.log.error(error);
+              cb(sails.config.errors["ERR_WHEN_RETRIEVING"]);
             }
             else {
               cb(err, outputResponse);
@@ -905,9 +914,9 @@ module.exports = {
           });
         }
         else {
-          console.log("ERR#6679");
-          console.log(error);
-          cb({"error": "internal_error","error_description": "no response while creating" });
+          error.error_code="ERR_internal_1008";
+          sails.log.error(error);
+          cb(sails.config.errors["ERR_NO_RESPONSE_WHEN_CREATE"]);
         }
       }
     });
@@ -917,8 +926,7 @@ module.exports = {
 
 
   deleteOne: function deleteOne (req, cb){
-    console.log('deleteOne:model');
- 		// console.log(query);
+    sails.log('deleteOne:model');
 
     // create the DSL Query
     var DSLQuery = '';
@@ -935,14 +943,12 @@ module.exports = {
 		}
 
     esclient.delete(DSLQuery, function (error, response) {
-      console.log(response);
-      console.log(error);
-				if (response && response.found==false) {
 
-				  cb({"error": "not_found","error_description": "no ressource found" });
+				if (response && response.found==false) {
+				  cb(sails.config.errors["NOT_FOUND"]);
 				}
 				else if (response && response.status==409) {
-				  cb({"error": "conflict","error_description": "conflict"});
+				  cb(sails.config.errors["CONFLICT"]);
 				}
 				else if (error) {
 				 	cb(error);
@@ -957,7 +963,7 @@ module.exports = {
 
   // FindOne methods
   getMapping: function getMapping (params, query, cb){
-    console.log('getMapping:model');
+    sails.log('getMapping:model');
 
     // create the DSL Query for elastic search
     var DSLQuery = {
@@ -969,12 +975,11 @@ module.exports = {
     // execute the DSL Query
     esclient.indices.getMapping(DSLQuery, function (error, response) {
       if (error) {
-        console.log('Error while executing');
-        cb({"error": "internal_error","error_description": "Error while executing" });
+        error.error_code="ERR_getMapping_1000";
+        sails.log.error(error);
+        cb(sails.config.errors["ERR_WHEN_EXECUTE"]);
       }
      else {
-        console.log(error);
-        console.log(response);
         //response._source.etag=response._version.toString();
         cb(null, response);
      }

@@ -24,6 +24,6 @@ module.exports.log = {
   *                                                                          *
   ***************************************************************************/
 
-  // level: 'info'
+   level: process.env.RESTLASTIC_LOG || 'warn'
 
 };

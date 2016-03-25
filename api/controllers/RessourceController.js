@@ -20,9 +20,9 @@ module.exports = {
         }
         else if (err) {
           //todo improve
-          console.log("ERR#500_3000");
-          console.log(err);
-          return res.send(500, [{"error": "internal_error","error_description": "May be an hamster bite a wire" }]);
+          err.error_code="ERR_500_0017";
+          sails.log.error(err);
+          return res.send(500, sails.config.errors["ERR_UNKNOWN"]);
         }
         else {
 
@@ -48,7 +48,7 @@ module.exports = {
 
 	// search ressources
   findAll :function (req, res) {
-    console.log("controller:findAll");
+    sails.log("controller:findAll");
 
     var DSLQuerySizeMax = sails.config.blueprints.maxLimit || 1000; //max ressource for paginate
     if (req.query.count > DSLQuerySizeMax) {
@@ -56,11 +56,16 @@ module.exports = {
     }
 
     Ressource.findAll(req, function (err, outputRessource) {
-      if (err && err.error) {
+      if (err && err.error =="index_not_found") {
+        // send a 404 Not Found
+        sails.log.warn("WARN#500_2001");
+        return res.send(500, [{"error": "index_not_found","error_description": err.error_description }]);
+      }
+      else if (err && err.error) {
         //todo improve
-        console.log("ERR#500_2000");
-        console.log(err);
-        return res.send(500, [{"error": "internal_error","error_description": "May be an hamster bite a wire" }]);
+        err.error_code="ERR_500_0002";
+        sails.log.error(err);
+        return res.send(500, sails.config.errors["ERR_UNKNOWN"]);
       }
       else {
 			  //generate etag
@@ -88,9 +93,9 @@ module.exports = {
 
       Ressource.search(req, function (err, outputRessource) {
         if (err) {
-          console.log("ERR#500_1000");
-          console.log(err);
-          return res.send(500, [{"error": "internal_error","error_description": "May be an hamster bite a wire" }]);
+          err.error_code="ERR_500_0003";
+          sails.log.error(err);
+          return res.send(500, sails.config.errors["ERR_UNKNOWN"]);
         }
         else {
            //generate etag
@@ -113,7 +118,7 @@ module.exports = {
 
 	alter :function (req, res) {
 
-    console.log('alter:controller');
+    sails.log('alter:controller');
     //test if body is not empty
     if (  !Object.keys(req.body).length ) {
          return res.send(400, [{"error": "wrong_body","error_description": "The http body request is invalid or empty" }]);
@@ -152,10 +157,9 @@ module.exports = {
         }
         else if (err) {
         	//TODO : change output error message format
-          console.log("ERR#500_0001");
-          console.log(err);
-          return res.send(500, [{"error": "internal_error","error_description": "May be an hamster bite a wire" }]);
-
+          err.error_code="ERR_500_0004";
+          sails.log.error(err);
+          return res.send(500, sails.config.errors["ERR_UNKNOWN"]);
         }
         else {
         	// Send response OK
@@ -178,7 +182,7 @@ module.exports = {
 
 	create :function (req, res) {
       // Get the id parameter from the URI route
-      console.log('create:controller');
+      sails.log('create:controller');
 
       //test if body is not empty
       if (  !Object.keys(req.body).length ) {
@@ -210,15 +214,15 @@ module.exports = {
         }
         else if (err && err.created===false) {
           //TODO : change output error message format
-          console.log("ERR#500_0002");
-          console.log(err);
-          return res.send(500, [{"error": "internal_error","error_description": "May be an hamster bite a wire" }]);
+          err.error_code="ERR_500_0005";
+          sails.log.error(err);
+          return res.send(500, sails.config.errors["ERR_UNKNOWN"]);
         }
         else if (err) {
           //TODO : change output error message format
-          console.log("ERR#500_0003");
-          console.log(err);
-          return res.send(500, [{"error": "internal_error","error_description": "May be an hamster bite a wire" }]);
+          err.error_code="ERR_500_0006";
+          sails.log.error(err);
+          return res.send(500, sails.config.errors["ERR_UNKNOWN"]);
         }
         else {
          //res.setHeader("Etag", crypto.createHash('md5').update(JSON.stringify(outputRessource)).digest('hex'));
@@ -240,7 +244,7 @@ module.exports = {
    //          if etag is not send --> full update with old creation_date
    alterOrCreate :function (req, res) {
 
-       console.log('alterOrCreate:controller');
+       sails.log('alterOrCreate:controller');
        //test if body is not empty
        if (  !Object.keys(req.body).length ) {
             return res.send(400, [{"error": "wrong_body","error_description": "The http body request is invalid or empty" }]);
@@ -269,14 +273,13 @@ module.exports = {
        }
        else {
          //retrieve ressource
-         console.log('alterOrCreate:findOne');
          Ressource.findOne(req.params, req.query , function (err, outputRessource) {
            if (err && err.error =="not_found") {
 
              //fullUpdate
             Ressource.fullUpdate(req.params,req.body, function (err, outputRessource) {
               if (err && err.error=="ressource_version_conflict") {
-                console.log("409:conflict");
+                //console.sails.log("409:conflict");
                 //todo : send 404 before 409
                 return res.send(409, [{"error": err.error,"error_description": "Conflict : ressource " +req.params.id + " already exist"}]);
               }
@@ -285,15 +288,15 @@ module.exports = {
               }
               else if (err && err.created===false) {
                 //TODO : change output error message format
-                console.log("ERR#500_0004");
-                console.log(err);
-                return res.send(500, [{"error": "internal_error","error_description": "May be an hamster bite a wire" }]);
+                err.error_code="ERR_500_0007";
+                sails.log.error(err);
+                return res.send(500, sails.config.errors["ERR_UNKNOWN"]);
               }
               else if (err) {
                 //TODO : change output error message format
-                console.log("ERR#500_0005");
-                console.log(err);
-                return res.send(500, [{"error": "internal_error","error_description": "May be an hamster bite a wire" }]);
+                err.error_code="ERR_500_0008";
+                sails.log.error(err);
+                return res.send(500, sails.config.errors["ERR_UNKNOWN"]);
               }
               else {
                 res.setHeader("Etag", outputRessource.etag);
@@ -303,15 +306,13 @@ module.exports = {
             });
            }
            else if (err) {
-             console.log('alterOrCreate:error');
              //TODO : change output error message format
-             console.log("ERR#500_0006");
-             console.log(err);
-             return res.send(500, [{"error": "internal_error","error_description": "May be an hamster bite a wire" }]);
+             err.error_code="ERR_500_0009";
+             sails.log.error(err);
+             return res.send(500, sails.config.errors["ERR_UNKNOWN"]);
            }
            else {
              //ressource found
-            console.log('alterOrCreate:error');
             //if etag is not null and is different from ressource --> 412
            	if (outputRessource.etag !== req.headers['if-none-match'] && req.headers['if-none-match'] != null) {
            		// The version of the resource is not the same than the client : send conflict error
@@ -330,15 +331,15 @@ module.exports = {
                   }
                   else if (err && err.created===false) {
                     //TODO : change output error message format
-                    console.log("ERR#500_0007");
-                    console.log(err);
-                    return res.send(500, [{"error": "internal_error","error_description": "May be an hamster bite a wire" }]);
+                    err.error_code="ERR_500_0010";
+                    sails.log.error(err);
+                    return res.send(500, sails.config.errors["ERR_UNKNOWN"]);
                   }
                   else if (err) {
                     //TODO : change output error message format
-                    console.log("ERR#500_0008");
-                    console.log(err);
-                    return res.send(500, [{"error": "internal_error","error_description": "May be an hamster bite a wire" }]);
+                    err.error_code="ERR_500_0011";
+                    sails.log.error(err);
+                    return res.send(500, sails.config.errors["ERR_UNKNOWN"]);
                   }
                   else {
                    //res.setHeader("Etag", crypto.createHash('md5').update(JSON.stringify(outputRessource)).digest('hex'));
@@ -361,7 +362,7 @@ module.exports = {
    deleteOne :function (req, res) {
 
 			//used with DELETE verb
-      console.log('deleteOne:controller');
+      sails.log('deleteOne:controller');
 
 			// Get the id parameter from the URI route
       if (!req.params.id ) {
@@ -374,7 +375,7 @@ module.exports = {
         	//the document was not existing
           return res.send(404,"");
         }
-        else if (err && err.error=="conflict") {
+        else if (err && err.error=="ressource_version_conflict") {
             return res.send(412, [{"error": "ressource_version_conflict","error_description": "conflict on ressource " + req.params.id + " : Etag " + req.headers['if-none-match'] + " not matching"}]);
         }
         else if (err && err.status==204) {
@@ -382,8 +383,8 @@ module.exports = {
 					return res.send(204);
         }
         else {
-          console.log(err);
-        	return res.serverError(500,[{"error": "internal_error","error_description": "internal error while deleting"}]);
+          sails.log.error(sails.config.errors["ERR_WHEN_DELETE"]);
+        	return res.serverError(500, sails.config.errors["ERR_WHEN_DELETE"]);
         }
       });
    },
@@ -401,9 +402,9 @@ module.exports = {
          }
          else if (err) {
            //TODO : change output error message format
-           console.log("ERR#500_7000");
-           console.log(err);
-           return res.send(500, [{"error": "internal_error","error_description": "May be an hamster bite a wire" }]);
+           err.error_code="ERR_500_0012";
+           sails.log.error(err);
+           return res.send(500, sails.config.errors["ERR_UNKNOWN"]);
          }
          else {
            var mapping = outputRessource[req.params.domain + '_' +req.params.model];
@@ -416,9 +417,9 @@ module.exports = {
              }
              else if (err) {
                //TODO : change output error message format
-               console.log("ERR#500_9000");
-               console.log(err);
-               return res.send(500, [{"error": "internal_error","error_description": "May be an hamster bite a wire" }]);
+               err.error_code="ERR_500_0013";
+               sails.log.error(err);
+               return res.send(500, sails.config.errors["ERR_UNKNOWN"]);
              }
              else {
                var mapping_text = JSON.stringify(mapping["mappings"][req.params.model]["properties"])
@@ -460,9 +461,9 @@ module.exports = {
         }
         else if (err) {
           //TODO : change output error message format
-          console.log("ERR#500_8000");
-          console.log(err);
-          return res.send(500, err);
+          err.error_code="ERR_500_0014";
+          sails.log.error(err);
+          return res.send(500, sails.config.errors["ERR_UNKNOWN"]);
         }
         else {
           var mapping = outputRessource[req.params.domain + '_' +req.params.model];
@@ -475,9 +476,9 @@ module.exports = {
             }
             else if (err) {
               //TODO : change output error message format
-              console.log("ERR#500_9000");
-              console.log(err);
-              return res.send(500, [{"error": "internal_error","error_description": "May be an hamster bite a wire" }]);
+              err.error_code="ERR_500_00014";
+              sails.log.error(err);
+              return res.send(500, sails.config.errors["ERR_UNKNOWN"]);
             }
             else {
               var mapping_text = JSON.stringify(mapping["mappings"][req.params.model]["properties"])
@@ -519,9 +520,9 @@ swagger_template   :function (req, res) {
         }
         else if (err) {
           //todo improve
-          console.log("ERR#500_3000");
-          console.log(err);
-          return res.send(500, [{"error": "internal_error","error_description": "May be an hamster bite a wire" }]);
+          err.error_code="ERR_500_0016";
+          sails.log.error(err);
+          return res.send(500, sails.config.errors["ERR_UNKNOWN"]);
         }
         else {
 
@@ -549,7 +550,7 @@ swagger_template   :function (req, res) {
 
 
 findOneSecondModel :function (req, res) {
-  console.log('controller:findOneSecondModel');
+  sails.log('controller:findOneSecondModel');
 
   //GET /:domain/:version/:model/:id/_:secondModel/:secondId
   //--> redirect GET /:domain/v0/:secondModel/_:secondId?model_id=id
@@ -563,7 +564,7 @@ findOneSecondModel :function (req, res) {
 },
 
 findAllSecondModel :function (req, res) {
-  console.log('controller:findAllSecondModel');
+  sails.log('controller:findAllSecondModel');
 
   //GET /:domain/:version/:model/:id/_:secondModel/
   //--> redirect GET /:domain/v0/:secondModel?model_id=id
@@ -575,7 +576,7 @@ findAllSecondModel :function (req, res) {
 },
 
 createSecondModel :function (req, res) {
-  console.log('controller:createSecondModel');
+  sails.log('controller:createSecondModel');
 
   req.query["id_" + req.params.model] = req.params.id;
   req.body["id_" + req.params.model] = req.params.id;
@@ -587,7 +588,7 @@ createSecondModel :function (req, res) {
 },
 
 alterSecondModel :function (req, res) {
-  console.log('controller:alterSecondModel');
+  sails.log('controller:alterSecondModel');
 
   req.query["id_" + req.params.model] = req.params.id;
   req.body["id_" + req.params.model] = req.params.id;
@@ -600,7 +601,7 @@ alterSecondModel :function (req, res) {
 },
 
 alterOrCreateSecondModel :function (req, res) {
-  console.log('controller:alterOrCreateSecondModel');
+  sails.log('controller:alterOrCreateSecondModel');
 
   req.query["id_" + req.params.model] = req.params.id;
   req.body["id_" + req.params.model] = req.params.id;
@@ -612,7 +613,7 @@ alterOrCreateSecondModel :function (req, res) {
   this.alterOrCreate(req, res);
 },
 deleteSecondModel :function (req, res) {
-  console.log('controller:deleteSecondModel');
+  sails.log('controller:deleteSecondModel');
 
   req.query["id_" + req.params.model] = req.params.id;
   req.params.id = req.params.secondId;
@@ -622,7 +623,7 @@ deleteSecondModel :function (req, res) {
   this.deleteOne(req, res);
 },
 searchSecondModel :function (req, res) {
-  console.log('controller:searchSecondModel');
+  sails.log('controller:searchSecondModel');
 
   req.query["id_" + req.params.model] = req.params.id;
   req.params.id = req.params.secondId;
