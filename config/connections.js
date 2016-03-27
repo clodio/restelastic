@@ -64,10 +64,11 @@ module.exports.connections = {
   //   // password: 'password',
   //   // database: 'your_mongo_db_name_here'
   // },
-
-  someElasticsearchServer:{
-    host: (process.env.ELASTICSEARCH_HOST || 'localhost') + ':' + ( process.env.ELASTICSEARCH_PORT || '9200') ,
-    log: process.env.ELASTICSEARCH_LOG || 'error'
+  someElasticsearchServerConfig: function config() {
+    return {
+      host: (process.env.ELASTICSEARCH_HOST || 'localhost') + ':' + ( process.env.ELASTICSEARCH_PORT || '9200') ,
+      log: process.env.ELASTICSEARCH_LOG || 'error'
+    };
   }
 
   /***************************************************************************
