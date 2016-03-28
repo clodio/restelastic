@@ -49,7 +49,7 @@ module.exports = function isRessourcesReadWrite (req, res, next) {
 	//console.log(req.headers.authorization);
 	//console.log(jwt.encode(tokenExemple, secret));
  	//req.headers.authorization = jwt.encode(tokenExemple, secret)
-   if ( !req.headers.authorization && req.params.model !="swagger") {
+   if ( !req.headers.authorization && (req.params.id !="swagger.yaml" && req.params.id !="postman.json")) {
    	//console.log("forbidden");
     return res.send(401,{
       "error":"invalid_grant",
