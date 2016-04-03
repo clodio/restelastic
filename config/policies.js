@@ -38,7 +38,7 @@ module.exports.policies = {
 
 		// Apply the `false` policy as the default for all of RabbitController's actions
 		// (`false` prevents all access, which ensures that nothing bad happens to our rabbits)
-		'*': true,
+		//'*': false,
 
 		// For the action `nurture`, apply the 'isRabbitMother' policy
 		// (this overrides `false` above)

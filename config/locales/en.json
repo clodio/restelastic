@@ -1,5 +1,13 @@
 {
 	"Welcome": "Welcome",
-	"A brand new app.": "A brand new app.",
-	"Search": "Search"
+	"Restfull APIs with zero coding in less than 30 sec": "Restfull APIs with zero coding in less than 30 sec",
+	"Do not spend time creating APIs, just use them.": "Do not spend time creating APIs, just use them.",
+	"Live Demo": "Live Demo",
+	"features": "features",
+	"create : \"Restfull APIs in less than 30 sec\"": "create : \"Restfull APIs in less than 30 sec\"",
+	"code    : \"0 line of code\"": "code    : \"0 line of code\"",
+	"enjoy    : \"Pagination, search, filters, fulltext,...\"": "enjoy    : \"Pagination, search, filters, fulltext,...\"",
+	"generate : \"Instantly swagger, postman, mocha\"": "generate : \"Instantly swagger, postman, mocha\"",
+	"dashboard : \"Realtime graph with kibana\"": "dashboard : \"Realtime graph with kibana\"",
+	"customise : \"based on sails.js, elasticsearch\"": "customise : \"based on sails.js, elasticsearch\""
 }

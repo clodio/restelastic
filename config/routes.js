@@ -35,7 +35,14 @@ module.exports.routes = {
 	'/*' : 'SessionController.disable',
 
   '/': {
-    view: 'homepage'
+    view: 'homepage',
+    locals: {
+			api: {
+      	domain: 'data' ,
+      	version: 'v1',
+      	ressource: 'products'
+    	}
+		}
   },
 
 	/***************************************************************************
@@ -49,8 +56,18 @@ module.exports.routes = {
   ***************************************************************************/
   //'GET /users/v1/user/:id': 'RessourceController.alter',
 
+	/* add assets routes to avoid authentification */
+	'GET /js/:file': 'AssetsController.assets',
+	'GET /images/:file': 'AssetsController.assets',
+	'GET /styles/:file': 'AssetsController.assets',
+	'GET /templates/:file': 'AssetsController.assets',
+	'GET /favicon.ico': 'AssetsController.assets',
+	'GET /robots.txt': 'AssetsController.assets',
+	'GET /sitemap.xml': 'AssetsController.assets',
+
 	'GET /:domain/:version/swagger/:id': 'RessourceController.swagger_template',
-  'GET /:domain/:version/:model/:id/_:secondModel/search?*': 'RessourceController.searchSecondModel',
+
+	'GET /:domain/:version/:model/:id/_:secondModel/search?*': 'RessourceController.searchSecondModel',
 	'GET /:domain/:version/:model/:id/_:secondModel/:secondId': 'RessourceController.findOneSecondModel',
   'GET /:domain/:version/:model/:id/_:secondModel': 'RessourceController.findAllSecondModel',
 	'PUT /:domain/:version/:model/:id/_:secondModel/:secondId': 'RessourceController.alterOrCreateSecondModel',
