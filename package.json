@@ -1,9 +1,9 @@
 {
-  "name": "restlastic",
+  "name": "Restlastic",
   "private": true,
   "version": "1.0.0",
-  "description": "Simply REST API in less than 10 sec",
-  "keywords": [],
+  "description": "Restfull APIs with zero coding in less than 30 sec...",
+  "keywords": ["rest","api","sails","elastic","elasticsearch","restfull","sandbox","data","testing","kibana","test","prototyping","faker","server","JSON"],
   "dependencies": {
     "sails": "~0.11.0-rc8",
     "elasticsearch": "10.1.3",
