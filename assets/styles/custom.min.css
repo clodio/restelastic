@@ -25,4 +25,10 @@ float: right!important;
 #mc_embed_signup input.email {
     width: 195px;
 }
+#gh-fork{
+  display:none;
+}
+#top-bar-documentation {
+  padding-top:15px;
+}
 }
