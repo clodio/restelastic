@@ -2511,7 +2511,7 @@ it('should not delete and send a http code 412 when etag provided do not match',
 			rejectUnauthorized: false,
 			json: true,
 			headers: {
-				'If-None-Match': '2',
+				'If-None-Match': '999999999',
 						'Accept-Encoding' : 'gzip','Authorization':'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2NsYXVkZS1pZHAubGFwb3N0ZS5mciIsInBybiI6ImNsYXVkZS5zZWd1cmV0QGxhcG9zdGUuZnIiLCJhdWQiOiJodHRwczovL2NsYXVkZS1hdXRoLmxhcG9zdGUuZnIiLCJleHAiOiIxNDYxNTYxNzIxIiwic2NvcGVzIjpbInJlc3NvdXJjZXMucmVhZCIsInJlc3NvdXJjZXMud3JpdGUiXX0.rn6BGkwXv1bqaevBuroqNoBDP6d8dNo3dN1f6kwPqNU'}
 	};
 	request.del(options, function (error, response, body){

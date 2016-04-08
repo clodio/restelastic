@@ -4,7 +4,8 @@ local_url += "://";
 local_url += req.host;
 if (req.port) {
   if (req.port != "80" && req.port != "443") {
-  local_url += ":" + req.port;
+    local_url += ":" + req.port;
+  }
 }
 local_url += "/";
 local_url +=req.query.domain || "sample";
