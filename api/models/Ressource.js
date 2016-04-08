@@ -876,15 +876,15 @@ module.exports = {
 
     // execute the DSL Query
     esclient.index(DSLQuery, function (error, response) {
-      if (error && response.status==409) {
+      if (error && typeof response === "undefined") {
+        ReportError.error(req,error,"ERR_internal_1006");
+        cb(sails.config.errors["ERR_WHEN_RETRIEVING"]);
+      }
+      else if (error && response.status==409) {
         cb(sails.config.errors["CONFLICT"]);
       }
       else if (error && response.status==400) {
         cb({"error": "wrong_arguments","error_description": response.error.root_cause[0].reason});
-      }
-      else if (error) {
-        ReportError.error(req,error,"ERR_internal_1006");
-        cb(sails.config.errors["ERR_WHEN_RETRIEVING"]);
       }
       else {
         if (response) {
