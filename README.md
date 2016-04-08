@@ -252,18 +252,18 @@ you can use header `If-None-Match` to retrieve data only if modified, to modify 
 
 You can create a new ressource or a new field easily by calling POST (ex : /sample/v1/products). It will create an index in elasticsearch named `sample_products`. If you want to manage precisely the types of your fields, you must use [elasticsearch mapping(https://www.elastic.co/guide/en/elasticsearch/reference/current/mapping.html). By default, all the fields will considered as string, interger and dates depending on the first POST. If you want to change a type or delete a field you must delete the index before changing the mapping.
 
-Retrieve mapping
+#### Retrieve mapping
 
 ```
 curl -XGET http://localhost:9200/sample_products/_mapping/products
 ```
 
-create index
+#### create index
 ```
 curl -XPUT 'http://localhost:9200/sample_products/'
 ```
 
-create mapping
+#### create mapping
 
 ```
 curl -XPUT 'http://localhost:9200/sample_products/_mapping/products' \
@@ -308,7 +308,7 @@ see [kibana](https://www.elastic.co/products/kibana) for more information
 
 You can get a swagger template of your Restull API
 
-Open directly in swagger editor[http://editor.swagger.io/#/?import=http://api.restlastic.com/sample/v1/products/swagger.yaml&no-proxy](http://editor.swagger.io/#/?import=http://api.restlastic.com/sample/v1/products/swagger.yaml&no-proxy)
+Open directly in swagger editor [http://editor.swagger.io/#/?import=http://api.restlastic.com/sample/v1/products/swagger.yaml&no-proxy](http://editor.swagger.io/#/?import=http://api.restlastic.com/sample/v1/products/swagger.yaml&no-proxy)
 
 or download the file
 ```
@@ -327,21 +327,37 @@ GET http://api.restlastic.com/sample/v1/products/postman.json
 
 ### Generate random data
 
-Using JS instead of a JSON file, you can create data programmatically.
+You can easily create data programmatically.
 
 ```javascript
-// index.js
-module.exports = function() {
-  var data = { users: [] }
+  //import-data.js
+  var request = require('request');
+
+  var dns="http://localhost:1337/sample/v1/users/";
+  var body={};
+
   // Create 1000 users
   for (var i = 0; i < 1000; i++) {
-    data.users.push({ id: i, name: 'user' + i })
+    body = { id: i, name: 'user' + i };
+    request.put({
+        url: dns + i,
+        body: body,
+        rejectUnauthorized: false,
+        json: true,
+        headers: {
+          'Accept-Encoding' : 'gzip', 'Authorization':'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2NsYXVkZS1pZHAubGFwb3N0ZS5mciIsInBybiI6ImNsYXVkZS5zZWd1cmV0QGxhcG9zdGUuZnIiLCJhdWQiOiJodHRwczovL2NsYXVkZS1hdXRoLmxhcG9zdGUuZnIiLCJleHAiOiIxNDYxNTYxNzIxIiwic2NvcGVzIjpbInJlc3NvdXJjZXMucmVhZCIsInJlc3NvdXJjZXMud3JpdGUiXX0.rn6BGkwXv1bqaevBuroqNoBDP6d8dNo3dN1f6kwPqNU'
+        }
+      }, function (err, res, body) {
+        if (err) {
+          console.log(err);
+        }
+      }
+    );
   }
-  return data
-}
+  // Then launch $> node import-data.js
 ```
 
-__Tip__ use modules like [faker](https://github.com/Marak/faker.js), [casual](https://github.com/boo1ean/casual) or [chance](https://github.com/victorquinn/chancejs).
+__Tip__ use modules like [faker](https://github.com/Marak/faker.js), [casual](https://github.com/boo1ean/casual) or [chance](https://github.com/victorquinn/chancejs) to create random semantic data.
 
 ### Add routes
 
@@ -354,6 +370,6 @@ MIT - [Restlastic](https://github.com/clodio/restlastic)
 ## Credits
 
 - [json-server](https://github.com/typicode/json-server)
-- Based on [Bootstrap](http://getbootstrap.com/) and [Bootswatch](https://bootswatch.com/)
+- Homepage based on [Bootstrap](http://getbootstrap.com/) and [Bootswatch](https://bootswatch.com/)
 - Icons from [Font Awesome](http://fortawesome.github.io/Font-Awesome/)
 - Web fonts from [Google](http://www.google.com/webfonts)
