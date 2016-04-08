@@ -103,7 +103,7 @@ local_url +=req.query.ressource || "products";
             <h3><i class="fa fa-cloud"></i> <%= __('Analytics included') %></h3>
             <p><%= __('To better understand your data, easily create bar and line charts, histograms, pie charts with') %> <a href="https://www.elastic.co/products/kibana" target="_blank" rel="nofollow">kibana</a>.</p>
           </div>
-          <a name="create_api"></a>
+
           <div class="col-sm-4">
             <h3><i class="fa fa-bullhorn"></i> <%= __('Stay Updated') %></h3>
             <p><%= __('Be notified about updates, news by subscribing via') %> <a href="https://twitter.com/restlastic">Twiter</a> or <a href="#newsletter">newsletter</a>.</p>
@@ -112,7 +112,7 @@ local_url +=req.query.ressource || "products";
 
       </div>
     </div>
-
+<a name="create_api"></a>
 
     <div class="sections-detail">
 
@@ -240,7 +240,7 @@ local_url +=req.query.ressource || "products";
           </div>
           <div class="col-sm-7">
             <h2><%= __('Explore your data') %></h2>
-            <p><%= __('Use') %> <a href="https://kibana.seguret.org" target="_blank" rel="nofollow">kibana</a> <%= __('to explore your API data') %></p>
+            <p><%= __('Use') %> <a href="https://kibana.restlatic.com" target="_blank" rel="nofollow">kibana</a> <%= __('to explore your API data') %></p>
           </div>
         </div>
       </div>
@@ -267,7 +267,7 @@ local_url +=req.query.ressource || "products";
         <div class="row">
 
           <div class="col-sm-12"><h2><%= __('Easy to Install') %></h2>
-          <p><%= __('You can install with') %> docker-compose, npm (<%= __('if elasticsearch already installed) or use cloud demo') %></p</div>
+
             <div class="col-sm-4">
             <h3><%= __('with docker') %></h3>
             <p class="code">
@@ -291,7 +291,7 @@ local_url +=req.query.ressource || "products";
           <div class="col-sm-4">
             <h3><%= __('Use the beta online demo') %></h3>
             <p>/!\ <%= __('All data are deleted each day') %></p>
-            <p><%= __('Use') %> <a href="http://api.seguret.org">api.seguret.org</a>, <a href="http://elastic.seguret.org" rel="nofollow">elastic.seguret.org</a>, <a href="http://kibana.seguret.org" rel="nofollow">kibana.seguret.org</a>
+            <p><%= __('Use') %> <a href="http://api.restlatic.com">api.restlatic.com</a>, <a href="http://elastic.restlatic.com" rel="nofollow">elastic.restlatic.com</a>, <a href="http://kibana.restlatic.com" rel="nofollow">kibana.restlatic.com</a>
             </p>
           </div>
         </div><!-- end row-->
@@ -313,15 +313,111 @@ local_url +=req.query.ressource || "products";
             <a name="live_demo"></a><h2><%= __('Live Demo') %></h2>
             <p>
               <ul>
-                <li><%= __('Import') %> <a href="http://api.seguret.org/sample/v1/products/postman.json" target="_blank">postman API template</a> <%= __('into') %> <a href="https://chrome.google.com/webstore/detail/postman-rest-client/fdmmgilgnpjigdojojpjoooidkmcomcm?utm_source=chrome-app-launcher-info-dialog"  target="_blank" rel="nofollow">postman</a></li>
-                <li><%= __('Import') %> <a href="http://api.seguret.org/sample/v1/products/swagger.yaml" target="_blank">swagger template</a> <%= __('into') %> <a href="http://editor.swagger.io/#/?import=<%= local_url %>/swagger.yaml&no-proxy" target="_blank" rel="nofollow">swagger editor</a></li>
-                <li><%= __('Explore data with') %> <a href="http://kibana.seguret.org:5601/app/kibana#/dashboard/sample_users__dashboard?_g=(refreshInterval:(display:Off,pause:!f,value:0),time:(from:now-6M,mode:quick,to:now))&_a=(filters:!(),options:(darkTheme:!f),panels:!((col:1,id:sample_users__pie_chart_is_vip,panelIndex:1,row:1,size_x:3,size_y:3,type:visualization),(col:4,id:sample_users_histogram_name,panelIndex:2,row:1,size_x:8,size_y:3,type:visualization)),query:(query_string:(analyze_wildcard:!t,query:'*')),title:sample_users__dashboard,uiState:())" target="_blank" rel="nofollow">kibana</a></li>
+                <li><%= __('Import') %> <a href="http://api.restlatic.com/sample/v1/products/postman.json" target="_blank">postman API template</a> <%= __('into') %> <a href="https://chrome.google.com/webstore/detail/postman-rest-client/fdmmgilgnpjigdojojpjoooidkmcomcm?utm_source=chrome-app-launcher-info-dialog"  target="_blank" rel="nofollow">postman</a></li>
+                <li><%= __('Import') %> <a href="http://api.restlatic.com/sample/v1/products/swagger.yaml" target="_blank">swagger template</a> <%= __('into') %> <a href="http://editor.swagger.io/#/?import=<%= local_url %>/swagger.yaml&no-proxy" target="_blank" rel="nofollow">swagger editor</a></li>
+                <li><%= __('Explore data with') %> <a href="http://kibana.restlatic.com:5601/app/kibana#/dashboard/sample_users__dashboard?_g=(refreshInterval:(display:Off,pause:!f,value:0),time:(from:now-6M,mode:quick,to:now))&_a=(filters:!(),options:(darkTheme:!f),panels:!((col:1,id:sample_users__pie_chart_is_vip,panelIndex:1,row:1,size_x:3,size_y:3,type:visualization),(col:4,id:sample_users_histogram_name,panelIndex:2,row:1,size_x:8,size_y:3,type:visualization)),query:(query_string:(analyze_wildcard:!t,query:'*')),title:sample_users__dashboard,uiState:())" target="_blank" rel="nofollow">kibana</a></li>
                 <li><%= __('Or') %> <a href="#create_api"><%= __('create your own API') %></a> <%= __('with a post command') %></li>
                 </ul>
               </p>
           </div>
         </div>
       </div>
+    </div>
+
+
+    <div class="container">
+      <div class="row">
+          <div class="col-lg-12">
+            <h1><%= __('Go deeper') %></h1>
+            <p class="lead"><span class="brand-danger"><strong><%= __('Please support us') %></strong></span> <%= __('by clicking on one of these links') %>.</p>
+          </div>
+          <div class="col-sm-2">
+            <div class="preview">
+              <div class="image">
+                <a  href="http://www.amazon.fr/gp/product/1449358063/ref=as_li_tl?ie=UTF8&camp=1642&creative=19458&creativeASIN=1449358063&linkCode=as2&tag=seguretorg-21" target="_blank"><img class="img-responsive" src="images/amazon_restful_web_apis<%= __('_lang') %>.png" alt="RESTful Web APIs, by Leonard Richardson"></a>
+              </div>
+              <div class="options">
+                <h3>RESTful Web <br/>APIs</h3>
+                <p>Leonard Richardson</p>
+                <div>
+                  <div class="btn-group"><a class="btn btn-info" href="http://www.amazon.fr/gp/product/1449358063/ref=as_li_tl?ie=UTF8&camp=1642&creative=19458&creativeASIN=1449358063&linkCode=as2&tag=seguretorg-21" target="_blank">Amazon</a></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-2">
+            <div class="preview">
+              <div class="image">
+                <a href="http://www.amazon.fr/gp/product/1449308929/ref=as_li_tl?ie=UTF8&camp=1642&creative=19458&creativeASIN=1449308929&linkCode=as2&tag=seguretorg-21" target="_blank"><img class="img-responsive" src="images/amazon_api_a_startegy_guide<%= __('_lang') %>.png" alt="APIs, a strategy guide, by Daniel Jacobs"></a>
+              </div>
+              <div class="options">
+                <h3>APIs, a strategy guide</h3>
+                <p>Daniel Jacobs</p>
+                <div>
+                  <div class="btn-group"><a class="btn btn-info"  href="http://www.amazon.fr/gp/product/1449308929/ref=as_li_tl?ie=UTF8&camp=1642&creative=19458&creativeASIN=1449308929&linkCode=as2&tag=seguretorg-21" target="_blank">Amazon</a></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-2">
+            <div class="preview">
+              <div class="image">
+                <a  href="http://www.amazon.fr/gp/product/B0046RERXY/ref=as_li_tl?ie=UTF8&camp=1642&creative=19458&creativeASIN=B0046RERXY&linkCode=as2&tag=seguretorg-21" target="_blank"><img class="img-responsive" src="images/amazon_rest_in_practice<%= __('_lang') %>.png" alt="REST in practice: Hypermedia and Systems Architecture"></a>
+              </div>
+              <div class="options">
+                <h3>REST in <br/>practice</h3>
+                <p>Jim Weber</p>
+                <div>
+                  <div class="btn-group"><a class="btn btn-info" href="http://www.amazon.fr/gp/product/B0046RERXY/ref=as_li_tl?ie=UTF8&camp=1642&creative=19458&creativeASIN=B0046RERXY&linkCode=as2&tag=seguretorg-21" target="_blank">Amazon</a></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-2">
+            <div class="preview">
+              <div class="image">
+                <a  href="http://www.amazon.fr/gp/product/1783287314/ref=as_li_tl?ie=UTF8&camp=1642&creative=19458&creativeASIN=1783287314&linkCode=as2&tag=seguretorg-21" target="_blank"><img class="img-responsive" src="images/amazon_nodejs_design_pattern<%= __('_lang') %>.png" alt="Node.js Design Patterns, by Mario Casciaro"></a>
+              </div>
+              <div class="options">
+                <h3>Node.js Design Patterns</h3>
+                <p>Mario Casciaro</p>
+                <div>
+                  <div class="btn-group"><a class="btn btn-info" href="http://www.amazon.fr/gp/product/1783287314/ref=as_li_tl?ie=UTF8&camp=1642&creative=19458&creativeASIN=1783287314&linkCode=as2&tag=seguretorg-21" target="_blank">Amazon</a></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-2">
+            <div class="preview">
+              <div class="image">
+                <a  href="http://www.amazon.fr/gp/product/1491950358/ref=as_li_tl?ie=UTF8&camp=1642&creative=19458&creativeASIN=1491950358&linkCode=as2&tag=seguretorg-21" target="_blank"><img class="img-responsive" src="images/amazon_building_microservices<%= __('_lang') %>.png" alt="Building Microservices"></a>
+              </div>
+              <div class="options">
+                <h3>Building Microservices</h3>
+                <p>Sam Newman</p>
+                <div>
+                  <div class="btn-group"><a class="btn btn-info" href="http://www.amazon.fr/gp/product/1491950358/ref=as_li_tl?ie=UTF8&camp=1642&creative=19458&creativeASIN=1491950358&linkCode=as2&tag=seguretorg-21" target="_blank">Amazon</a></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-2">
+            <div class="preview">
+              <div class="image">
+                <a rel="nofollow" href="http://www.amazon.fr/gp/product/B00SLXVBC4/ref=as_li_tl?ie=UTF8&camp=1642&creative=19458&creativeASIN=B00SLXVBC4&linkCode=as2&tag=seguretorg-21"><img class="img-responsive" src="images/amazon_elasticsearch<%= __('_lang') %>.png" alt="Elasticsearch, The definitive guide" /></a>
+              </div>
+              <div class="options">
+                <h3>Elasticsearch: The Definitive Guide</h3>
+                <p>Clinton Gormley</p>
+                <div>
+                  <div class="btn-group">
+                    <a class="btn btn-info" rel="nofollow" href="http://www.amazon.fr/gp/product/B00SLXVBC4/ref=as_li_tl?ie=UTF8&camp=1642&creative=19458&creativeASIN=B00SLXVBC4&linkCode=as2&tag=seguretorg-21">Amazon</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
     </div>
 
 

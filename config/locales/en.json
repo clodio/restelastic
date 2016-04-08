@@ -9,5 +9,6 @@
 	"enjoy    : \"Pagination, search, filters, fulltext,...\"": "enjoy    : \"Pagination, search, filters, fulltext,...\"",
 	"generate : \"Instantly swagger, postman, mocha\"": "generate : \"Instantly swagger, postman, mocha\"",
 	"dashboard : \"Realtime graph with kibana\"": "dashboard : \"Realtime graph with kibana\"",
-	"customise : \"based on sails.js, elasticsearch\"": "customise : \"based on sails.js, elasticsearch\""
+	"customise : \"based on sails.js, elasticsearch\"": "customise : \"based on sails.js, elasticsearch\"",
+	"_lang": "_en"
 }
