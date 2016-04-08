@@ -77,7 +77,7 @@ Then use http://localhost:1337
 
 /!\ All data are deleted each day
 
-Use api.seguret.org, elastic.seguret.org, kibana.seguret.org
+Use api.restlatic.com, elastic.restlatic.com, kibana.restlatic.com
 
 ## Routes
 
