@@ -31,7 +31,7 @@
 	"To create an API you just have to push data with a POST request with the header authorisation to have grant": "Pour créer une API, passez simplement une commande POST avec le header d'autorisation pour avoir les droits",
 	"Your API must be /:domain/:version/:ressource": "Votre API doit être au format /:domaine/:version/:ressource",
 	"Explore your API with swagger": "Explorez votre API avec swagger",
-	"Your swagger file documentation is avalable at": "Votre swagger doc est à l'adresse",
+	"Your swagger file documentation is avalable at": "Votre contrat d'interface est disponible sur ",
 	"You can open it in": "Vous pouvez l'ouvrir dans",
 	"Get full request features": "Profitez de toutes les fonctionnalités",
 	"CRUD Operations": "Opérations CRUD",
