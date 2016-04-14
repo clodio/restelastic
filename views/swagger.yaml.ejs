@@ -6,7 +6,13 @@ info:
     <% var sample_data_without_id = sample_data;
       var id = sample_data.id;
       var etag = sample_data.etag;
-      delete sample_data_without_id.id; %>
+      delete sample_data_without_id.id;
+      // add secured parameter to add authentification on services
+      var secured_api= process.env.SECURED_API || false;
+      if (req.query.secured_api !== undefined ) {
+        secured_api=true;
+      }
+      %>
 
     This is a swagger template for your api, you should adpat exemples to your context and add a description of the purpose af the API. You should also replase todo with your data.
 
@@ -279,6 +285,7 @@ info:
     email: your_email@yourdomain.com
 host: <%=: baseUrl |replace:"https://","" | replace:"http://","" | replace:"/","" %>
 basePath: /<%= domain %>/<%= version %>
+<%if (secured_api==true) {%>
 securityDefinitions:
   bearer:
     type: apiKey
@@ -318,15 +325,18 @@ tags:
     description: API services that can be readed and writed
   - name: write
     description: Ressources that can only be writed
+<%}%>
 schemes:
   - <% if (baseUrl.indexOf("https") >-1 ) {%>https<%} else {%>http<%} %>
 paths:
 
   /<%= model %>:
     get:
+    <%if (secured_api==true) {%>
       tags:
         - readOnly
         - readWrite
+    <%}%>
       summary: Retrieve a list of <%= model %>
       description: >
 
@@ -338,9 +348,8 @@ paths:
 
 
           ```
-          curl -iX GET \
-          -H 'Accept: application/json' \
-          -H 'Authorization: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2NsYXVkZS1pZHAubGFwb3N0ZS5mciIsInBybiI6ImNsYXVkZS5zZWd1cmV0QGxhcG9zdGUuZnIiLCJhdWQiOiJodHRwczovL2NsYXVkZS1hdXRoLmxhcG9zdGUuZnIiLCJleHAiOiIxNDYxNTYxNzIxIiwic2NvcGVzIjpbInJlc3NvdXJjZXMucmVhZCIsInJlc3NvdXJjZXMud3JpdGUiXX0.rn6BGkwXv1bqaevBuroqNoBDP6d8dNo3dN1f6kwPqNU' \
+          curl -iX GET \<%if (secured_api==true) {%>
+          -H 'Authorization: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2NsYXVkZS1pZHAubGFwb3N0ZS5mciIsInBybiI6ImNsYXVkZS5zZWd1cmV0QGxhcG9zdGUuZnIiLCJhdWQiOiJodHRwczovL2NsYXVkZS1hdXRoLmxhcG9zdGUuZnIiLCJleHAiOiIxNDYxNTYxNzIxIiwic2NvcGVzIjpbInJlc3NvdXJjZXMucmVhZCIsInJlc3NvdXJjZXMud3JpdGUiXX0.rn6BGkwXv1bqaevBuroqNoBDP6d8dNo3dN1f6kwPqNU' \<%}%>
           "<%= baseUrl %><%= domain %>/<%= version %>/<%= model %>?start_index=1&count=10"
           ```
 
@@ -348,9 +357,8 @@ paths:
 
 
           ```
-          curl -iX GET \
-          -H 'Accept: application/json' \
-          -H 'Authorization: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2NsYXVkZS1pZHAubGFwb3N0ZS5mciIsInBybiI6ImNsYXVkZS5zZWd1cmV0QGxhcG9zdGUuZnIiLCJhdWQiOiJodHRwczovL2NsYXVkZS1hdXRoLmxhcG9zdGUuZnIiLCJleHAiOiIxNDYxNTYxNzIxIiwic2NvcGVzIjpbInJlc3NvdXJjZXMucmVhZCIsInJlc3NvdXJjZXMud3JpdGUiXX0.rn6BGkwXv1bqaevBuroqNoBDP6d8dNo3dN1f6kwPqNU' \
+          curl -iX GET \<%if (secured_api==true) {%>
+          -H 'Authorization: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2NsYXVkZS1pZHAubGFwb3N0ZS5mciIsInBybiI6ImNsYXVkZS5zZWd1cmV0QGxhcG9zdGUuZnIiLCJhdWQiOiJodHRwczovL2NsYXVkZS1hdXRoLmxhcG9zdGUuZnIiLCJleHAiOiIxNDYxNTYxNzIxIiwic2NvcGVzIjpbInJlc3NvdXJjZXMucmVhZCIsInJlc3NvdXJjZXMud3JpdGUiXX0.rn6BGkwXv1bqaevBuroqNoBDP6d8dNo3dN1f6kwPqNU' \<%}%>
           "<%= baseUrl %><%= domain %>/<%= version %>/<%= model %>?creation_date_gte=2015-06-18T00:00:00Z"
           ```
 
@@ -358,9 +366,8 @@ paths:
 
 
           ```
-          curl -iX GET \
-          -H 'Accept: application/json' \
-          -H 'Authorization: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2NsYXVkZS1pZHAubGFwb3N0ZS5mciIsInBybiI6ImNsYXVkZS5zZWd1cmV0QGxhcG9zdGUuZnIiLCJhdWQiOiJodHRwczovL2NsYXVkZS1hdXRoLmxhcG9zdGUuZnIiLCJleHAiOiIxNDYxNTYxNzIxIiwic2NvcGVzIjpbInJlc3NvdXJjZXMucmVhZCIsInJlc3NvdXJjZXMud3JpdGUiXX0.rn6BGkwXv1bqaevBuroqNoBDP6d8dNo3dN1f6kwPqNU' \
+          curl -iX GET \<%if (secured_api==true) {%>
+          -H 'Authorization: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2NsYXVkZS1pZHAubGFwb3N0ZS5mciIsInBybiI6ImNsYXVkZS5zZWd1cmV0QGxhcG9zdGUuZnIiLCJhdWQiOiJodHRwczovL2NsYXVkZS1hdXRoLmxhcG9zdGUuZnIiLCJleHAiOiIxNDYxNTYxNzIxIiwic2NvcGVzIjpbInJlc3NvdXJjZXMucmVhZCIsInJlc3NvdXJjZXMud3JpdGUiXX0.rn6BGkwXv1bqaevBuroqNoBDP6d8dNo3dN1f6kwPqNU' \<%}%>
           "<%= baseUrl %><%= domain %>/<%= version %>/<%= model %>?creation_date_gte=2015-06-18T00:00:00Z&fields=id,modification_date"
           ```
 
@@ -395,8 +402,8 @@ paths:
           description: "Version of the ressource (see etag) (Ex : <%= etag %>)"
           required: false
           type: string
-      security:
-        - bearer: []
+      <%if (secured_api==true) {%>security:
+        - bearer: []<%}%>
       responses:
         '200':
           description: successful operation
@@ -425,9 +432,11 @@ paths:
             items:
               $ref: '#/definitions/Error'
     post:
+    <%if (secured_api==true) {%>
       tags:
-        - readWrite
         - write
+        - readWrite
+    <%}%>
       summary: Create a ressource <%= model %>
       description: >
         Create a ressource <%= model %>
@@ -435,9 +444,9 @@ paths:
 
           ```
           curl -iX POST \
-          -H 'Accept: application/json' \
-          -H 'Content-Type: application/json; charset=utf-8' \
+          -H 'Content-Type: application/json; charset=utf-8' \<%if (secured_api==true) {%>
           -H 'Authorization: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2NsYXVkZS1pZHAubGFwb3N0ZS5mciIsInBybiI6ImNsYXVkZS5zZWd1cmV0QGxhcG9zdGUuZnIiLCJhdWQiOiJodHRwczovL2NsYXVkZS1hdXRoLmxhcG9zdGUuZnIiLCJleHAiOiIxNDYxNTYxNzIxIiwic2NvcGVzIjpbInJlc3NvdXJjZXMucmVhZCIsInJlc3NvdXJjZXMud3JpdGUiXX0.rn6BGkwXv1bqaevBuroqNoBDP6d8dNo3dN1f6kwPqNU' \
+          <%}%>
           -d '<%- JSON.stringify(sample_data_without_id) %>' \
           '<%= baseUrl %><%= domain %>/<%= version %>/<%= model %>'
           ```
@@ -447,8 +456,8 @@ paths:
         - application/x-www-form-urlencoded
       produces:
         - application/json
-      security:
-        - bearer: []
+      <%if (secured_api==true) {%>security:
+        - bearer: []<%}%>
       parameters:
         - in: body
           name: body
@@ -489,18 +498,19 @@ paths:
               $ref: '#/definitions/Error'
   '/<%= model %>/{id}':
     get:
+    <%if (secured_api==true) {%>
       tags:
         - readOnly
         - readWrite
+    <%}%>
       summary: Retrieve one ressource <%= model %>
       description: >
 
         Retrieve the ressource <%= model %> `<%= id %>` with filter on attributes
 
           ```
-          curl -iX GET \
-          -H 'Accept: application/json' \
-          -H 'Authorization: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2NsYXVkZS1pZHAubGFwb3N0ZS5mciIsInBybiI6ImNsYXVkZS5zZWd1cmV0QGxhcG9zdGUuZnIiLCJhdWQiOiJodHRwczovL2NsYXVkZS1hdXRoLmxhcG9zdGUuZnIiLCJleHAiOiIxNDYxNTYxNzIxIiwic2NvcGVzIjpbInJlc3NvdXJjZXMucmVhZCIsInJlc3NvdXJjZXMud3JpdGUiXX0.rn6BGkwXv1bqaevBuroqNoBDP6d8dNo3dN1f6kwPqNU' \
+          curl -iX GET \<%if (secured_api==true) {%>
+          -H 'Authorization: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2NsYXVkZS1pZHAubGFwb3N0ZS5mciIsInBybiI6ImNsYXVkZS5zZWd1cmV0QGxhcG9zdGUuZnIiLCJhdWQiOiJodHRwczovL2NsYXVkZS1hdXRoLmxhcG9zdGUuZnIiLCJleHAiOiIxNDYxNTYxNzIxIiwic2NvcGVzIjpbInJlc3NvdXJjZXMucmVhZCIsInJlc3NvdXJjZXMud3JpdGUiXX0.rn6BGkwXv1bqaevBuroqNoBDP6d8dNo3dN1f6kwPqNU' \<%}%>
           -H "If-None-Match: <%= etag %>" \
           "<%= baseUrl %><%= domain %>/<%= version %>/<%= model %>/<%= id %>?fields=id,creation_date,modification_date"
           ```
@@ -522,11 +532,10 @@ paths:
         - in: header
           name: If-None-Match
           description: "Version of the ressource (see etag) (Ex : <%= etag %>)"
-          required: true
           required: false
           type: string
-      security:
-        - bearer: []
+      <%if (secured_api==true) {%>security:
+        - bearer: []<%}%>
       responses:
         '200':
           description: successful operation
@@ -557,9 +566,11 @@ paths:
             items:
               $ref: '#/definitions/Error'
     put:
+    <%if (secured_api==true) {%>
       tags:
-        - readWrite
         - write
+        - readWrite
+    <%}%>
       summary: Full update a ressource <%= model %>
       description: >
 
@@ -568,9 +579,8 @@ paths:
 
           ```
           curl -iX PUT \
-          -H 'Accept: application/json' \
-          -H 'Content-Type: application/json; charset=utf-8' \
-          -H 'Authorization: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2NsYXVkZS1pZHAubGFwb3N0ZS5mciIsInBybiI6ImNsYXVkZS5zZWd1cmV0QGxhcG9zdGUuZnIiLCJhdWQiOiJodHRwczovL2NsYXVkZS1hdXRoLmxhcG9zdGUuZnIiLCJleHAiOiIxNDYxNTYxNzIxIiwic2NvcGVzIjpbInJlc3NvdXJjZXMucmVhZCIsInJlc3NvdXJjZXMud3JpdGUiXX0.rn6BGkwXv1bqaevBuroqNoBDP6d8dNo3dN1f6kwPqNU' \
+          -H 'Content-Type: application/json; charset=utf-8' \<%if (secured_api==true) {%>
+          -H 'Authorization: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2NsYXVkZS1pZHAubGFwb3N0ZS5mciIsInBybiI6ImNsYXVkZS5zZWd1cmV0QGxhcG9zdGUuZnIiLCJhdWQiOiJodHRwczovL2NsYXVkZS1hdXRoLmxhcG9zdGUuZnIiLCJleHAiOiIxNDYxNTYxNzIxIiwic2NvcGVzIjpbInJlc3NvdXJjZXMucmVhZCIsInJlc3NvdXJjZXMud3JpdGUiXX0.rn6BGkwXv1bqaevBuroqNoBDP6d8dNo3dN1f6kwPqNU' \<%}%>
           -d '<%- JSON.stringify(sample_data) %>' \
           "<%= baseUrl %><%= domain %>/<%= version %>/<%= model %>/<%= id %>"
           ```
@@ -580,8 +590,8 @@ paths:
         - application/x-www-form-urlencoded
       produces:
         - application/json
-      security:
-        - bearer: []
+      <%if (secured_api==true) {%>security:
+        - bearer: []<%}%>
       parameters:
         - in: path
           name: id
@@ -631,9 +641,11 @@ paths:
             items:
               $ref: '#/definitions/Error'
     post:
+    <%if (secured_api==true) {%>
       tags:
-        - readWrite
         - write
+        - readWrite
+    <%}%>
       summary: Partial update (one or more attributes) a ressource <%= model %>
       description: >
         Partial update the ressource <%= model %> `<%= id %>`
@@ -641,9 +653,8 @@ paths:
 
           ```
           curl -iX POST \
-          -H 'Accept: application/json' \
-          -H 'Content-Type: application/json; charset=utf-8' \
-          -H 'Authorization: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2NsYXVkZS1pZHAubGFwb3N0ZS5mciIsInBybiI6ImNsYXVkZS5zZWd1cmV0QGxhcG9zdGUuZnIiLCJhdWQiOiJodHRwczovL2NsYXVkZS1hdXRoLmxhcG9zdGUuZnIiLCJleHAiOiIxNDYxNTYxNzIxIiwic2NvcGVzIjpbInJlc3NvdXJjZXMucmVhZCIsInJlc3NvdXJjZXMud3JpdGUiXX0.rn6BGkwXv1bqaevBuroqNoBDP6d8dNo3dN1f6kwPqNU' \
+          -H 'Content-Type: application/json; charset=utf-8' \<%if (secured_api==true) {%>
+          -H 'Authorization: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2NsYXVkZS1pZHAubGFwb3N0ZS5mciIsInBybiI6ImNsYXVkZS5zZWd1cmV0QGxhcG9zdGUuZnIiLCJhdWQiOiJodHRwczovL2NsYXVkZS1hdXRoLmxhcG9zdGUuZnIiLCJleHAiOiIxNDYxNTYxNzIxIiwic2NvcGVzIjpbInJlc3NvdXJjZXMucmVhZCIsInJlc3NvdXJjZXMud3JpdGUiXX0.rn6BGkwXv1bqaevBuroqNoBDP6d8dNo3dN1f6kwPqNU' \<%}%>
           -d '<%- JSON.stringify(sample_data) %>' \
           "<%= baseUrl %><%= domain %>/<%= version %>/<%= model %>/<%= id %>"
           ```
@@ -653,8 +664,8 @@ paths:
         - application/x-www-form-urlencoded
       produces:
         - application/json
-      security:
-        - bearer: []
+      <%if (secured_api==true) {%>security:
+        - bearer: []<%}%>
       parameters:
         - in: path
           name: id
@@ -704,9 +715,11 @@ paths:
             items:
               $ref: '#/definitions/Error'
     patch:
+    <%if (secured_api==true) {%>
       tags:
-        - readWrite
         - write
+        - readWrite
+    <%}%>
       summary: Partial update (one or more attributes) a ressource <%= model %>
       description: >
         Partial update the ressource <%= model %> `<%= id %>`
@@ -714,9 +727,8 @@ paths:
 
           ```
           curl -iX PATCH \
-          -H 'Accept: application/json' \
-          -H 'Content-Type: application/json; charset=utf-8' \
-          -H 'Authorization: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2NsYXVkZS1pZHAubGFwb3N0ZS5mciIsInBybiI6ImNsYXVkZS5zZWd1cmV0QGxhcG9zdGUuZnIiLCJhdWQiOiJodHRwczovL2NsYXVkZS1hdXRoLmxhcG9zdGUuZnIiLCJleHAiOiIxNDYxNTYxNzIxIiwic2NvcGVzIjpbInJlc3NvdXJjZXMucmVhZCIsInJlc3NvdXJjZXMud3JpdGUiXX0.rn6BGkwXv1bqaevBuroqNoBDP6d8dNo3dN1f6kwPqNU' \
+          -H 'Content-Type: application/json; charset=utf-8' \<%if (secured_api==true) {%>
+          -H 'Authorization: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2NsYXVkZS1pZHAubGFwb3N0ZS5mciIsInBybiI6ImNsYXVkZS5zZWd1cmV0QGxhcG9zdGUuZnIiLCJhdWQiOiJodHRwczovL2NsYXVkZS1hdXRoLmxhcG9zdGUuZnIiLCJleHAiOiIxNDYxNTYxNzIxIiwic2NvcGVzIjpbInJlc3NvdXJjZXMucmVhZCIsInJlc3NvdXJjZXMud3JpdGUiXX0.rn6BGkwXv1bqaevBuroqNoBDP6d8dNo3dN1f6kwPqNU' \<%}%>
           -d '<%- JSON.stringify(sample_data) %>' \
           "<%= baseUrl %><%= domain %>/<%= version %>/<%= model %>/<%= id %>"
           ```
@@ -726,8 +738,8 @@ paths:
         - application/x-www-form-urlencoded
       produces:
         - application/json
-      security:
-        - bearer: []
+      <%if (secured_api==true) {%>security:
+        - bearer: []<%}%>
       parameters:
         - in: path
           name: id
@@ -778,26 +790,27 @@ paths:
               $ref: '#/definitions/Error'
 
     delete:
+    <%if (secured_api==true) {%>
       tags:
-        - readWrite
         - write
+        - readWrite
+    <%}%>
       summary: 'Delete a ressource <%= model %>'
       description: >
         Delete the ressource <%= model %> `<%= id %>`
 
 
           ```
-          curl -iX DELETE \
-          -H 'Accept: application/json' \
-          -H 'Authorization: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2NsYXVkZS1pZHAubGFwb3N0ZS5mciIsInBybiI6ImNsYXVkZS5zZWd1cmV0QGxhcG9zdGUuZnIiLCJhdWQiOiJodHRwczovL2NsYXVkZS1hdXRoLmxhcG9zdGUuZnIiLCJleHAiOiIxNDYxNTYxNzIxIiwic2NvcGVzIjpbInJlc3NvdXJjZXMucmVhZCIsInJlc3NvdXJjZXMud3JpdGUiXX0.rn6BGkwXv1bqaevBuroqNoBDP6d8dNo3dN1f6kwPqNU' \
+          curl -iX DELETE \<%if (secured_api==true) {%>
+          -H 'Authorization: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2NsYXVkZS1pZHAubGFwb3N0ZS5mciIsInBybiI6ImNsYXVkZS5zZWd1cmV0QGxhcG9zdGUuZnIiLCJhdWQiOiJodHRwczovL2NsYXVkZS1hdXRoLmxhcG9zdGUuZnIiLCJleHAiOiIxNDYxNTYxNzIxIiwic2NvcGVzIjpbInJlc3NvdXJjZXMucmVhZCIsInJlc3NvdXJjZXMud3JpdGUiXX0.rn6BGkwXv1bqaevBuroqNoBDP6d8dNo3dN1f6kwPqNU' \<%}%>
           "<%= baseUrl %><%= domain %>/<%= version %>/<%= model %>/<%= id %>"
           ```
 
       operationId: deleteOne<%=: model | capitalize %>
       produces:
         - application/json
-      security:
-        - bearer: []
+      <%if (secured_api==true) {%>security:
+        - bearer: []<%}%>
       parameters:
         - in: path
           name: id
@@ -830,9 +843,11 @@ paths:
               $ref: '#/definitions/Error'
   /<%= model %>/search:
     get:
+    <%if (secured_api==true) {%>
       tags:
         - readOnly
         - readWrite
+    <%}%>
       summary: Fulltext search on all attribute of <%= model %>
       description: >
 
@@ -843,9 +858,8 @@ paths:
 
 
           ```
-          curl -iX GET \
-          -H 'Accept: application/json' \
-          -H 'Authorization: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2NsYXVkZS1pZHAubGFwb3N0ZS5mciIsInBybiI6ImNsYXVkZS5zZWd1cmV0QGxhcG9zdGUuZnIiLCJhdWQiOiJodHRwczovL2NsYXVkZS1hdXRoLmxhcG9zdGUuZnIiLCJleHAiOiIxNDYxNTYxNzIxIiwic2NvcGVzIjpbInJlc3NvdXJjZXMucmVhZCIsInJlc3NvdXJjZXMud3JpdGUiXX0.rn6BGkwXv1bqaevBuroqNoBDP6d8dNo3dN1f6kwPqNU' \
+          curl -iX GET \<%if (secured_api==true) {%>
+          -H 'Authorization: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2NsYXVkZS1pZHAubGFwb3N0ZS5mciIsInBybiI6ImNsYXVkZS5zZWd1cmV0QGxhcG9zdGUuZnIiLCJhdWQiOiJodHRwczovL2NsYXVkZS1hdXRoLmxhcG9zdGUuZnIiLCJleHAiOiIxNDYxNTYxNzIxIiwic2NvcGVzIjpbInJlc3NvdXJjZXMucmVhZCIsInJlc3NvdXJjZXMud3JpdGUiXX0.rn6BGkwXv1bqaevBuroqNoBDP6d8dNo3dN1f6kwPqNU' \<%}%>
           "<%= baseUrl %><%= domain %>/<%= version %>/<%= model %>/search?q=v*&start_index=1&count=10"
           ```
 
@@ -853,9 +867,8 @@ paths:
 
 
           ```
-          curl -iX GET \
-          -H 'Accept: application/json' \
-          -H 'Authorization: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2NsYXVkZS1pZHAubGFwb3N0ZS5mciIsInBybiI6ImNsYXVkZS5zZWd1cmV0QGxhcG9zdGUuZnIiLCJhdWQiOiJodHRwczovL2NsYXVkZS1hdXRoLmxhcG9zdGUuZnIiLCJleHAiOiIxNDYxNTYxNzIxIiwic2NvcGVzIjpbInJlc3NvdXJjZXMucmVhZCIsInJlc3NvdXJjZXMud3JpdGUiXX0.rn6BGkwXv1bqaevBuroqNoBDP6d8dNo3dN1f6kwPqNU' \
+          curl -iX GET \<%if (secured_api==true) {%>
+          -H 'Authorization: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2NsYXVkZS1pZHAubGFwb3N0ZS5mciIsInBybiI6ImNsYXVkZS5zZWd1cmV0QGxhcG9zdGUuZnIiLCJhdWQiOiJodHRwczovL2NsYXVkZS1hdXRoLmxhcG9zdGUuZnIiLCJleHAiOiIxNDYxNTYxNzIxIiwic2NvcGVzIjpbInJlc3NvdXJjZXMucmVhZCIsInJlc3NvdXJjZXMud3JpdGUiXX0.rn6BGkwXv1bqaevBuroqNoBDP6d8dNo3dN1f6kwPqNU' \<%}%>
           "<%= baseUrl %><%= domain %>/<%= version %>/<%= model %>/search?q=v*&creation_date_gte=2015-06-18T00:00:00Z"
           ```
 
@@ -863,9 +876,8 @@ paths:
 
 
           ```
-          curl -iX GET \
-          -H 'Accept: application/json' \
-          -H 'Authorization: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2NsYXVkZS1pZHAubGFwb3N0ZS5mciIsInBybiI6ImNsYXVkZS5zZWd1cmV0QGxhcG9zdGUuZnIiLCJhdWQiOiJodHRwczovL2NsYXVkZS1hdXRoLmxhcG9zdGUuZnIiLCJleHAiOiIxNDYxNTYxNzIxIiwic2NvcGVzIjpbInJlc3NvdXJjZXMucmVhZCIsInJlc3NvdXJjZXMud3JpdGUiXX0.rn6BGkwXv1bqaevBuroqNoBDP6d8dNo3dN1f6kwPqNU' \
+          curl -iX GET \<%if (secured_api==true) {%>
+          -H 'Authorization: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2NsYXVkZS1pZHAubGFwb3N0ZS5mciIsInBybiI6ImNsYXVkZS5zZWd1cmV0QGxhcG9zdGUuZnIiLCJhdWQiOiJodHRwczovL2NsYXVkZS1hdXRoLmxhcG9zdGUuZnIiLCJleHAiOiIxNDYxNTYxNzIxIiwic2NvcGVzIjpbInJlc3NvdXJjZXMucmVhZCIsInJlc3NvdXJjZXMud3JpdGUiXX0.rn6BGkwXv1bqaevBuroqNoBDP6d8dNo3dN1f6kwPqNU' \<%}%>
           "<%= baseUrl %><%= domain %>/<%= version %>/<%= model %>/search?q=v*&creation_date_gte=2015-06-18T00:00:00Z&fields=id,modification_date"
           ```
 
@@ -910,8 +922,8 @@ paths:
           description: "Version of the ressource (see etag) (Ex : <%= etag %>)"
           required: false
           type: string
-      security:
-        - bearer: []
+      <%if (secured_api==true) {%>security:
+        - bearer: []<%}%>
       responses:
         '200':
           description: successful operation

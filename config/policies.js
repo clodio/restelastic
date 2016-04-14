@@ -42,15 +42,18 @@ module.exports.policies = {
 
 		// For the action `nurture`, apply the 'isRabbitMother' policy
 		// (this overrides `false` above)
-		 findAll	: ['isRessourcesReadOnly'],
-		 findOne	: ['isRessourcesReadOnly'],
-		 findOneSecondModel	: ['isRessourcesReadOnly'],
-		 findAllSecondModel	: ['isRessourcesReadOnly'],
-		 create	: 'isRessourcesReadWrite',
-		 alter	: 'isRessourcesReadWrite',
-		 alterOrCreate	: 'isRessourcesReadWrite',
-		 deleteOne	: 'isRessourcesReadWrite'
+    // add secured parameter to add authentification on services
 
+
+    // to secure api with authorisation header , uncomment these lines
+		// findAll	: ['isRessourcesReadOnly'],
+		// findOne	: ['isRessourcesReadOnly'],
+		// findOneSecondModel	: ['isRessourcesReadOnly'],
+		// findAllSecondModel	: ['isRessourcesReadOnly'],
+		// create	: 'isRessourcesReadWrite',
+		// alter	: 'isRessourcesReadWrite',
+		// alterOrCreate	: 'isRessourcesReadWrite',
+		// deleteOne	: 'isRessourcesReadWrite'
 
 	}
 };
