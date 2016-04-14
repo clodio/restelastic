@@ -241,7 +241,7 @@ local_url +=req.query.ressource || "products";
           </div>
           <div class="col-sm-7">
             <h2><%= __('Explore your data') %></h2>
-            <p><%= __('Use') %> <a href="https://kibana.restlastic.com" target="_blank" rel="nofollow">kibana</a> <%= __('to explore your API data') %></p>
+            <p><%= __('Use') %> <a href="http://kibana.restlastic.com" target="_blank" rel="nofollow">kibana</a> <%= __('to explore your API data') %></p>
           </div>
         </div>
       </div>
@@ -443,4 +443,5 @@ local_url +=req.query.ressource || "products";
     </div>
   </div>
   <div class="row copyright text-center">© 2016 Claude Seguret &amp; Restlastic</div>
+  <!-- <%= process.env.ELASTICSEARCH_HOST %>-->
 </div>
