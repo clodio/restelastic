@@ -7,5 +7,6 @@ module.exports.errors = {
   "NOT_FOUND":{"error": "not_found","error_description": "No ressource found" },
   "ERR_WITH_DATABASE":{"error": "internal_error","error_description": "Internal problem with database" },
   "CONFLICT":{"error": "ressource_version_conflict","error_description": "Ressource already exist"},
-  "ERR_WHEN_DELETE":{"error": "internal_error","error_description": "Internal error while deleting"}
+  "ERR_WHEN_DELETE":{"error": "internal_error","error_description": "Internal error while deleting"},
+  "ERR_NO_INDEX":{"error": "error_no_index","error_description": "index not found, wrong url?"}
 };

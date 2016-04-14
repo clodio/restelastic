@@ -44,6 +44,9 @@ module.exports = {
       if (response && response.found==false) {
         cb(sails.config.errors["NOT_FOUND"]);
       }
+      else if (error && error.status==404) {
+        cb(sails.config.errors["ERR_NO_INDEX"]);
+      }
       else if (error) {
         ReportError.error(req,error,"ERR_internal_2000");
         cb(sails.config.errors["ERR_WHEN_RETRIEVING"]);
@@ -332,6 +335,9 @@ module.exports = {
           else if (error && error.message !="Unable to parse/serialize body") {
             ReportError.error(req,error,"ERR_internal_1001");
             cb(sails.config.errors["ERR_WHEN_EXECUTE"]);
+          }
+          else if (error && error.status==404) {
+            cb(sails.config.errors["ERR_NO_INDEX"]);
           }
           else if (error ) {
             ReportError.error(req,error,"ERR_internal_1002");
@@ -644,8 +650,13 @@ module.exports = {
             cb({"error":"not found"});
           }
           else if (error) {
-            ReportError.error(req,error,"ERR_internal_1011");
-            cb(sails.config.errors["ERR_WHEN_RETRIEVING"]);
+            if (error && error.status==404) {
+              cb(sails.config.errors["ERR_NO_INDEX"]);
+            }
+            else {
+              ReportError.error(req,error,"ERR_internal_1011");
+              cb(sails.config.errors["ERR_WHEN_RETRIEVING"]);
+            }
           }
           else {
             var collectionOutput={};
@@ -733,6 +744,9 @@ module.exports = {
           cb(sails.config.errors["NOT_FOUND"]);
         }
       }
+      else if (error && error.status==404) {
+        cb(sails.config.errors["ERR_NO_INDEX"]);
+      }
       else if (error) {
         ReportError.error(req,error,"ERR_internal_1010");
         cb(sails.config.errors["ERR_WHEN_RETRIEVING"]);
@@ -805,6 +819,9 @@ module.exports = {
           ReportError.error(req,error,"ERR_internal_1003");
           cb(sails.config.errors["ERR_WHEN_CREATE"]);
         }
+      }
+      else if (error && error.status==404) {
+        cb(sails.config.errors["ERR_NO_INDEX"]);
       }
       else if (error) {
         ReportError.error(req,error,"ERR_internal_1000");
@@ -886,6 +903,7 @@ module.exports = {
       else if (error && response.status==400) {
         cb({"error": "wrong_arguments","error_description": response.error.root_cause[0].reason});
       }
+
       else {
         if (response) {
           req.params.id= response._id;
@@ -899,6 +917,9 @@ module.exports = {
               cb(err, outputResponse);
             }
           });
+        }
+        else if (error && error.status==404) {
+          cb(sails.config.errors["ERR_NO_INDEX"]);
         }
         else {
           ReportError.error(req,error,"ERR_internal_1008");
@@ -936,6 +957,9 @@ module.exports = {
 				else if (response && response.status==409) {
 				  cb(sails.config.errors["CONFLICT"]);
 				}
+        else if (error && error.status==404) {
+          cb(sails.config.errors["ERR_NO_INDEX"]);
+        }
 				else if (error) {
           ReportError.error(req,error,"ERR_delete_1000");
 				 	cb(sails.config.errors["ERR_WHEN_EXECUTE"]);
@@ -962,8 +986,15 @@ module.exports = {
     // execute the DSL Query
     esclient.indices.getMapping(DSLQuery, function (error, response) {
       if (error) {
-        ReportError.error(req,error,"ERR_getMapping_1000");
-        cb(sails.config.errors["ERR_WHEN_EXECUTE"]);
+        if (error.status == 404) {
+          cb(sails.config.errors["ERR_NO_INDEX"]);
+        }
+        else{
+          ReportError.error(req,error,"ERR_getMapping_1000");
+          cb(sails.config.errors["ERR_WHEN_EXECUTE"]);
+        }
+
+
       }
      else {
         //response._source.etag=response._version.toString();

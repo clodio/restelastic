@@ -18,6 +18,9 @@ module.exports = {
         	// send a 404 Not Found
           return res.send(404, "{}");
         }
+        else if (err && err.error=="error_no_index") {
+          return res.send(404, sails.config.errors["ERR_NO_INDEX"]);
+        }
         else if (err) {
           ReportError.error(req,err,"ERR_500_0017");
           return res.send(500, sails.config.errors["ERR_UNKNOWN"]);
@@ -59,6 +62,9 @@ module.exports = {
         sails.log.warn("WARN#500_2001");
         return res.send(500, [{"error": "index_not_found","error_description": err.error_description }]);
       }
+      else if (err && err.error=="error_no_index") {
+        return res.send(404, sails.config.errors["ERR_NO_INDEX"]);
+      }
       else if (err && err.error) {
         ReportError.error(req,err,"ERR_500_0002");
         return res.send(500, sails.config.errors["ERR_UNKNOWN"]);
@@ -89,8 +95,13 @@ module.exports = {
 
       Ressource.search(req, function (err, outputRessource) {
         if (err) {
-          ReportError.error(req,err,"ERR_500_0003");
-          return res.send(500, sails.config.errors["ERR_UNKNOWN"]);
+          if (err && err.error=="error_no_index") {
+            return res.send(404, sails.config.errors["ERR_NO_INDEX"]);
+          }
+          else {
+            ReportError.error(req,err,"ERR_500_0003");
+            return res.send(500, sails.config.errors["ERR_UNKNOWN"]);
+          }
         }
         else {
            //generate etag
@@ -150,6 +161,9 @@ module.exports = {
         else if (err && err.error=="wrong_arguments") {
           return res.send(400, [{"error": err.error,"error_description": err.error_description}]);
         }
+        else if (err && err.error=="error_no_index") {
+          return res.send(404, sails.config.errors["ERR_NO_INDEX"]);
+        }
         else if (err) {
           ReportError.error(req,err,"ERR_500_0004");
           return res.send(500, sails.config.errors["ERR_UNKNOWN"]);
@@ -204,6 +218,9 @@ module.exports = {
         }
         else if (err && err.error=="wrong_arguments") {
           return res.send(400, [{"error": err.error,"error_description": err.error_description}]);
+        }
+        else if (err && err.error=="error_no_index") {
+          return res.send(404, sails.config.errors["ERR_NO_INDEX"]);
         }
         else if (err && err.created===false) {
           ReportError.error(req,err,"ERR_500_0005");
@@ -290,6 +307,9 @@ module.exports = {
               }
             });
            }
+           else if (err && err.error=="error_no_index") {
+             return res.send(404, sails.config.errors["ERR_NO_INDEX"]);
+           }
            else if (err) {
              ReportError.error(req,err,"ERR_500_0009");
              return res.send(500, sails.config.errors["ERR_UNKNOWN"]);
@@ -354,6 +374,9 @@ module.exports = {
         	//the document was not existing
           return res.send(404,"");
         }
+        else if (err && err.error=="error_no_index") {
+          return res.send(404, sails.config.errors["ERR_NO_INDEX"]);
+        }
         else if (err && err.error=="ressource_version_conflict") {
             return res.send(412, [{"error": "ressource_version_conflict","error_description": "conflict on ressource " + req.params.id + " : Etag " + req.headers['if-none-match'] + " not matching"}]);
         }
@@ -375,9 +398,9 @@ module.exports = {
      // Get the id parameter from the URI route
      if (req.params) {
        Ressource.getMapping(req, req.query , function (err, outputRessource) {
-         if (err && err.error =="not_found") {
+         if (err && err.error =="error_no_index") {
            // send a 404 Not Found
-           return res.send(404, "{}");
+           return res.send(404, sails.config.errors["ERR_NO_INDEX"]);
          }
          else if (err) {
            ReportError.error(req,err,"ERR_500_0012");
