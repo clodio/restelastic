@@ -10,7 +10,7 @@
 	"enjoy    : \"Pagination, search, filters, fulltext,...\"":"profitez    : \"Pagination, recherche, filtres, fulltext,...\"",
 	"generate : \"Instantly swagger, postman, mocha\"":"générez : \"Instantanément swagger, postman, mocha\"",
 	"dashboard : \"Realtime graph with kibana\"":"tableau_de_bord : \"Graphes en temps réel avec kibana\"",
-	"customise : \"based on sails.js, elasticsearch\"":"adaptez : \"Basé sur sails.js, elasticsearch\"",
+	"customise : \"based on node.js, sails.js, elasticsearch\"":"adaptez : \"Basé sur node.js, sails.js, elasticsearch\"",
 	"Easy to Install" :"Facile à installer",
 	"Use in the": "Utilisez dans le",
 	"or simply install": "ou installer le simplement",

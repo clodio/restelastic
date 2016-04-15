@@ -1,183 +1,314 @@
+<%
+
+	var etag = sample_data.etag;
+	delete sample_data.etag;
+  var sample_data_without_id = sample_data;
+	var id = sample_data.id;
+	delete sample_data_without_id.id;
+	var sample_data_string= JSON.stringify(sample_data,null,2);
+	var sample_data_without_id_string= JSON.stringify(sample_data_without_id,null,2);
+	// very ugly
+	sample_data_string = sample_data_string.replace(/\"/g,'\\\"').replace(/\n/g,"\\n");
+	sample_data_without_id_string = sample_data_without_id_string.replace(/\"/g,'\\\"').replace(/\n/g,"\\n");
+
+	var sample_data_without_id_params = [];
+	for(var key in sample_data_without_id){
+		if (typeof sample_data_without_id[key] !== 'object') {
+			sample_data_without_id_params.push({"key":key,"value":sample_data_without_id[key],"type":"text"});
+		}
+	}
+
+	// add secured parameter to add authentification on services
+	var secured_api= process.env.SECURED_API || false;
+	if (req.query.secured_api !== undefined ) {
+		secured_api=true;
+	}
+	%>
 {
 	"id": "<%= model %>-12c6-98b9-<%= version %>-<%= domain %>",
-	"name": "<%= domain %>-<%= model %>",
+	"name": "<%= domain %>-<%= version %>-<%= model %>",
 	"timestamp": 1456337189036,
+	"order": ["121e5beb-7791-1a01-98e9-<%= domain %><%= version %><%= model %>", "c8dd79d8-560e-7ded-0d87-<%= domain %><%= version %><%= model %>",
+	"c8dd79d8-560e-7ded-0d88-<%= domain %><%= version %><%= model %>", "8799449b-791a-29a7-f113-<%= domain %><%= version %><%= model %>", "9bd3cc79-940e-d312-7813-<%= domain %><%= version %><%= model %>", "4240a0bb-109d-2acc-8d30-<%= domain %><%= version %><%= model %>", "36f7ae74-fcf7-31b7-e903-<%= domain %><%= version %><%= model %>", "ee9673b5-4e9b-eba6-83c2-<%= domain %><%= version %><%= model %>", "6bbc8609-4eb8-d98b-5499-<%= domain %><%= version %><%= model %>", "15d3744a-2b68-9117-e83c-<%= domain %><%= version %><%= model %>", "3d0068fa-262e-317b-616b-<%= domain %><%= version %><%= model %>", "90e9ea21-ac4e-1877-9f58-<%= domain %><%= version %><%= model %>", "3afaa44e-63db-72bd-196a-<%= domain %><%= version %><%= model %>", "1b562726-a776-1232-66aa-<%= domain %><%= version %><%= model %>", "45b368a0-87ec-2f67-ff42-<%= domain %><%= version %><%= model %>", "28dc187d-e7c1-44e1-d5a2-<%= domain %><%= version %><%= model %>", "5fe74377-2a52-f699-c8fe-<%= domain %><%= version %><%= model %>", "5aacb6e9-e179-cfe7-1145-<%= domain %><%= version %><%= model %>", "f607c19f-3b2f-c30d-ff79-<%= domain %><%= version %><%= model %>", "13ae5a64-65d0-208a-6a8e-<%= domain %><%= version %><%= model %>", "efbae22e-8817-021b-80a6-<%= domain %><%= version %><%= model %>", "6a9c3dbc-634e-f3b7-a38a-<%= domain %><%= version %><%= model %>", "ed54e23a-009b-d13b-de57-<%= domain %><%= version %><%= model %>", "8702b2c6-7a38-e53f-8248-<%= domain %><%= version %><%= model %>"],
 	"requests": [{
 		"collectionId": "<%= model %>-12c6-98b9-<%= version %>-<%= domain %>",
-		"id": "121e5beb-7791-1a01-98e9-cee537451c28",
-		"name": "POST Create",
-		"description": "",
+		"id": "121e5beb-7791-1a01-98e9-<%= domain %><%= version %><%= model %>",
+		"name": "CREATE",
+		"description": "See http://api.restlastic.com for more informations",
 		"url": "<%= baseUrl %><%= domain %>/<%= version %>/<%= model %>",
 		"method": "POST",
-		"headers": "Accept-Encoding: application/json\nAuthorization: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2NsYXVkZS1pZHAubGFwb3N0ZS5mciIsInBybiI6ImNsYXVkZS5zZWd1cmV0QGxhcG9zdGUuZnIiLCJhdWQiOiJodHRwczovL2NsYXVkZS1hdXRoLmxhcG9zdGUuZnIiLCJleHAiOiIxNDYxNTYxNzIxIiwic2NvcGVzIjpbInJlc3NvdXJjZXMucmVhZCIsInJlc3NvdXJjZXMud3JpdGUiXX0.rn6BGkwXv1bqaevBuroqNoBDP6d8dNo3dN1f6kwPqNU\n",
-		"data": [{
-			"key": "name",
-			"value": "Clodio",
-			"type": "text"
-		}, {
-			"key": "votes",
-			"value": "23",
-			"type": "text"
-		}, {
-			"key": "mail",
-			"value": "claude.seguret@github.com",
-			"type": "text"
-		}],
-		"dataMode": "params",
+		"headers": "Content-Type: application/json\n<%if (secured_api==true) {%>Authorization: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2NsYXVkZS1pZHAubGFwb3N0ZS5mciIsInBybiI6ImNsYXVkZS5zZWd1cmV0QGxhcG9zdGUuZnIiLCJhdWQiOiJodHRwczovL2NsYXVkZS1hdXRoLmxhcG9zdGUuZnIiLCJleHAiOiIxNDYxNTYxNzIxIiwic2NvcGVzIjpbInJlc3NvdXJjZXMucmVhZCIsInJlc3NvdXJjZXMud3JpdGUiXX0.rn6BGkwXv1bqaevBuroqNoBDP6d8dNo3dN1f6kwPqNU\n<%}%>",
+		"data": "<%- sample_data_without_id_string %>",
+		"dataMode": "raw",
 		"timestamp": 0,
-		"responses": [],
-		"version": 2
+		"version": 2,
+		"time": 1460656378010
 	}, {
 		"collectionId": "<%= model %>-12c6-98b9-<%= version %>-<%= domain %>",
-		"id": "15d3744a-2b68-9117-e83c-19b20d92eb04",
-		"name": "get One",
-		"description": "",
-		"url": "<%= baseUrl %><%= domain %>/<%= version %>/<%= model %>/sixeja085Vk3vUAj3e",
+		"id": "13ae5a64-65d0-208a-6a8e-<%= domain %><%= version %><%= model %>",
+		"name": "LIST _prefix",
+		"description": "See http://api.restlastic.com for more informations",
+		"url": "<%= baseUrl %><%= domain %>/<%= version %>/<%= model %>?id_prefix=l",
 		"method": "GET",
-		"headers": "Accept-Encoding: application/json\nAuthorization: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2NsYXVkZS1pZHAubGFwb3N0ZS5mciIsInBybiI6ImNsYXVkZS5zZWd1cmV0QGxhcG9zdGUuZnIiLCJhdWQiOiJodHRwczovL2NsYXVkZS1hdXRoLmxhcG9zdGUuZnIiLCJleHAiOiIxNDYxNTYxNzIxIiwic2NvcGVzIjpbInJlc3NvdXJjZXMucmVhZCIsInJlc3NvdXJjZXMud3JpdGUiXX0.rn6BGkwXv1bqaevBuroqNoBDP6d8dNo3dN1f6kwPqNU\n",
-		"data": [{
-			"key": "name",
-			"value": "Timbres",
-			"type": "text"
-		}, {
-			"key": "status",
-			"value": "available",
-			"type": "text"
-		}, {
-			"key": "price",
-			"value": "10",
-			"type": "text"
-		}],
-		"dataMode": "params",
+		<%if (secured_api==true) {%>"headers": "Authorization: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2NsYXVkZS1pZHAubGFwb3N0ZS5mciIsInBybiI6ImNsYXVkZS5zZWd1cmV0QGxhcG9zdGUuZnIiLCJhdWQiOiJodHRwczovL2NsYXVkZS1hdXRoLmxhcG9zdGUuZnIiLCJleHAiOiIxNDYxNTYxNzIxIiwic2NvcGVzIjpbInJlc3NvdXJjZXMucmVhZCIsInJlc3NvdXJjZXMud3JpdGUiXX0.rn6BGkwXv1bqaevBuroqNoBDP6d8dNo3dN1f6kwPqNU\n",<%}%>
 		"timestamp": 0,
-		"responses": [],
-		"version": 2
+		"version": 2,
+		"time": 1460656530546
 	}, {
 		"collectionId": "<%= model %>-12c6-98b9-<%= version %>-<%= domain %>",
-		"id": "36f7ae74-fcf7-31b7-e903-c7c548bc3c86",
-		"name": "DELETE <%= model %>",
-		"description": "",
+		"id": "15d3744a-2b68-9117-e83c-<%= domain %><%= version %><%= model %>",
+		"name": "ONE resource",
+		"description": "See http://api.restlastic.com for more informations",
+		"url": "<%= baseUrl %><%= domain %>/<%= version %>/<%= model %>/<%= id %>",
+		"method": "GET",
+		<%if (secured_api==true) {%>"headers": "Authorization: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2NsYXVkZS1pZHAubGFwb3N0ZS5mciIsInBybiI6ImNsYXVkZS5zZWd1cmV0QGxhcG9zdGUuZnIiLCJhdWQiOiJodHRwczovL2NsYXVkZS1hdXRoLmxhcG9zdGUuZnIiLCJleHAiOiIxNDYxNTYxNzIxIiwic2NvcGVzIjpbInJlc3NvdXJjZXMucmVhZCJdfQ.ssrAHB1phB3hGh4n2t7rBJQAJP5GQWM5Qtvg7tR7UwA\n",<%}%>
+		"timestamp": 0,
+		"version": 2,
+		"time": 1460656446122
+	}, {
+		"collectionId": "<%= model %>-12c6-98b9-<%= version %>-<%= domain %>",
+		"id": "1b562726-a776-1232-66aa-<%= domain %><%= version %><%= model %>",
+		"name": "LIST with pagination",
+		"description": "See http://api.restlastic.com for more informations",
+		"url": "<%= baseUrl %><%= domain %>/<%= version %>/<%= model %>?start_index=1&count=10",
+		"method": "GET",
+		<%if (secured_api==true) {%>"headers": "Authorization: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2NsYXVkZS1pZHAubGFwb3N0ZS5mciIsInBybiI6ImNsYXVkZS5zZWd1cmV0QGxhcG9zdGUuZnIiLCJhdWQiOiJodHRwczovL2NsYXVkZS1hdXRoLmxhcG9zdGUuZnIiLCJleHAiOiIxNDYxNTYxNzIxIiwic2NvcGVzIjpbInJlc3NvdXJjZXMucmVhZCJdfQ.ssrAHB1phB3hGh4n2t7rBJQAJP5GQWM5Qtvg7tR7UwA\n",<%}%>
+		"timestamp": 0,
+		"version": 2,
+		"time": 1460656497097
+	}, {
+		"collectionId": "<%= model %>-12c6-98b9-<%= version %>-<%= domain %>",
+		"id": "28dc187d-e7c1-44e1-d5a2-<%= domain %><%= version %><%= model %>",
+		"name": "LIST _ne (not equal)",
+		"description": "See http://api.restlastic.com for more informations",
+		"url": "<%= baseUrl %><%= domain %>/<%= version %>/<%= model %>?creation_date_ne=2015-06-18T12:59:59Z",
+		"method": "GET",
+		<%if (secured_api==true) {%>"headers": "Authorization: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2NsYXVkZS1pZHAubGFwb3N0ZS5mciIsInBybiI6ImNsYXVkZS5zZWd1cmV0QGxhcG9zdGUuZnIiLCJhdWQiOiJodHRwczovL2NsYXVkZS1hdXRoLmxhcG9zdGUuZnIiLCJleHAiOiIxNDYxNTYxNzIxIiwic2NvcGVzIjpbInJlc3NvdXJjZXMucmVhZCIsInJlc3NvdXJjZXMud3JpdGUiXX0.rn6BGkwXv1bqaevBuroqNoBDP6d8dNo3dN1f6kwPqNU\n",<%}%>
+		"timestamp": 0,
+		"version": 2,
+		"time": 1460656511890
+	}, {
+		"collectionId": "<%= model %>-12c6-98b9-<%= version %>-<%= domain %>",
+		"id": "36f7ae74-fcf7-31b7-e903-<%= domain %><%= version %><%= model %>",
+		"name": "ONE ressource",
+		"description": "See http://api.restlastic.com for more informations",
 		"url": "<%= baseUrl %><%= domain %>/<%= version %>/<%= model %>/to_delete",
 		"method": "DELETE",
-		"headers": "Accept-Encoding: application/json\nAuthorization: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2NsYXVkZS1pZHAubGFwb3N0ZS5mciIsInBybiI6ImNsYXVkZS5zZWd1cmV0QGxhcG9zdGUuZnIiLCJhdWQiOiJodHRwczovL2NsYXVkZS1hdXRoLmxhcG9zdGUuZnIiLCJleHAiOiIxNDYxNTYxNzIxIiwic2NvcGVzIjpbInJlc3NvdXJjZXMucmVhZCIsInJlc3NvdXJjZXMud3JpdGUiXX0.rn6BGkwXv1bqaevBuroqNoBDP6d8dNo3dN1f6kwPqNU\n",
-		"data": [{
-			"key": "name",
-			"value": "to_delete",
-			"type": "text"
-		}, {
-			"key": "votes",
-			"value": "23",
-			"type": "text"
-		}],
-		"dataMode": "params",
+		<%if (secured_api==true) {%>"headers": "Authorization: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2NsYXVkZS1pZHAubGFwb3N0ZS5mciIsInBybiI6ImNsYXVkZS5zZWd1cmV0QGxhcG9zdGUuZnIiLCJhdWQiOiJodHRwczovL2NsYXVkZS1hdXRoLmxhcG9zdGUuZnIiLCJleHAiOiIxNDYxNTYxNzIxIiwic2NvcGVzIjpbInJlc3NvdXJjZXMucmVhZCIsInJlc3NvdXJjZXMud3JpdGUiXX0.rn6BGkwXv1bqaevBuroqNoBDP6d8dNo3dN1f6kwPqNU\n",<%}%>
 		"timestamp": 0,
-		"responses": [],
-		"version": 2
+		"version": 2,
+		"time": 1460656426073
 	}, {
 		"collectionId": "<%= model %>-12c6-98b9-<%= version %>-<%= domain %>",
-		"id": "45b368a0-87ec-2f67-ff42-ca9db21479ec",
-		"name": "GET List",
-		"description": "",
-		"url": "<%= baseUrl %><%= domain %>/<%= version %>/<%= model %>",
+		"id": "3afaa44e-63db-72bd-196a-<%= domain %><%= version %><%= model %>",
+		"name": "LIST Filter fields",
+		"description": "See http://api.restlastic.com for more informations",
+		"url": "<%= baseUrl %><%= domain %>/<%= version %>/<%= model %>?creation_date=2016-04-08T17:44:28Z",
 		"method": "GET",
-		"headers": "Accept-Encoding: application/json\nAuthorization: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2NsYXVkZS1pZHAubGFwb3N0ZS5mciIsInBybiI6ImNsYXVkZS5zZWd1cmV0QGxhcG9zdGUuZnIiLCJhdWQiOiJodHRwczovL2NsYXVkZS1hdXRoLmxhcG9zdGUuZnIiLCJleHAiOiIxNDYxNTYxNzIxIiwic2NvcGVzIjpbInJlc3NvdXJjZXMucmVhZCIsInJlc3NvdXJjZXMud3JpdGUiXX0.rn6BGkwXv1bqaevBuroqNoBDP6d8dNo3dN1f6kwPqNU\n",
-		"data": [{
-			"key": "name",
-			"value": "julie",
-			"type": "text"
-		}, {
-			"key": "votes",
-			"value": "12",
-			"type": "text"
-		}, {
-			"key": "mail",
-			"value": "julie@github.com",
-			"type": "text"
-		}],
-		"dataMode": "params",
+		<%if (secured_api==true) {%>"headers": "Authorization: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2NsYXVkZS1pZHAubGFwb3N0ZS5mciIsInBybiI6ImNsYXVkZS5zZWd1cmV0QGxhcG9zdGUuZnIiLCJhdWQiOiJodHRwczovL2NsYXVkZS1hdXRoLmxhcG9zdGUuZnIiLCJleHAiOiIxNDYxNTYxNzIxIiwic2NvcGVzIjpbInJlc3NvdXJjZXMucmVhZCIsInJlc3NvdXJjZXMud3JpdGUiXX0.rn6BGkwXv1bqaevBuroqNoBDP6d8dNo3dN1f6kwPqNU\n",<%}%>
 		"timestamp": 0,
-		"responses": [],
-		"version": 2
+		"version": 2,
+		"time": 1460656462835
 	}, {
 		"collectionId": "<%= model %>-12c6-98b9-<%= version %>-<%= domain %>",
-		"id": "6a9c3dbc-634e-f3b7-a38a-8458239c363a",
-		"name": "GET search",
-		"description": "",
-		"url": "<%= baseUrl %><%= domain %>/<%= version %>/<%= model %>/search?q=*c&fields=name",
+		"id": "3d0068fa-262e-317b-616b-<%= domain %><%= version %><%= model %>",
+		"name": "ONE ressource with partial data",
+		"description": "See http://api.restlastic.com for more informations",
+		"url": "<%= baseUrl %><%= domain %>/<%= version %>/<%= model %>/<%= id %>?fields=id,creation_date",
 		"method": "GET",
-		"headers": "",
-		"data": [],
-		"dataMode": "params",
+		<%if (secured_api==true) {%>"headers": "Authorization: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2NsYXVkZS1pZHAubGFwb3N0ZS5mciIsInBybiI6ImNsYXVkZS5zZWd1cmV0QGxhcG9zdGUuZnIiLCJhdWQiOiJodHRwczovL2NsYXVkZS1hdXRoLmxhcG9zdGUuZnIiLCJleHAiOiIxNDYxNTYxNzIxIiwic2NvcGVzIjpbInJlc3NvdXJjZXMucmVhZCJdfQ.ssrAHB1phB3hGh4n2t7rBJQAJP5GQWM5Qtvg7tR7UwA\n",<%}%>
 		"timestamp": 0,
-		"responses": [],
-		"version": 2
+		"version": 2,
+		"time": 1460656450451
 	}, {
 		"collectionId": "<%= model %>-12c6-98b9-<%= version %>-<%= domain %>",
-		"id": "904d3201-4a21-6522-8c33-3a21752440ad",
-		"name": "DELETE <%= model %> etag",
-		"description": "",
-		"url": "<%= baseUrl %><%= domain %>/<%= version %>/<%= model %>/to_delete",
-		"method": "DELETE",
-		"headers": "Accept-Encoding: application/json\nAuthorization: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2NsYXVkZS1pZHAubGFwb3N0ZS5mciIsInBybiI6ImNsYXVkZS5zZWd1cmV0QGxhcG9zdGUuZnIiLCJhdWQiOiJodHRwczovL2NsYXVkZS1hdXRoLmxhcG9zdGUuZnIiLCJleHAiOiIxNDYxNTYxNzIxIiwic2NvcGVzIjpbInJlc3NvdXJjZXMucmVhZCIsInJlc3NvdXJjZXMud3JpdGUiXX0.rn6BGkwXv1bqaevBuroqNoBDP6d8dNo3dN1f6kwPqNU\nIf-None-Match: 11\n",
-		"data": [{
-			"key": "name",
-			"value": "to_delete",
-			"type": "text"
-		}, {
-			"key": "votes",
-			"value": "23",
-			"type": "text"
-		}],
-		"dataMode": "params",
+		"id": "4240a0bb-109d-2acc-8d30-<%= domain %><%= version %><%= model %>",
+		"name": "FULL UPDATE with etag (If-None-Match)",
+		"description": "See http://api.restlastic.com for more informations",
+		"url": "<%= baseUrl %><%= domain %>/<%= version %>/<%= model %>/<%= id %>",
+		"method": "PUT",
+		"headers": "If-None-Match: 1\nContent-Type: application/json\n<%if (secured_api==true) {%>Authorization: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2NsYXVkZS1pZHAubGFwb3N0ZS5mciIsInBybiI6ImNsYXVkZS5zZWd1cmV0QGxhcG9zdGUuZnIiLCJhdWQiOiJodHRwczovL2NsYXVkZS1hdXRoLmxhcG9zdGUuZnIiLCJleHAiOiIxNDYxNTYxNzIxIiwic2NvcGVzIjpbInJlc3NvdXJjZXMucmVhZCJdfQ.ssrAHB1phB3hGh4n2t7rBJQAJP5GQWM5Qtvg7tR7UwA\n<%}%>",
+		"data": "<%- sample_data_without_id_string %>",
+		"dataMode": "raw",
 		"timestamp": 0,
-		"responses": [],
-		"version": 2
+		"version": 2,
+		"time": 1460656421499
 	}, {
 		"collectionId": "<%= model %>-12c6-98b9-<%= version %>-<%= domain %>",
-		"id": "ed54e23a-009b-d13b-de57-09bb6180d3b2",
-		"name": "get swagger",
-		"description": "",
+		"id": "45b368a0-87ec-2f67-ff42-<%= domain %><%= version %><%= model %>",
+		"name": "LIST with partial data",
+		"description": "See http://api.restlastic.com for more informations",
+		"url": "<%= baseUrl %><%= domain %>/<%= version %>/<%= model %>?fields=id,creation_date,modification_date",
+		"method": "GET",
+		<%if (secured_api==true) {%>"headers": "Authorization: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2NsYXVkZS1pZHAubGFwb3N0ZS5mciIsInBybiI6ImNsYXVkZS5zZWd1cmV0QGxhcG9zdGUuZnIiLCJhdWQiOiJodHRwczovL2NsYXVkZS1hdXRoLmxhcG9zdGUuZnIiLCJleHAiOiIxNDYxNTYxNzIxIiwic2NvcGVzIjpbInJlc3NvdXJjZXMucmVhZCIsInJlc3NvdXJjZXMud3JpdGUiXX0.rn6BGkwXv1bqaevBuroqNoBDP6d8dNo3dN1f6kwPqNU\n",<%}%>
+		"timestamp": 0,
+		"version": 2,
+		"time": 1460656504626
+	}, {
+		"collectionId": "<%= model %>-12c6-98b9-<%= version %>-<%= domain %>",
+		"id": "5aacb6e9-e179-cfe7-1145-<%= domain %><%= version %><%= model %>",
+		"name": "LIST _exists=true (fields exists)",
+		"description": "See http://api.restlastic.com for more informations",
+		"url": "<%= baseUrl %><%= domain %>/<%= version %>/<%= model %>?fieldThatNotExist_exists=true",
+		"method": "GET",
+		<%if (secured_api==true) {%>"headers": "Authorization: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2NsYXVkZS1pZHAubGFwb3N0ZS5mciIsInBybiI6ImNsYXVkZS5zZWd1cmV0QGxhcG9zdGUuZnIiLCJhdWQiOiJodHRwczovL2NsYXVkZS1hdXRoLmxhcG9zdGUuZnIiLCJleHAiOiIxNDYxNTYxNzIxIiwic2NvcGVzIjpbInJlc3NvdXJjZXMucmVhZCIsInJlc3NvdXJjZXMud3JpdGUiXX0.rn6BGkwXv1bqaevBuroqNoBDP6d8dNo3dN1f6kwPqNU\n",<%}%>
+		"timestamp": 0,
+		"version": 2,
+		"time": 1460656520266
+	}, {
+		"collectionId": "<%= model %>-12c6-98b9-<%= version %>-<%= domain %>",
+		"id": "5fe74377-2a52-f699-c8fe-<%= domain %><%= version %><%= model %>",
+		"name": "LIST multiple value field",
+		"description": "See http://api.restlastic.com for more informations",
+		"url": "<%= baseUrl %><%= domain %>/<%= version %>/<%= model %>?id=1,<%= model %>",
+		"method": "GET",
+		<%if (secured_api==true) {%>"headers": "Authorization: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2NsYXVkZS1pZHAubGFwb3N0ZS5mciIsInBybiI6ImNsYXVkZS5zZWd1cmV0QGxhcG9zdGUuZnIiLCJhdWQiOiJodHRwczovL2NsYXVkZS1hdXRoLmxhcG9zdGUuZnIiLCJleHAiOiIxNDYxNTYxNzIxIiwic2NvcGVzIjpbInJlc3NvdXJjZXMucmVhZCIsInJlc3NvdXJjZXMud3JpdGUiXX0.rn6BGkwXv1bqaevBuroqNoBDP6d8dNo3dN1f6kwPqNU\n",<%}%>
+		"timestamp": 0,
+		"version": 2,
+		"time": 1460656516164
+	}, {
+		"collectionId": "<%= model %>-12c6-98b9-<%= version %>-<%= domain %>",
+		"id": "6a9c3dbc-634e-f3b7-a38a-<%= domain %><%= version %><%= model %>",
+		"name": "LIST search fulltext on all fields",
+		"description": "See http://api.restlastic.com for more informations",
+		"url": "<%= baseUrl %><%= domain %>/<%= version %>/<%= model %>/search?q=*c",
+		"method": "GET",
+		<%if (secured_api==true) {%>"headers": "Authorization: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2NsYXVkZS1pZHAubGFwb3N0ZS5mciIsInBybiI6ImNsYXVkZS5zZWd1cmV0QGxhcG9zdGUuZnIiLCJhdWQiOiJodHRwczovL2NsYXVkZS1hdXRoLmxhcG9zdGUuZnIiLCJleHAiOiIxNDYxNTYxNzIxIiwic2NvcGVzIjpbInJlc3NvdXJjZXMucmVhZCJdfQ.ssrAHB1phB3hGh4n2t7rBJQAJP5GQWM5Qtvg7tR7UwA\n",<%}%>
+		"timestamp": 0,
+		"version": 2,
+		"time": 1460656543458
+	}, {
+		"collectionId": "<%= model %>-12c6-98b9-<%= version %>-<%= domain %>",
+		"id": "6bbc8609-4eb8-d98b-5499-<%= domain %><%= version %><%= model %>",
+		"name": "PARTIAL UPDATE with etag",
+		"description": "See http://api.restlastic.com for more informations",
+		"url": "<%= baseUrl %><%= domain %>/<%= version %>/<%= model %>/<%= id %>",
+		"method": "PATCH",
+		"headers": "If-None-Match: 10000\nContent-Type: application/json\n<%if (secured_api==true) {%>Authorization: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2NsYXVkZS1pZHAubGFwb3N0ZS5mciIsInBybiI6ImNsYXVkZS5zZWd1cmV0QGxhcG9zdGUuZnIiLCJhdWQiOiJodHRwczovL2NsYXVkZS1hdXRoLmxhcG9zdGUuZnIiLCJleHAiOiIxNDYxNTYxNzIxIiwic2NvcGVzIjpbInJlc3NvdXJjZXMucmVhZCJdfQ.ssrAHB1phB3hGh4n2t7rBJQAJP5GQWM5Qtvg7tR7UwA\n<%}%>",
+		"data": "<%- sample_data_without_id_string %>",
+		"dataMode": "raw",
+		"timestamp": 0,
+		"version": 2,
+		"time": 1460656579829
+	}, {
+		"collectionId": "<%= model %>-12c6-98b9-<%= version %>-<%= domain %>",
+		"id": "8702b2c6-7a38-e53f-8248-<%= domain %><%= version %><%= model %>",
+		"name": "postman.json",
+		"description": "See http://api.restlastic.com for more informations",
+		"url": "<%= baseUrl %><%= domain %>/<%= version %>/<%= model %>/postman.json",
+		"method": "GET",
+		<%if (secured_api==true) {%>"headers": "Authorization: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2NsYXVkZS1pZHAubGFwb3N0ZS5mciIsInBybiI6ImNsYXVkZS5zZWd1cmV0QGxhcG9zdGUuZnIiLCJhdWQiOiJodHRwczovL2NsYXVkZS1hdXRoLmxhcG9zdGUuZnIiLCJleHAiOiIxNDYxNTYxNzIxIiwic2NvcGVzIjpbInJlc3NvdXJjZXMucmVhZCJdfQ.ssrAHB1phB3hGh4n2t7rBJQAJP5GQWM5Qtvg7tR7UwA\n",<%}%>
+		"timestamp": 0,
+		"version": 2,
+		"time": 1460656553479
+	}, {
+		"collectionId": "<%= model %>-12c6-98b9-<%= version %>-<%= domain %>",
+		"id": "8799449b-791a-29a7-f113-<%= domain %><%= version %><%= model %>",
+		"name": "CREATE with id",
+		"description": "See http://api.restlastic.com for more informations",
+		"url": "<%= baseUrl %><%= domain %>/<%= version %>/<%= model %>/newId",
+		"method": "PUT",
+		<%if (secured_api==true) {%>"headers": "Authorization: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2NsYXVkZS1pZHAubGFwb3N0ZS5mciIsInBybiI6ImNsYXVkZS5zZWd1cmV0QGxhcG9zdGUuZnIiLCJhdWQiOiJodHRwczovL2NsYXVkZS1hdXRoLmxhcG9zdGUuZnIiLCJleHAiOiIxNDYxNTYxNzIxIiwic2NvcGVzIjpbInJlc3NvdXJjZXMucmVhZCIsInJlc3NvdXJjZXMud3JpdGUiXX0.rn6BGkwXv1bqaevBuroqNoBDP6d8dNo3dN1f6kwPqNU\n",<%}%>
+		"data": <%- JSON.stringify(sample_data_without_id_params) %>,
+		"dataMode": "params",
+		"timestamp": 0,
+		"version": 2,
+		"time": 1460656403415
+	}, {
+		"collectionId": "<%= model %>-12c6-98b9-<%= version %>-<%= domain %>",
+		"id": "90e9ea21-ac4e-1877-9f58-<%= domain %><%= version %><%= model %>",
+		"name": "ONE with etag (If-None-Match)",
+		"description": "See http://api.restlastic.com for more informations",
+		"url": "<%= baseUrl %><%= domain %>/<%= version %>/<%= model %>/<%= id %>",
+		"method": "GET",
+		"headers": "If-None-Match: 1\n<%if (secured_api==true) {%>Authorization: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2NsYXVkZS1pZHAubGFwb3N0ZS5mciIsInBybiI6ImNsYXVkZS5zZWd1cmV0QGxhcG9zdGUuZnIiLCJhdWQiOiJodHRwczovL2NsYXVkZS1hdXRoLmxhcG9zdGUuZnIiLCJleHAiOiIxNDYxNTYxNzIxIiwic2NvcGVzIjpbInJlc3NvdXJjZXMucmVhZCJdfQ.ssrAHB1phB3hGh4n2t7rBJQAJP5GQWM5Qtvg7tR7UwA\n",<%}%>",
+		"timestamp": 0,
+		"version": 2,
+		"time": 1460656457840
+	}, {
+		"collectionId": "<%= model %>-12c6-98b9-<%= version %>-<%= domain %>",
+		"id": "9bd3cc79-940e-d312-7813-<%= domain %><%= version %><%= model %>",
+		"name": "FULL UPDATE ressource",
+		"description": "See http://api.restlastic.com for more informations",
+		"url": "<%= baseUrl %><%= domain %>/<%= version %>/<%= model %>/<%= id %>",
+		"method": "PUT",
+		"headers":"Content-Type: application/json\n<%if (secured_api==true) {%>Authorization: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2NsYXVkZS1pZHAubGFwb3N0ZS5mciIsInBybiI6ImNsYXVkZS5zZWd1cmV0QGxhcG9zdGUuZnIiLCJhdWQiOiJodHRwczovL2NsYXVkZS1hdXRoLmxhcG9zdGUuZnIiLCJleHAiOiIxNDYxNTYxNzIxIiwic2NvcGVzIjpbInJlc3NvdXJjZXMucmVhZCIsInJlc3NvdXJjZXMud3JpdGUiXX0.rn6BGkwXv1bqaevBuroqNoBDP6d8dNo3dN1f6kwPqNU\n<%}%>",
+		"data": "<%- sample_data_without_id_string %>",
+		"dataMode": "raw",
+		"timestamp": 0,
+		"version": 2,
+		"time": 1460656412918
+	}, {
+		"collectionId": "<%= model %>-12c6-98b9-<%= version %>-<%= domain %>",
+		"id": "c8dd79d8-560e-7ded-0d87-<%= domain %><%= version %><%= model %>",
+		"name": "PARTIAL UPDATE",
+		"description": "See http://api.restlastic.com for more informations",
+		"url": "<%= baseUrl %><%= domain %>/<%= version %>/<%= model %>/<%= id %>",
+		"method": "POST",
+		<%if (secured_api==true) {%>"headers": "Authorization: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2NsYXVkZS1pZHAubGFwb3N0ZS5mciIsInBybiI6ImNsYXVkZS5zZWd1cmV0QGxhcG9zdGUuZnIiLCJhdWQiOiJodHRwczovL2NsYXVkZS1hdXRoLmxhcG9zdGUuZnIiLCJleHAiOiIxNDYxNTYxNzIxIiwic2NvcGVzIjpbInJlc3NvdXJjZXMucmVhZCIsInJlc3NvdXJjZXMud3JpdGUiXX0.rn6BGkwXv1bqaevBuroqNoBDP6d8dNo3dN1f6kwPqNU\n",<%}%>
+		"data": <%- JSON.stringify(sample_data_without_id_params) %>,
+		"dataMode": "params",
+		"timestamp": 0,
+		"version": 2,
+		"time": 1460656389279
+	}, {
+		"collectionId": "<%= model %>-12c6-98b9-<%= version %>-<%= domain %>",
+		"id": "c8dd79d8-560e-7ded-0d88-<%= domain %><%= version %><%= model %>",
+		"name": "PARTIAL UPDATE (body json)",
+		"description": "See http://api.restlastic.com for more informations",
+		"url": "<%= baseUrl %><%= domain %>/<%= version %>/<%= model %>/<%= id %>",
+		"method": "POST",
+		"headers": "Content-Type: application/json\n<%if (secured_api==true) {%>Authorization: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2NsYXVkZS1pZHAubGFwb3N0ZS5mciIsInBybiI6ImNsYXVkZS5zZWd1cmV0QGxhcG9zdGUuZnIiLCJhdWQiOiJodHRwczovL2NsYXVkZS1hdXRoLmxhcG9zdGUuZnIiLCJleHAiOiIxNDYxNTYxNzIxIiwic2NvcGVzIjpbInJlc3NvdXJjZXMucmVhZCIsInJlc3NvdXJjZXMud3JpdGUiXX0.rn6BGkwXv1bqaevBuroqNoBDP6d8dNo3dN1f6kwPqNU\n<%}%>",
+		"data": "<%- sample_data_without_id_string %>",
+		"dataMode": "raw",
+		"timestamp": 0,
+		"version": 2,
+		"time": 1460656389279
+	}, {
+		"collectionId": "<%= model %>-12c6-98b9-<%= version %>-<%= domain %>",
+		"id": "ed54e23a-009b-d13b-de57-<%= domain %><%= version %><%= model %>",
+		"name": "swager.yaml",
+		"description": "See http://api.restlastic.com for more informations",
 		"url": "<%= baseUrl %><%= domain %>/<%= version %>/<%= model %>/swagger.yaml",
 		"method": "GET",
-		"headers": "Accept-Encoding: application/json\nAuthorization: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2NsYXVkZS1pZHAubGFwb3N0ZS5mciIsInBybiI6ImNsYXVkZS5zZWd1cmV0QGxhcG9zdGUuZnIiLCJhdWQiOiJodHRwczovL2NsYXVkZS1hdXRoLmxhcG9zdGUuZnIiLCJleHAiOiIxNDYxNTYxNzIxIiwic2NvcGVzIjpbInJlc3NvdXJjZXMucmVhZCIsInJlc3NvdXJjZXMud3JpdGUiXX0.rn6BGkwXv1bqaevBuroqNoBDP6d8dNo3dN1f6kwPqNU\n",
-		"data": [{
-			"key": "name",
-			"value": "to_delete",
-			"type": "text"
-		}, {
-			"key": "votes",
-			"value": "23",
-			"type": "text"
-		}],
-		"dataMode": "params",
+		<%if (secured_api==true) {%>"headers": "Authorization: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2NsYXVkZS1pZHAubGFwb3N0ZS5mciIsInBybiI6ImNsYXVkZS5zZWd1cmV0QGxhcG9zdGUuZnIiLCJhdWQiOiJodHRwczovL2NsYXVkZS1hdXRoLmxhcG9zdGUuZnIiLCJleHAiOiIxNDYxNTYxNzIxIiwic2NvcGVzIjpbInJlc3NvdXJjZXMucmVhZCJdfQ.ssrAHB1phB3hGh4n2t7rBJQAJP5GQWM5Qtvg7tR7UwA\n",<%}%>
 		"timestamp": 0,
-		"responses": [],
-		"version": 2
+		"version": 2,
+		"time": 1460656548712
 	}, {
 		"collectionId": "<%= model %>-12c6-98b9-<%= version %>-<%= domain %>",
-		"id": "ee9673b5-4e9b-eba6-83c2-b55e1508681e",
-		"name": "PATCH <%= model %>",
-		"description": "",
-		"url": "<%= baseUrl %><%= domain %>/<%= version %>/<%= model %>/4yZpPWYjx",
+		"id": "ee9673b5-4e9b-eba6-83c2-<%= domain %><%= version %><%= model %>",
+		"name": "PARTIAL UPDATE",
+		"description": "See http://api.restlastic.com for more informations",
+		"url": "<%= baseUrl %><%= domain %>/<%= version %>/<%= model %>/<%= id %>",
 		"method": "PATCH",
-		"headers": "Accept-Encoding: application/json\nAuthorization: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2NsYXVkZS1pZHAubGFwb3N0ZS5mciIsInBybiI6ImNsYXVkZS5zZWd1cmV0QGxhcG9zdGUuZnIiLCJhdWQiOiJodHRwczovL2NsYXVkZS1hdXRoLmxhcG9zdGUuZnIiLCJleHAiOiIxNDYxNTYxNzIxIiwic2NvcGVzIjpbInJlc3NvdXJjZXMucmVhZCIsInJlc3NvdXJjZXMud3JpdGUiXX0.rn6BGkwXv1bqaevBuroqNoBDP6d8dNo3dN1f6kwPqNU\n",
-		"data": "{\n\n            \"address\" : {\n            \t\"locality\":\"FÃ©lines, ArdÃ¨che\"\n            }\n        }",
+		"headers": "Content-Type: application/json\n<%if (secured_api==true) {%>Authorization: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2NsYXVkZS1pZHAubGFwb3N0ZS5mciIsInBybiI6ImNsYXVkZS5zZWd1cmV0QGxhcG9zdGUuZnIiLCJhdWQiOiJodHRwczovL2NsYXVkZS1hdXRoLmxhcG9zdGUuZnIiLCJleHAiOiIxNDYxNTYxNzIxIiwic2NvcGVzIjpbInJlc3NvdXJjZXMucmVhZCIsInJlc3NvdXJjZXMud3JpdGUiXX0.rn6BGkwXv1bqaevBuroqNoBDP6d8dNo3dN1f6kwPqNU\n<%}%>",
+		"data": "<%- sample_data_without_id_string %>",
 		"dataMode": "raw",
 		"timestamp": 0,
-		"responses": [],
-		"version": 2
+		"version": 2,
+		"time": 1460656430681
 	}, {
 		"collectionId": "<%= model %>-12c6-98b9-<%= version %>-<%= domain %>",
-		"id": "efbae22e-8817-021b-80a6-cf1f1cb6732f",
-		"name": "Get _lte, _gte, fields",
-		"description": "",
-		"url": "<%= baseUrl %><%= domain %>/<%= version %>/<%= model %>?votes_lte=1010&votes_gte=1000&fields=votes,name",
+		"id": "efbae22e-8817-021b-80a6-<%= domain %><%= version %><%= model %>",
+		"name": "LIST  _lte, _gte, _lt, _gt fields (greater, less than or equal)",
+		"description": "See http://api.restlastic.com for more informations",
+		"url": "<%= baseUrl %><%= domain %>/<%= version %>/<%= model %>?creation_date_gte=now-10y&modification_date_lt=now",
 		"method": "GET",
-		"headers": "Accept-Encoding: application/json\nAuthorization: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2NsYXVkZS1pZHAubGFwb3N0ZS5mciIsInBybiI6ImNsYXVkZS5zZWd1cmV0QGxhcG9zdGUuZnIiLCJhdWQiOiJodHRwczovL2NsYXVkZS1hdXRoLmxhcG9zdGUuZnIiLCJleHAiOiIxNDYxNTYxNzIxIiwic2NvcGVzIjpbInJlc3NvdXJjZXMucmVhZCIsInJlc3NvdXJjZXMud3JpdGUiXX0.rn6BGkwXv1bqaevBuroqNoBDP6d8dNo3dN1f6kwPqNU\n",
-		"data": "{\n\t\t\t\"users\": {\n\t\t\t\t\"_timestamp\": {},\n\t\t\t\t\"properties\": {\n\t\t\t\t\t\"creation_date\": {\n\t\t\t\t\t\t\"type\": \"date\",\n\t\t\t\t\t\t\"format\": \"epoch_millis||dateOptionalTime\"\n\t\t\t\t\t},\n\t\t\t\t\t\"id\": {\n\t\t\t\t\t\t\"type\": \"string\"\n\t\t\t\t\t},\n\t\t\t\t\t\"mail\": {\n\t\t\t\t\t\t\"type\": \"string\"\n\t\t\t\t\t},\n\t\t\t\t\t\"modification_date\": {\n\t\t\t\t\t\t\"type\": \"date\",\n\t\t\t\t\t\t\"format\": \"epoch_millis||dateOptionalTime\"\n\t\t\t\t\t},\n\t\t\t\t\t\"name\": {\n\t\t\t\t\t\t\"type\": \"string\"\n\t\t\t\t\t},\n\t\t\t\t\t\"pwd\": {\n\t\t\t\t\t\t\"type\": \"string\"\n\t\t\t\t\t},\n\t\t\t\t\t\"value\": {\n\t\t\t\t\t\t\"type\": \"string\"\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t",
-		"dataMode": "raw",
+		<%if (secured_api==true) {%>"headers": "Authorization: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2NsYXVkZS1pZHAubGFwb3N0ZS5mciIsInBybiI6ImNsYXVkZS5zZWd1cmV0QGxhcG9zdGUuZnIiLCJhdWQiOiJodHRwczovL2NsYXVkZS1hdXRoLmxhcG9zdGUuZnIiLCJleHAiOiIxNDYxNTYxNzIxIiwic2NvcGVzIjpbInJlc3NvdXJjZXMucmVhZCIsInJlc3NvdXJjZXMud3JpdGUiXX0.rn6BGkwXv1bqaevBuroqNoBDP6d8dNo3dN1f6kwPqNU\n",<%}%>
 		"timestamp": 0,
-		"responses": [],
-		"version": 2
+		"version": 2,
+		"time": 1460656534908
+	}, {
+		"collectionId": "<%= model %>-12c6-98b9-<%= version %>-<%= domain %>",
+		"id": "f607c19f-3b2f-c30d-ff79-<%= domain %><%= version %><%= model %>",
+		"name": "LIST _like (search value)",
+		"description": "See http://api.restlastic.com for more informations",
+		"url": "<%= baseUrl %><%= domain %>/<%= version %>/<%= model %>?id_like=l*",
+		"method": "GET",
+		<%if (secured_api==true) {%>"headers": "Authorization: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2NsYXVkZS1pZHAubGFwb3N0ZS5mciIsInBybiI6ImNsYXVkZS5zZWd1cmV0QGxhcG9zdGUuZnIiLCJhdWQiOiJodHRwczovL2NsYXVkZS1hdXRoLmxhcG9zdGUuZnIiLCJleHAiOiIxNDYxNTYxNzIxIiwic2NvcGVzIjpbInJlc3NvdXJjZXMucmVhZCIsInJlc3NvdXJjZXMud3JpdGUiXX0.rn6BGkwXv1bqaevBuroqNoBDP6d8dNo3dN1f6kwPqNU\n",<%}%>
+		"timestamp": 0,
+		"version": 2,
+		"time": 1460656524322
 	}]
 }
