@@ -1,14 +1,11 @@
 <%
-
 	var etag = sample_data.etag;
 	delete sample_data.etag;
   var sample_data_without_id = sample_data;
 	var id = sample_data.id;
 	delete sample_data_without_id.id;
-	var sample_data_string= JSON.stringify(sample_data,null,2);
 	var sample_data_without_id_string= JSON.stringify(sample_data_without_id,null,2);
 	// very ugly
-	sample_data_string = sample_data_string.replace(/\"/g,'\\\"').replace(/\n/g,"\\n");
 	sample_data_without_id_string = sample_data_without_id_string.replace(/\"/g,'\\\"').replace(/\n/g,"\\n");
 
 	var sample_data_without_id_params = [];
@@ -26,7 +23,7 @@
 	%>
 {
 	"id": "<%= model %>-12c6-98b9-<%= version %>-<%= domain %>",
-	"name": "<%= domain %>-<%= version %>-<%= model %>",
+	"name": "Restlastic <%= domain %>-<%= version %>-<%= model %>",
 	"timestamp": 1456337189036,
 	"order": ["121e5beb-7791-1a01-98e9-<%= domain %><%= version %><%= model %>", "c8dd79d8-560e-7ded-0d87-<%= domain %><%= version %><%= model %>",
 	"c8dd79d8-560e-7ded-0d88-<%= domain %><%= version %><%= model %>", "8799449b-791a-29a7-f113-<%= domain %><%= version %><%= model %>", "9bd3cc79-940e-d312-7813-<%= domain %><%= version %><%= model %>", "4240a0bb-109d-2acc-8d30-<%= domain %><%= version %><%= model %>", "36f7ae74-fcf7-31b7-e903-<%= domain %><%= version %><%= model %>", "ee9673b5-4e9b-eba6-83c2-<%= domain %><%= version %><%= model %>", "6bbc8609-4eb8-d98b-5499-<%= domain %><%= version %><%= model %>", "15d3744a-2b68-9117-e83c-<%= domain %><%= version %><%= model %>", "3d0068fa-262e-317b-616b-<%= domain %><%= version %><%= model %>", "90e9ea21-ac4e-1877-9f58-<%= domain %><%= version %><%= model %>", "3afaa44e-63db-72bd-196a-<%= domain %><%= version %><%= model %>", "1b562726-a776-1232-66aa-<%= domain %><%= version %><%= model %>", "45b368a0-87ec-2f67-ff42-<%= domain %><%= version %><%= model %>", "28dc187d-e7c1-44e1-d5a2-<%= domain %><%= version %><%= model %>", "5fe74377-2a52-f699-c8fe-<%= domain %><%= version %><%= model %>", "5aacb6e9-e179-cfe7-1145-<%= domain %><%= version %><%= model %>", "f607c19f-3b2f-c30d-ff79-<%= domain %><%= version %><%= model %>", "13ae5a64-65d0-208a-6a8e-<%= domain %><%= version %><%= model %>", "efbae22e-8817-021b-80a6-<%= domain %><%= version %><%= model %>", "6a9c3dbc-634e-f3b7-a38a-<%= domain %><%= version %><%= model %>", "ed54e23a-009b-d13b-de57-<%= domain %><%= version %><%= model %>", "8702b2c6-7a38-e53f-8248-<%= domain %><%= version %><%= model %>"],
