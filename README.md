@@ -16,7 +16,7 @@ GET /restlastic?price=free
     generate : "Instantly swagger, postman, mocha",
     dashboard : "Realtime graph with kibana",
     scalable : "To infinity and beyond",
-    customise : "based on sails.js, elasticsearch"
+    customise : "based on node.js, sails.js, elasticsearch"
   },
   tagline: "You Know, for API"
 }
