@@ -1,12 +1,14 @@
 <%
 var local_url = req.protocol;
-var local_port="";
+var local_port = "";
+var local_host = "api.restlastic.com"
 local_url += "://";
 if (req.host.indexOf("restlastic.com") >1 ) {
   local_url += "api.restlastic.com";
 }
 else {
   local_url += req.host;
+  local_host = req.host;
 }
 if (req.port) {
   if (req.port != "80" && req.port != "443") {
@@ -142,7 +144,7 @@ if (req.query.secured_api !== undefined ) {
                 <%if (secured_api==true) {%>
                 &nbsp;&nbsp;&nbsp;&nbsp;-H&nbsp;'Authorization: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2NsYXVkZS1pZHAubGFwb3N0ZS5mciIsInBybiI6ImNsYXVkZS5zZWd1cmV0QGxhcG9zdGUuZnIiLCJhdWQiOiJodHRwczovL2NsYXVkZS1hdXRoLmxhcG9zdGUuZnIiLCJleHAiOiIxNDYxNTYxNzIxIiwic2NvcGVzIjpbInJlc3NvdXJjZXMucmVhZCIsInJlc3NvdXJjZXMud3JpdGUiXX0.rn6BGkwXv1bqaevBuroqNoBDP6d8dNo3dN1f6kwPqNU'&nbsp;\<br/><%}%>
                 &nbsp;&nbsp;&nbsp;&nbsp;-d '<strong>{ "name":"banana", "status":"available", "price":12 }</strong>' \<br/>
-                &nbsp;&nbsp;&nbsp;&nbsp;'<%= req.protocol || env.protocol %></a>://<%= req.host || env.domain %><% if (local_port) { %><%= local_port %><% } %></a>/<strong><%= req.query.domain || api.domain %>/<%= req.query.version || api.version %>/<%= req.query.ressource || api.ressource %></strong>'<br/><br/>
+                &nbsp;&nbsp;&nbsp;&nbsp;'<%= req.protocol || env.protocol %></a>://<%= local_host || env.domain %><% if (local_port) { %><%= local_port %><% } %></a>/<strong><%= req.query.domain || api.domain %>/<%= req.query.version || api.version %>/<%= req.query.ressource || api.ressource %></strong>'<br/><br/>
             </p>
           </div>
           <div class="col-sm-7">
