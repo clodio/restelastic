@@ -13,9 +13,8 @@ ENV ELASTICSEARCH_PASS **None**
 RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app
 
-#Install nodemonand forever
+#Install nodemon forever
 RUN npm install nodemon -g
-RUN npm install forever -g
 
 # Install app dependencies
 COPY package.json /usr/src/app/
@@ -25,4 +24,4 @@ RUN npm install
 COPY . /usr/src/app
 
 EXPOSE 1337:1337
-CMD [ "npm", "start" ]
+CMD nodemon app.js
