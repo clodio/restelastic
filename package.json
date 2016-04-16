@@ -42,7 +42,6 @@
     "rc": "1.1.6",
     "sails": "0.12.3",
     "sails-disk": "~0.10.0",
-    "sails-hook-autoreload": "0.13.1",
     "shortid": "~2.2.2",
     "uuid": "~2.0.1"
   },
