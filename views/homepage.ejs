@@ -1,8 +1,13 @@
 <%
-var local_url = req.protocol;
+var local_api = {};
+local_api.domain=req.query.domain || "sample";
+local_api.version=req.query.version || "v1";
+local_api.ressource=req.query.ressource || "products";
+
 var local_port = "";
-var local_host = "api.restlastic.com"
-local_url += "://";
+var local_host = "api.restlastic.com";
+var local_protocol = req.protocol +"://";
+var local_url = local_protocol;
 if (req.host.indexOf("restlastic.com") >1 ) {
   local_url += "api.restlastic.com";
 }
@@ -16,12 +21,7 @@ if (req.port) {
     local_port = ":" + req.port;
   }
 }
-local_url += "/";
-local_url +=req.query.domain || "sample";
-local_url += "/";
-local_url +=req.query.version || "v1";
-local_url += "/";
-local_url +=req.query.ressource || "products";
+local_url += "/" + local_api.domain + "/"+ local_api.version + "/"+ local_api.ressource + "/";
 
 // add secured parameter to add authentification on services
 var secured_api= process.env.SECURED_API || false;
@@ -42,7 +42,7 @@ if (req.query.secured_api !== undefined ) {
         <div class="navbar-collapse collapse" id="navbar-main">
           <ul class="nav navbar-nav navbar-right">
             <li><a class="button" href="#live_demo" id="top-bar-demo-button"><%= __('Live Demo') %></a></li>
-            <li><a href="https://github.com/clodio/restlastic" id="top-bar-documentation" rel="nofollow"><%= __('Docs') %></a></li>
+            <li><a href="https://github.com/restlastic/restlastic" id="top-bar-documentation" rel="nofollow"><%= __('Docs') %></a></li>
             <li><iframe id="gh-fork" src="https://ghbtns.com/github-btn.html?user=clodio&repo=restlastic&type=fork" allowtransparency="true" frameborder="0" scrolling="0" width="53" height="20"></iframe></li>
             <li><iframe id="gh-star" src="https://ghbtns.com/github-btn.html?user=clodio&repo=restlastic&type=watch" allowtransparency="true" frameborder="0" scrolling="0" width="110" height="20"></iframe></li>
           </ul>
@@ -102,7 +102,7 @@ if (req.query.secured_api !== undefined ) {
 
           <div class="col-sm-4">
             <h3><i class="fa fa-github"></i> <%= __('Free and Open Source') %></h3>
-            <p><%= __('Restlastic is released under the MIT License and use open source and free components see on') %> <a target="_blank" href="https://github.com/clodio/restlastic">GitHub</a>.</p>
+            <p><%= __('Restlastic is released under the MIT License and use open source and free components see on') %> <a target="_blank" href="https://github.com/restlastic/restlastic">GitHub</a>.</p>
           </div>
           <div class="col-sm-4">
             <h3><i class="fa fa-wrench"></i> <%= __('Restful Services') %></h3>
@@ -144,7 +144,7 @@ if (req.query.secured_api !== undefined ) {
                 <%if (secured_api==true) {%>
                 &nbsp;&nbsp;&nbsp;&nbsp;-H&nbsp;'Authorization: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2NsYXVkZS1pZHAubGFwb3N0ZS5mciIsInBybiI6ImNsYXVkZS5zZWd1cmV0QGxhcG9zdGUuZnIiLCJhdWQiOiJodHRwczovL2NsYXVkZS1hdXRoLmxhcG9zdGUuZnIiLCJleHAiOiIxNDYxNTYxNzIxIiwic2NvcGVzIjpbInJlc3NvdXJjZXMucmVhZCIsInJlc3NvdXJjZXMud3JpdGUiXX0.rn6BGkwXv1bqaevBuroqNoBDP6d8dNo3dN1f6kwPqNU'&nbsp;\<br/><%}%>
                 &nbsp;&nbsp;&nbsp;&nbsp;-d '<strong>{ "name":"banana", "status":"available", "price":12 }</strong>' \<br/>
-                &nbsp;&nbsp;&nbsp;&nbsp;'<%= req.protocol || env.protocol %></a>://<%= local_host || env.domain %><% if (local_port) { %><%= local_port %><% } %></a>/<strong><%= req.query.domain || api.domain %>/<%= req.query.version || api.version %>/<%= req.query.ressource || api.ressource %></strong>'<br/><br/>
+                &nbsp;&nbsp;&nbsp;&nbsp;'<%= local_protocol %><%= local_host %><% if (local_port) { %><%= local_port %><% } %>/<strong><%= local_api.domain %>/<%= local_api.version %>/<%= local_api.ressource %></strong>'<br/><br/>
             </p>
           </div>
           <div class="col-sm-7">
@@ -273,7 +273,7 @@ if (req.query.secured_api !== undefined ) {
             <h2><%= __('Customize') %></h2>
             <p><%= __('It is  just the beginning.  You will probably want to learn how to customize your API') %> : <%= __('Alter') %> <a href="http://sailsjs.org/#/documentation/concepts/Routes" target="_blank" rel="nofollow"><%= __('routes ') %></a>, <%= __('set up') %> <a href="http://sailsjs.org/#/documentation/concepts/Policies" target="_blank" rel="nofollow"><%= __('security policies') %></a>, <%= __('and build custom') %> <a href="http://sailsjs.org/#/documentation/concepts/Controllers?q=actions" target="_blank" rel="nofollow"><%= __('controller actions') %></a>. <%= __('For more help getting started, check out') %> <a href="http://sailsjs.org" target="_blank" rel="nofollow">sailsjs.org</a>.
             </p>
-            <p><%= __('Go to the') %> <a href="https://github.com/clodio/restlastic" rel="nofollow">restlastic</a> <%= __('documentation') %></p>
+            <p><%= __('Go to the') %> <a href="https://github.com/restlastic/restlastic" rel="nofollow">restlastic</a> <%= __('documentation') %></p>
           </div>
         </div>
       </div>
