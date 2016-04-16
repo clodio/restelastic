@@ -47,7 +47,7 @@ module.exports.cors = {
   *                                                                          *
   ***************************************************************************/
 
-   origin: '*,http://localhost:8080,http://localhost:1337,http://editor.swagger.io,https://editor.swagger.io,http://petstore.swagger.io,https://petstore.swagger.io',
+   origin: '*,http://localhost:8080,http://localhost:1337,http://editor.swagger.io,https://editor.swagger.io,http://petstore.swagger.io,https://petstore.swagger.io,http://api.restlastic.com,https://api.restlastic.com,http://api.restlastic.com:1337,https://api.restlastic.com:1337',
 
   /***************************************************************************
   *                                                                          *
