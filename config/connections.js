@@ -66,7 +66,7 @@ module.exports.connections = {
   // },
   someElasticsearchServerConfig: function config() {
     return {
-      host: (process.env.ELASTICSEARCH_HOST || 'localhost') + ':' + ( process.env.ELASTICSEARCH_PORT || '9200') ,
+      host: 'elasticsearch' + ':' + ( process.env.ELASTICSEARCH_PORT || '9200') ,
       log: process.env.ELASTICSEARCH_LOG || 'error'
     };
   }
