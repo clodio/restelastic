@@ -457,6 +457,9 @@ module.exports = {
           // send a 404 Not Found
           return res.send(404, "{}");
         }
+        else if (err && err.error=="error_no_index") {
+          return res.send(404, sails.config.errors["ERR_NO_INDEX"]);
+        }
         else if (err) {
           ReportError.error(req,err,"ERR_500_0014");
           return res.send(500, sails.config.errors["ERR_UNKNOWN"]);
