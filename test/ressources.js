@@ -284,44 +284,6 @@ describe('ModelAPI', function(){
 	  	});
 		});
 
-
-	it('should compress http when asked', function (done) {
-	  	var options = {
-					timeout: 2000,
-			    url: dns + '/sample/v1/users/1117WJPog',
-			    headers: {'Accept-Encoding' : 'gzip','Authorization':'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2NsYXVkZS1pZHAubGFwb3N0ZS5mciIsInBybiI6ImNsYXVkZS5zZWd1cmV0QGxhcG9zdGUuZnIiLCJhdWQiOiJodHRwczovL2NsYXVkZS1hdXRoLmxhcG9zdGUuZnIiLCJleHAiOiIxNDYxNTYxNzIxIiwic2NvcGVzIjpbInJlc3NvdXJjZXMucmVhZCIsInJlc3NvdXJjZXMud3JpdGUiXX0.rn6BGkwXv1bqaevBuroqNoBDP6d8dNo3dN1f6kwPqNU'},
-			    rejectUnauthorized: false,
-			    json: true
-			};
-	    request(options, function (error, response, body){
-	    	//console.log(response);
-	    	expect(response).to.not.be.undefined;
-	    	expect(body).to.not.be.undefined;
-	    	//expect(response.headers).to.have.property('content-encoding').and.to.equal('gzip');
-	    	//todo : compress data
-	    	done();
-	  	});
-		});
-
-
-		it('should not compress when not asked', function (done) {
-	  	var options = {
-					timeout: 2000,
-			    url: dns + '/sample/v1/users/1117WJPog',
-					headers: {'Accept-Encoding' : 'gzip','Authorization':'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2NsYXVkZS1pZHAubGFwb3N0ZS5mciIsInBybiI6ImNsYXVkZS5zZWd1cmV0QGxhcG9zdGUuZnIiLCJhdWQiOiJodHRwczovL2NsYXVkZS1hdXRoLmxhcG9zdGUuZnIiLCJleHAiOiIxNDYxNTYxNzIxIiwic2NvcGVzIjpbInJlc3NvdXJjZXMucmVhZCIsInJlc3NvdXJjZXMud3JpdGUiXX0.rn6BGkwXv1bqaevBuroqNoBDP6d8dNo3dN1f6kwPqNU'},			    rejectUnauthorized: false,
-			    json: true
-			};
-	    request(options, function (error, response, body){
-	    	//console.log(response);
-	    	expect(response).to.not.be.undefined;
-	    	expect(body).to.not.be.undefined;
-	    	expect(response.headers).to.not.have.property('content-encoding');
-	    	done();
-	  	});
-	});
-
-
-
 		it('should send only fields in the query ?fields=', function (done) {
 	  	var options = {
 					timeout: 2000,
@@ -611,25 +573,6 @@ describe('ModelAPI', function(){
 	  	});
 		});
 
-		// à vérifier ce test
-		it('should compress http if asked', function (done) {
-	  	var options = {
-					timeout: 2000,
-			    url: dns + '/sample/v1/users?fields=id,creation_date,unknown_fields&start_index=2&count=3',
-			    rejectUnauthorized: false,
-			    headers: {'Accept-Encoding' : 'gzip','Authorization':'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2NsYXVkZS1pZHAubGFwb3N0ZS5mciIsInBybiI6ImNsYXVkZS5zZWd1cmV0QGxhcG9zdGUuZnIiLCJhdWQiOiJodHRwczovL2NsYXVkZS1hdXRoLmxhcG9zdGUuZnIiLCJleHAiOiIxNDYxNTYxNzIxIiwic2NvcGVzIjpbInJlc3NvdXJjZXMucmVhZCIsInJlc3NvdXJjZXMud3JpdGUiXX0.rn6BGkwXv1bqaevBuroqNoBDP6d8dNo3dN1f6kwPqNU'},
-			    json: true
-			};
-			var expectedResult = {};
-	    request(options, function (error, response, body){
-	    	//console.log(body);
-	    	expect(response).to.not.be.undefined;
-	    	//expect(response.headers).to.have.property('content-encoding');
-	    	//expect(response.headers['content-encoding']).to.equal('gzip');
-	      //todo : compress data
-	    	done();
-	  	});
-		});
 
 		it('should retrieve data when attributes exists _exists=true', function (done) {
 	  	var options = {
